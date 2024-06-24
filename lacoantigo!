@@ -1,0 +1,44 @@
+while(1){
+		al_wait_for_event(queue, &event);	
+		redraw = false;
+		switch (event.type){
+      case 42:
+          break;
+      case ALLEGRO_EVENT_TIMER:
+        if (key[ALLEGRO_KEY_UP])
+          player_1->y -= 1;
+        if (key[ALLEGRO_KEY_DOWN])
+          player_1->y += 1;
+        if (key[ALLEGRO_KEY_LEFT])
+          player_1->x -= 1;
+        if (key[ALLEGRO_KEY_RIGHT])
+            player_1->x += 1;
+
+        for (int i = 0; i < ALLEGRO_KEY_MAX; i++)
+            key[i] &= KEY_SEEN;
+
+        redraw = true;
+
+        if (key[ALLEGRO_KEY_ESCAPE])
+            break;
+      case ALLEGRO_EVENT_KEY_DOWN:
+          key[event.keyboard.keycode] = KEY_SEEN | KEY_RELEASED;
+          break;
+      case ALLEGRO_EVENT_KEY_UP:
+          key[event.keyboard.keycode] &= KEY_RELEASED;
+          break;
+    }
+
+    if (redraw){
+      al_clear_to_color (al_map_rgb(0, 0, 0);
+
+      al_draw_bitmap (mysha, 50, 100, 100);
+      al_draw_filled_rectangle (100, 100, 340, 340, al_map_rgba_f (0,0,0.5,0.5));
+      
+      al_draw_filled_rectangle (player_1->x-player_1->width/2, player_1->y-player_1->lenght/2, player_1->x+player_1->width/2, player_1->y+player_1->lenght/2, al_map_rgb(255, 0, 0));
+      al_draw_filled_rectangle (player_2->x-player_2->width/2, player_2->y-player_2->lenght/2, player_2->x+player_2->width/2, player_2->y+player_2->lenght/2, al_map_rgb (255, 0, 0));
+
+      al_flip_display();
+    }
+  }
+
