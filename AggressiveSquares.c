@@ -42,39 +42,53 @@ int main(){
 	ALLEGRO_EVENT event;
 	
 	al_start_timer(timer);	
+
+	int where_to_go = 1;
 	
 	while(1){
-		al_wait_for_event(queue, &event);	
-
-		if (event.type == 30){
-			al_clear_to_color (al_map_rgb(0, 0, 0));
-			al_draw_bitmap (mysha, 50, 100, 100);
-			al_draw_filled_rectangle (100, 100, 340, 340, al_map_rgba_f (0,0,0.5,0.5));
-      			al_draw_filled_rectangle (player_1->x-player_1->width/2, player_1->y-player_1->lenght/2, player_1->x+player_1->width/2, player_1->y+player_1->lenght/2, al_map_rgb(255, 0, 0));
-			al_draw_filled_rectangle (player_2->x-player_2->width/2, player_2->y-player_2->lenght/2, player_2->x+player_2->width/2, player_2->y+player_2->lenght/2, al_map_rgb (255, 0, 0));
-
-			al_flip_display();
+		
+		if (where_to_go == 1){
+			while (1){
+				al_wait_for_event(queue, &event);
+				printf ("Selecione o Player 1!\n");
+				if (49 <= event.keyboard.keycode && event.keyboard.keycode <= 52)
+					player1 = choose_hero (player1, event.keyboard.keycode, 
+			}	
 		}
-		else if ((event.type == 10) || (event.type == 12)){
-			if (event.keyboard.keycode == 1)
-				joystick_left (player_1->control);
-			else if (event.keyboard.keycode == 4)
-				joystick_right (player_1->control);
-			else if (event.keyboard.keycode == 23)
-				joystick_up (player_1->control);
-			else if (event.keyboard.keycode == 19)
-				joystick_down (player_1->control);
-			else if (event.keyboard.keycode == 82)
-				joystick_left (player_2->control);
-			else if (event.keyboard.keycode == 83)
-				joystick_right (player_2->control);
-			else if (event.keyboard.keycode == 84)
-				joystick_up (player_2->control);
-			else if (event.keyboard.keycode == 85)
-				joystick_down (player_2->control);
+		if (where_to_go == 2){
+			al_wait_for_event(queue, &event);	
+	
+			if (event.type == 30){
+				al_clear_to_color (al_map_rgb(0, 0, 0));
+				al_draw_bitmap (mysha, 50, 100, 100);
+				al_draw_filled_rectangle (100, 100, 340, 340, al_map_rgba_f (0,0,0.5,0.5));
+      				al_draw_filled_rectangle (player_1->x-player_1->width/2, player_1->y-player_1->lenght/2, player_1->x+player_1->width/2, player_1->y+player_1->lenght/2, al_map_rgb(255, 0, 0));
+				al_draw_filled_rectangle (player_2->x-player_2->width/2, player_2->y-player_2->lenght/2, player_2->x+player_2->width/2, player_2->y+player_2->lenght/2, al_map_rgb (255, 0, 0));
+
+				al_flip_display();
+			}
+
+			else if ((event.type == 10) || (event.type == 12)){
+				if (event.keyboard.keycode == 1)
+					joystick_left (player_1->control);
+				else if (event.keyboard.keycode == 4)
+					joystick_right (player_1->control);
+				else if (event.keyboard.keycode == 23)
+					joystick_up (player_1->control);
+				else if (event.keyboard.keycode == 19)
+					joystick_down (player_1->control);
+				else if (event.keyboard.keycode == 82)
+					joystick_left (player_2->control);
+				else if (event.keyboard.keycode == 83)
+					joystick_right (player_2->control);
+				else if (event.keyboard.keycode == 84)
+					joystick_up (player_2->control);
+				else if (event.keyboard.keycode == 85)
+					joystick_down (player_2->control);
+			}
+			else if (event.type == 42)
+				break;
 		}
-		else if (event.type == 42)
-			break;
 	}
 
 	al_destroy_font(font);

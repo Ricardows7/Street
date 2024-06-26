@@ -7,15 +7,16 @@
 
 #define STREET_STEP 20																									
 typedef struct {
+	unsigned short id;
 	unsigned char lenght;
 	unsigned char width;
 	unsigned short x;
 	unsigned short y;
-	unsigned char defense;
+	unsigned short stun;
 	unsigned char hp;
 	joystick *control;
 	actions *moves;
-
+	special *ultimate;
 } hero;																									
 hero* hero_create(unsigned char lenght, unsigned char width, unsigned short x, unsigned short y, unsigned short max_x, unsigned short max_y);
 

@@ -1,22 +1,91 @@
 #include <stdlib.h>
 #include "begin.h"
 
-hero* hero_create(unsigned char lenght, unsigned char width, unsigned short x, unsigned short y, unsigned short max_x, unsigned short max_y){
-	if ((x - width/2 < 0) || (x + width/2 > max_x) || (y - lenght/2 < 0) || (y + lenght/2 > max_y)) return NULL;
+hero* hero_create(){
 	hero *new_hero = (hero*) malloc (sizeof(hero));		
 	if (!new_hero){
 		printf ("Erro durante a alocação de um novo herói!\n");
 		return NULL;
 	}
 	
-	new_hero->lenght = lenght;
-	new_hero->width = width;
-	new_hero->x = x;
-	new_hero->y = y;
+	new_hero->id = 0;
+	new_hero->lenght = 0;
+	new_hero->width = 0;
+	new_hero->x = 0;
+	new_hero->y = 0;
+	new_hero->stun = 0;
+	new_hero->hp = 100;
+	new_hero->stamina = 100;
+	new_hero->jump = 0;
 	new_hero->control = joystick_create();
-	
+	new_hero->moves = create_action();
+	new_hero->special = create_special (hero* element);
+
 	return new_hero;
 	
+}
+
+hero* choose_hero (hero* element, int type, unsigned short x, unsigned short y, unsigned short max_x, unsigned short max_y){
+
+	element->x = x;
+	element->y = y;
+
+	if (type == 49){	//type se refere ao codigo do teclado
+		element->id = 1;
+	        element->lenght = 20;
+        	element->width = 20;
+
+		element->moves->timers[0] = 3;
+		element->moves->range[0] = 3;
+		element->moves->damage[0] = 3;
+
+		element->moves->timers[1] = 3;
+		element->moves->range[1] = 4;
+		element->moves->damage[1] = 4;
+	}
+	else if (type == 50){
+		element->id = 2;
+                element->lenght = 20;
+                element->width = 20;
+
+                element->moves->timers[0] = 3;
+                element->moves->range[0] = 3;
+                element->moves->damage[0] = 3;
+
+                element->moves->timers[1] = 3;
+                element->moves->range[1] = 4;
+                element->moves->damage[1] = 4;
+	}
+	else if (type == 51){
+		element->id = 3;
+                element->lenght = 20;
+                element->width = 20;
+
+                element->moves->timers[0] = 3;
+                element->moves->range[0] = 3;
+                element->moves->damage[0] = 3;
+
+                element->moves->timers[1] = 3;
+                element->moves->range[1] = 4;
+                element->moves->damage[1] = 4;
+	}
+	else{
+		element->id = 4;
+                element->lenght = 20;
+                element->width = 20;
+
+                element->moves->timers[0] = 3;
+                element->moves->range[0] = 3;
+                element->moves->damage[0] = 3;
+
+                element->moves->timers[1] = 3;
+                element->moves->range[1] = 4;
+                element->moves->damage[1] = 4;
+	}
+
+	if ((x - element->width/2 < 0) || (x + element->width/2 > max_x) || (y - element->lenght/2 < 0) || (y + element->lenght/2 > max_y)) return NULL;
+
+	return element;
 }
 
 void hero_move(hero *element, char steps, unsigned char trajectory, unsigned short max_x, unsigned short max_y){							//Implementação da função "square_move" (-1)
@@ -101,13 +170,36 @@ void update_position (hero *p1, hero *p2){
 	return;
 }
 
-void update_health (hero *p1, hero *p2){
-	if ((p1->x + p1->moves->range >= p2->x - p2->width) || (p2->x + p2->width >= p1->x - p1->moves->range)){//se p2 estiver na area de impacto 
-		if (p1->moves->action[0]){	//se for soco e esta na area do soco
-			if (//determinar a altura do soco)
-				p2->hp--;//tiro dano personalizado ou padrao???????????
+void update_damage (hero *p1, hero *p2, int type){
+	int a, b, c, d, e;
+
+	if (type == 3){
+		return;
+	}
+
+	if (type == 1)
+		e = 0;
+	else
+		e = 1;
+
+	a = p1->x + p1->moves->range[e];
+	b = p2->x - p2->width/2;
+	c = p2->x + p2->width/2;
+	d = p1->x - p1->moves->range[e];
+
+	if (((p1->x <= p2->x) && (a >= b)) || ((p1->x >= p2->x) && (c >= d))){//se p2 estiver na area de impacto em x
+		a = ((p1->y + p1->lenght/2) * 3) / 5;
+		b = p2->y + p2->lenght/2;
+		c = p2->y - p2->lenght/2;
+		d = ((p1->y + p1->lenght/2) * 4) / 5;
+	
+		if (type == 1){
+			if (((p1->y <= p2->y) && (d >= c)) || ((p1->y >= p2->y) && (a <= b)))	//se for soco e estar na altura certa NO CHAO!
+				p2->hp -= p1->moves->damage[0];
 		}
-		else if (p1->moves->action[1]){
+		else{	//se for chute NO CHAO
+			if (abs(p2->x - p1->x) <= c)	//se p2 estiver abaixo da reta de 45° do chute
+			      p2->hp -= p1->moves->damage[1];	
 		}
 
 	else if ();
@@ -115,12 +207,61 @@ void update_health (hero *p1, hero *p2){
 	if (p2 esta no alcance do tiro de p1){
 	}
 
-	return;
+	return;f (((p1->x <= p2->x) && (a >= b)) || ((p1->x >= p2->x) && (c >= d))){//se p2 estiver na area de impacto em x
+                a = ((p1->y + p1->lenght/2) * 3) / 5;
+                b = p2->y + p2->lenght/2;
+                c = p2->y - p2->lenght/2;
+                d = ((p1->y + p1->lenght/2) * 4) / 5;
+
+                if (type == 1){
+                        if (((p1->y <= p2->y) && (d >= c)) || ((p1->y >= p2->y) && (a <= b)))   //se for soco e estar na altura certa NO CHAO!
+                                p2->hp -= p1->moves->damage[0];
+                }
+                else{   //se for chute NO CHAO
+                        if (abs(p2->x - p1->x) <= c)    //se p2 estiver abaixo da reta de 45° do chute
+                              p2->hp -= p1->moves->damage[1];
+                }
+
+        else if ();
+
+        if (p2 esta no alcance do tiro de p1){
+        }
+
+        return;
 }
+f (((p1->x <= p2->x) && (a >= b)) || ((p1->x >= p2->x) && (c >= d))){//se p2 estiver na area de impacto em x
+                a = ((p1->y + p1->lenght/2) * 3) / 5;
+                b = p2->y + p2->lenght/2;
+                c = p2->y - p2->lenght/2;
+                d = ((p1->y + p1->lenght/2) * 4) / 5;
+
+                if (type == 1){
+                        if (((p1->y <= p2->y) && (d >= c)) || ((p1->y >= p2->y) && (a <= b)))   //se for soco e estar na altura certa NO CHAO!
+                                p2->hp -= p1->moves->damage[0];
+                }
+                else{   //se for chute NO CHAO
+                        if (abs(p2->x - p1->x) <= c)    //se p2 estiver abaixo da reta de 45° do chute
+                              p2->hp -= p1->moves->damage[1];
+                }
+
+        else if ();
+
+        if (p2 esta no alcance do tiro de p1){
+f (((p1->x <= p2->x) && (a >= b)) || ((p1->x >= p2->x) && (c >= d))){//se p2 estiver na area de impacto em x
+                a = ((p1->y + p1->lenght/2) * 3) / 5;
+                b = p2->y + p2->lenght/2;
+                c = p2->y - p2->lenght/2;
+                d = ((p1->y + p1->lenght/2) * 4) / 5;
+
+                if (type == 1){
+                        if (((p1->y <= p2->y) && (d >= c)) || ((p1->y >= p2->y) && (a <= b)))   //se for soco e estar na altura certa NO CHAO!
+                                p2->hp -= p1->moves->damage[0];
+                }
+                else{   //se for chute NO CHAO
+                        if (abs(p2-
 
 void hero_destroy(hero *element){
 	joystick_destroy (element->control);
 	free (element);
 	
-	return;
-}
+	return;}
