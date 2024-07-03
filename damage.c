@@ -34,13 +34,12 @@ bullet* create_bullet (int x, int y, int dam, int vel, bool track){
 	return aux;
 }
 
-special* create_special(int id, int x_ent, int y_ent, int where){
+special* create_special(){
 	special *aux = (special*) malloc (sizeof(special));
 	if (!aux){
 		printf ("Erro na alocação do especial!\n");
 		return;
 	}
-	aux->type = id;
 	aux->projectile = NULL;
 	if (id == 1){
 		aux->timer = 10;
@@ -61,8 +60,8 @@ special* create_special(int id, int x_ent, int y_ent, int where){
 
 	return aux;
 }
-	
-oid update_damage (hero *p1, hero *p2, int type){
+/*	
+void update_damage (hero *p1, hero *p2, int type){
         int a, b, c, d, e;
 
         if (type == 3){
@@ -172,4 +171,4 @@ f (((p1->x <= p2->x) && (a >= b)) || ((p1->x >= p2->x) && (c >= d))){//se p2 est
         return;
 
 }
-
+*/

@@ -18,7 +18,7 @@ joystick* joystick_create(){
 	return element;
 }
 
-void joystick_destroy (joystick *element){void joystick_left (joystick *element){ 
+void joystick_destroy (joystick *element){
 
 	free (element);
 	element = NULL;
@@ -29,14 +29,14 @@ void joystick_destroy (joystick *element){void joystick_left (joystick *element)
 void joystick_right (joystick *element, int type){
 	if (!element->right && (type == 10)){	
 		if (!element->defense && !element->down){
-			element->right = element->right = 1;
+			element->right = 1;
 			return;
 		}
 		else
 			return;
 	}
 	else if (element->right && (type == 12)){
-		element->right = element->right = 0;
+		element->right = 0;
 		return;
 	}
 	return;
@@ -45,33 +45,43 @@ void joystick_right (joystick *element, int type){
 void joystick_left (joystick *element, int type){
 	if (!element->left && (type == 10)){	
 		if (!element->defense && !element->down){
-			element->left = element->left = 1;
+			element->left = 1;
 			return;
 		}
 		else
 			return;
 	}
 	else if (element->left && (type == 12)){
-		element->left = element->left = 0;
+		element->left = 0;
 		return;
 	}
 	return;
 }
 
-void joystick_defense (joystick *element){
-       if (!element->air && !element->down){
-	       element->left = 0;
-	       element->right = 0;
-	       element->defense = element->defense ^ 1;
+void joystick_defense (joystick *element, int type){
+	if (!element->defense && (type == 10)){
+		if (element->air || element->down)
+			return;
+		element->left = 0;
+		element->right = 0;
+		element->defense = element->defense ^ 1;
 	}
-       return;
+	else if (element->defense && (type == 12))
+		element->defense = 0;
+	
+	return;
 }
 
 void joystick_down (joystick *element){
-	if (!element->defense && !element->air){
+	if (!element->down && (type == 10)){
+		if (element->defense ||element->air)
+			return;
 		element->right = 0;
 		element->left = 0;
 		element->down = element->down ^ 1;
 	}
+	else if (element->down && (type == 12))
+		element->down = 0;
+	
 	return;
 }

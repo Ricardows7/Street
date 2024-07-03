@@ -1,6 +1,11 @@
 #ifndef __DAMAGE__
 #define __DAMAGE__
 
+#define PUNCH_DAMAGE 3
+#define PUNCH_COOLDOWN 3
+#define KICK_DAMAGE 5
+#define KICK_COOLDOWN 5
+
 #define BDAMAGE 5
 #define BVELOCITY 5
 #define BCOOLDOWN 10
@@ -8,7 +13,6 @@
 typedef struct{
 	int timers[2];
 	int range[2];
-	int damage[2];
 }actions;
 
 typedef struct bullet{
@@ -20,7 +24,6 @@ typedef struct bullet{
 }bullet;
 
 typedef struct special{
-	int type;	//NAO PRECISA DISSO!!!!!!!!!!!
 	int timer;
 	int damage;
 	bullet *projectile; //AQUI TEM QUE TER OUTRO STRUCT PRA BALA!!!!!!!!!!!
