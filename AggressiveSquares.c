@@ -83,7 +83,7 @@ int main(){
 					joystick_right (player_1->control, event.type);
 				else if (event.keyboard.keycode == 23)
 					hero_jump (player_1, player_2);
-				else if (event.keyboard.keycode == 19){
+				else if (event.keyboard.keycode == 19){		//COLOCAR AQUI COM BASE NA VERIFICACAO DE EVENT.TYPE O REDIMENSIONAMENTO
 					int stat = player_1->control->down;
 					joystick_down (player_1->control, event.type);
 					if (!stat && player_1->control->down){
