@@ -37,13 +37,13 @@ hero *choose_hero (hero *element, int type, unsigned short x, unsigned short y, 
 
 unsigned char collision (hero *element_first, hero *element_second);
 
-void update_position (hero *p1);
+void update_position (hero *p1, hero *p2, int max_x, int max_y, int ground, int gravity);
 
 void update_health (hero *p1, hero *p2);
 
 void hero_destroy(hero *element);										
 
-void hero_jump (hero *element, hero *aux);
+void hero_jump (hero *element, hero *aux, int max_x, int max_y, int ground);
 
 void verify (bool test, const char *local);
 

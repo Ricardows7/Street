@@ -17,8 +17,8 @@ begin.o: begin.c begin.h
 joystick.o: joystick.c joystick.h
 	gcc -c joystick.o $(FLAGS)
 
-damage.o: damage.c damage.h
-	gcc -c damage.o $(FLAGS)
+#damage.o: damage.c damage.h
+#	gcc -c damage.o $(FLAGS)
 
 clean:
 	rm -f *.o *.gch

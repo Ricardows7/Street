@@ -91,12 +91,12 @@ void hero_move(hero *element, char steps, unsigned char trajectory, unsigned sho
 unsigned char collision (hero *element_first, hero *element_second){
 	int a, b, c, d;
 
-	if ((element_first->y+element_first->lenght/2 >= element_second->y-element_second->lenght/2) && (element_second->y-element_second_lenght/2 >= element_first->y-element_first->lenght/2))
+	if ((element_first->y+element_first->lenght/2 >= element_second->y-element_second->lenght/2) && (element_second->y-element_second->lenght/2 >= element_first->y-element_first->lenght/2))
 		a = 1;
 	else
 		a = 0;
 
-	if ((element_second->y+element_second->lenght/2 >= element_first->y-element-first->lenght/2) && (element_first->y-element_first->lenght/2 >= element_second->y-element_second->lenght/2))
+	if ((element_second->y+element_second->lenght/2 >= element_first->y-element_first->lenght/2) && (element_first->y-element_first->lenght/2 >= element_second->y-element_second->lenght/2))
 		b = 1;
 	else
 		b = 0;
@@ -106,7 +106,7 @@ unsigned char collision (hero *element_first, hero *element_second){
 	else
 		c = 0;
 
-	if ((element_second->x+element_second->width/2 >= element_first->x-element_first->width/2) && (element_first->x-element_first->width/2 >= element_second->x-element_second->width/2));
+	if ((element_second->x+element_second->width/2 >= element_first->x-element_first->width/2) && (element_first->x-element_first->width/2 >= element_second->x-element_second->width/2))
 		d = 1;
 	else
 		d = 0;
@@ -117,7 +117,7 @@ unsigned char collision (hero *element_first, hero *element_second){
 		return 0;
 }
 
-void update_position (hero *p1, int max_x, int max_y, int ground){
+void update_position (hero *p1, hero *p2, int max_x, int max_y, int ground, int gravity){
 	if (p1->control->left){
 		hero_move (p1, 1, 0, max_x, max_y, ground);
 		if (collision (p1, p2))
@@ -129,7 +129,7 @@ void update_position (hero *p1, int max_x, int max_y, int ground){
 			hero_move (p1, -1, 1, max_x, max_y, ground);
 	}
 	if (p1->control->air){	//PULAR!!!!!!!!!!!
-		p1->jump -= GRAVITY;
+		p1->jump -= gravity;
 		hero_move (p1, p1->jump, 2, max_x, max_y, ground);
 		if (collision (p1, p2)){
 			p1->jump = -p1->jump;
@@ -139,10 +139,6 @@ void update_position (hero *p1, int max_x, int max_y, int ground){
 			p1->jump = 0;
 			p1->control->air = 0;
 		}
-	}
-	if (p1->control->down){	//reduzir as dimensões!!!!!!!!!
-		p1->y = p1->y/2;	//ONDE VOU AUMENTAR DNV??? NO JOYSTICK???
-		p1->lenght = p1->lenght/2;
 	}
 
 	return;
@@ -239,11 +235,11 @@ f (((p1->x <= p2->x) && (a >= b)) || ((p1->x >= p2->x) && (c >= d))){//se p2 est
                         if (abs(p2-
 */
 
-void hero_jump (hero *element, hero *aux){
+void hero_jump (hero *element, hero *aux, int max_x, int max_y, int ground){
 	if (!element)
 		return;
 	
-	if (element->y - element->lenght/2 != GROUND)	//Se o heroi nao esta no chao, nao pula
+	if (element->y - element->lenght/2 != ground)	//Se o heroi nao esta no chao, nao pula
 		return;
 
 	if (element->control->down || element->control->defense)	//Se o heroi esta agachado ou defendendo, nao pula
@@ -251,10 +247,10 @@ void hero_jump (hero *element, hero *aux){
 	
 	element->jump = JUMP_VEL;
 	element->control->air = 1;
-	hero_move (element, element->jump, 2, X_SCREEN, Y_SCREEN);
+	hero_move (element, element->jump, 2, max_x, max_y, ground);
         if (collision (element, aux)){
         	element->jump = -element->jump;
-        	hero_move (element, element->jump, 2, X_SCREEN, Y_SCREEN);
+        	hero_move (element, element->jump, 2, max_x, max_y, ground);
 		element->control->air = 0;
 		element->jump = 0;
 	}
