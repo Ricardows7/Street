@@ -69,7 +69,7 @@ hero* choose_hero (hero* element, int type, unsigned short x, unsigned short y, 
 
 	element->y = ground + element->lenght/2;
 
-	if ((x - element->width/2 < 0) || (x + element->width/2 > max_x) || (y - element->lenght/2 < 0) || (y + element->lenght/2 > max_y)){
+	if ((x - element->width/2 < 0) || (x + element->width/2 > max_x) || (y - element->lenght/2 < ground) || (y + element->lenght/2 > max_y)){
 	       	free (element);
 		printf ("Erro na posição inicial dos jogadores!\n");
 		return NULL;

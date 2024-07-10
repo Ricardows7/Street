@@ -62,8 +62,8 @@ int main(){
 	*/
 		if (where_to_go == 2){
 			al_wait_for_event(queue, &event);	
-			update_position (player_1);
-			update_position (player_2);
+			update_position (player_1, player_2, X_SCREEN, Y_SCREEN, GROUND, GRAVITY);
+			update_position (player_2, player_1, X_SCREEN, Y_SCREEN, GROUND, GRAVITY);
 
 			if (event.type == 30){
 				al_clear_to_color (al_map_rgb(0, 0, 0));
