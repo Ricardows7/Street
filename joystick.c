@@ -58,7 +58,7 @@ void joystick_left (joystick *element, int type){
 	return;
 }
 
-void joystick_defense (joystick *element, int type){
+void joystick_defense (joystick *element, int type){	//FAZER DEFESA PRA CIMA E PRA BAIXO!!!
 	if (!element->defense && (type == 10)){
 		if (element->air || element->down)
 			return;
@@ -72,7 +72,7 @@ void joystick_defense (joystick *element, int type){
 	return;
 }
 
-void joystick_down (joystick *element){
+void joystick_down (joystick *element, int type){
 	if (!element->down && (type == 10)){
 		if (element->defense ||element->air)
 			return;

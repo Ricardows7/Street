@@ -2,6 +2,7 @@
 #define __JOYSTICK__
 
 #include <stdlib.h>
+#include <stdio.h>
 
 typedef struct joystick{
 	unsigned char right;

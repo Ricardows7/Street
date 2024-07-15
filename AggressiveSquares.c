@@ -1,9 +1,12 @@
 //Compilação: gcc AggressiveSquares.c Square.c -o AS $(pkg-config allegro-5 allegro_main-5 allegro_font-5 allegro_primitives-5 --libs --cflags) (!)
 
-#include <allegro5/allegro5.h>
-#include <allegro5/allegro_font.h>	
+#include <allegro5/allegro.h>
 #include <allegro5/allegro_primitives.h>
 #include <allegro5/allegro_image.h>
+#include <allegro5/allegro_font.h>
+#include <allegro5/allegro_ttf.h>
+#include <allegro5/allegro_native_dialog.h>
+
 #include <stdio.h>
 
 #include "begin.h"
@@ -76,13 +79,13 @@ int main(){
 				al_flip_display();
 			}
 
-			else if ((event.type == 10) || (event.type == 12)){
+			else if ((event.type == 10) || (event.type == 12)){ //FAZER ISSO VIRAR UMA FUNCAO PRA 1 SO HEROI!!! VERIFICAR SE ESTA BATENDO DE ALGUM JEITO, E SE SIM, NAO FAZER NADA! CASO ESTEJA NA TERRA
 				if (event.keyboard.keycode == 1)
 					joystick_left (player_1->control, event.type);
 				else if (event.keyboard.keycode == 4)
 					joystick_right (player_1->control, event.type);
 				else if (event.keyboard.keycode == 23)
-					hero_jump (player_1, player_2);
+					hero_jump (player_1, player_2, X_SCREEN, Y_SCREEN, GROUND);
 				else if (event.keyboard.keycode == 19){		//COLOCAR AQUI COM BASE NA VERIFICACAO DE EVENT.TYPE O REDIMENSIONAMENTO
 					int stat = player_1->control->down;
 					joystick_down (player_1->control, event.type);
@@ -96,17 +99,17 @@ int main(){
 					}
 				}
 					
-				else if (event.keyboard.keycode == ALLEGRO_KEY_C)	//ARRUMAR AQUI!
+				else if (event.keyboard.keycode == 6)	//ARRUMAR AQUI!
 					joystick_defense (player_1->control, event.type);
 				else if (event.keyboard.keycode == 82)
 					joystick_left (player_2->control, event.type);
 				else if (event.keyboard.keycode == 83)
 					joystick_right (player_2->control, event.type);
 				else if (event.keyboard.keycode == 84)
-					hero_jump (player_2, player_1);
+					hero_jump (player_2, player_1, X_SCREEN, Y_SCREEN, GROUND);
 				else if (event.keyboard.keycode == 85)
 					joystick_down (player_2->control, event.type);
-				else if (event.keyboard.keycode == ALLEGRO_KEY_J)	//ARRUMAR AQUI TAMBEM
+				else if (event.keyboard.keycode == 215)	//ARRUMAR AQUI TAMBEM
 					joystick_defense (player_2->control, event.type);
 			}
 			else if (event.type == 42){

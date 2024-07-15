@@ -2,9 +2,9 @@
 #define __DAMAGE__
 
 #define PUNCH_DAMAGE 3
-#define PUNCH_COOLDOWN 3
+#define PUNCH_COOLDOWN 3 * 30
 #define KICK_DAMAGE 5
-#define KICK_COOLDOWN 5
+#define KICK_COOLDOWN 5 * 30
 
 #define BDAMAGE 5
 #define BVELOCITY 5
@@ -15,18 +15,9 @@ typedef struct{
 	int range[2];
 }actions;
 
-typedef struct bullet{
-	int x;
-	int y;
-	bool trajectory;	//0 para a esquerda, 1 para a direita
-	int damage;
-	int velocity;
-}bullet;
-
 typedef struct special{
 	int timer;
 	int damage;
-	bullet *projectile; //AQUI TEM QUE TER OUTRO STRUCT PRA BALA!!!!!!!!!!!
 }special;
 
 actions* create_action();

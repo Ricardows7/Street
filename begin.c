@@ -144,6 +144,51 @@ void update_position (hero *p1, hero *p2, int max_x, int max_y, int ground, int 
 	return;
 }
 /*
+void punch (hero *player, hero *target){
+	SE ESTIVER NA TERRA, ZERA todos os campos DO PLAYER->CONTROL
+
+	if (player->moves->timer[0] < 0){
+		player->moves->timer[0] = PUNCH_COOLDOWN;
+		player->state[1].status = false;	???
+		return;
+	}
+	if (player->state[1].status == 0)	??? ISSO VAI NO INICIO! SE NAO TIVER SETADO PRA SOCO, OU TIVER SETADO PRA OUTRO GOLPE
+		return;
+
+	player->moves->timer[0] -= 1;
+	if (player->moves->timer[0] >= PUNCH_COOLDOWN * 4/5 || player->moves->timer[0] <= PUNCH_COOLDOWN / 5)
+		printar sprite normal;
+	else if (player->moves->timer[0] >= PUNCH_COOLDOWN * 3/5)
+		ajusta a sprite a ser printada;
+	else if (player->moves->timer[0] >= PUNCH_COOLDOWN * 2/5){
+		ajusta a sprite a ser printada;
+		clean_hit ();
+	}
+	else
+		ajusta a sprite a ser printada;
+	
+	return;
+
+}
+
+void clean_hit (int x_origin, y_origin, x_ext, y_ext, hero *source, hero *target){ //funcao que verifica se a hitbox e alvo se interceptam
+
+}
+
+void printa_hero (hero *player, hero *aux){
+	SE ESTIVER BATENDO DE ALGUM JEITO, RETORNA!!!!!!
+	if (player->control->air){
+		printa a sprite em relacao a aux (COM BASE NA ID DO HERO!)
+	}
+	if (estiver batendo)
+		return;
+	
+	if (player->control->left)
+		printa indo pra esquerda com base nas posicoes;
+	else if (player->control->right)
+		
+*/
+/*
 void update_damage (hero *p1, hero *p2, int type){
 	int a, b, c, d, e;
 
