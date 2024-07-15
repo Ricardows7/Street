@@ -1,9 +1,9 @@
 # Makefile para o jogo STREET_FIGHT Prog2
 
 # Usar pkg-config para obter os flags corretos de compilação e linkagem para o Allegro
-#INCLUDE_PATH=/usr/include/allegro5
-#LIB_PATH=/usr/lib
-FLAGS=$(shell pkg-config allegro-5 allegro_main-5 allegro_font-5 allegro_primitives-5 allegro_image-5 allegro_ttf-5 allegro_dialog-5 allegro_keyboard-5 --libs --cflags)
+INCLUDE_PATH=/usr/include/allegro5
+LIB_PATH=/usr/lib
+FLAGS=$(shell pkg-config allegro-5 allegro_main-5 allegro_font-5 allegro_primitives-5 allegro_image-5 allegro_ttf-5 allegro_dialog-5  --libs --cflags)
 Executavel=Street
 
 all: $(Executavel)

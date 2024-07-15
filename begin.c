@@ -18,8 +18,8 @@ hero* hero_create(){
 	new_hero->stamina = 100;
 	new_hero->jump = 0;
 	new_hero->control = joystick_create();
-	new_hero->moves = create_action();
-	new_hero->ultimate = create_special ();
+	//new_hero->moves = create_action();
+	//new_hero->ultimate = create_special ();
 	//new_hero->state = NULL;
 
 	return new_hero;

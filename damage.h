@@ -22,8 +22,6 @@ typedef struct special{
 
 actions* create_action();
 
-bullet* create_bullet (int x, int y, int dam, int vel, bool track);
-
 special* create_special();
 
 special* special_move(special *element);

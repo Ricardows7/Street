@@ -12,8 +12,6 @@ actions* create_action(){
 	move_set->timers[1] = 0;
 	move_set->range[0] = 0;
 	move_set->range[1] = 0;
-	move_set->damage[0] = 0;
-	move_set->damage[1] = 0;
 
 	return move_set;
 }
