@@ -9,11 +9,6 @@
 #define STREET_STEP 20
 #define JUMP_VEL 50
 
-typedef struct animation{
-	bool status;
-	int timer;
-}animation;
-
 typedef struct {
 	unsigned short id;
 	unsigned char lenght;
@@ -23,11 +18,7 @@ typedef struct {
 	unsigned short stun;
 	unsigned short hp;
 	unsigned short stamina;
-	unsigned short jump;
-	animation state[8];
 	joystick *control;
-	actions *moves;
-	special *ultimate;
 } hero;																									
 hero* hero_create();
 
