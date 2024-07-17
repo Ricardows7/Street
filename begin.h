@@ -18,7 +18,10 @@ typedef struct {
 	unsigned short stun;
 	unsigned short hp;
 	unsigned short stamina;
-	joystick *control;
+	bool air;
+	int jump;
+	joystick *control_x;
+	joystick *control_y;
 } hero;																									
 hero* hero_create();
 

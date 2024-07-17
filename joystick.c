@@ -12,8 +12,6 @@ joystick* joystick_create(){
 	element->acumulation = 1;
 	element->timer = 0;
 	element->state = false;
-	element->air = false;
-	element->jump = 0;	//so e alterado na funcao de pular!
 
 	return element;
 }
@@ -25,7 +23,7 @@ void joystick_destroy (joystick *element){
 	return;
 }
 
-void joystick_activate (joystick *element, int type, long move){
+void joystick_activate (joystick *element, int type, long move){	//funcao para guardar a ativação de ume estado
 	if (type != 10)		//Se não estiver apertando o botão, não guarda a info
 		return;
 	
@@ -37,4 +35,15 @@ void joystick_activate (joystick *element, int type, long move){
 	return;
 }
 
+void joystick_deactivate (joystick *element, int type, long move){	//funcao para esquecer a ativacao de um estado
+	if (type != 12)		//Se não estiver soltando o botão, não deleta a info
+		return;
 
+	if ((element->acumulation % move) == 0)		//Se tiver a info guardada, libera ela
+		element->acumulation /= move;
+
+	return;
+}
+
+void choose_move_x (joystick *element, bool air, unsigned short stun, unsigned short stamina){
+	

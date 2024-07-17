@@ -49,8 +49,8 @@ int main(){
 
 	int where_to_go = 2;
 
-	choose_hero (player_1, 49, X_SCREEN/3, Y_SCREEN/2, X_SCREEN, Y_SCREEN, GROUND);		//RETIRAR O INICIO EM Y, DEPENDE DA ALTURA DO HEROI!!!!!!!!!!	
-	choose_hero (player_2, 49, X_SCREEN * 2/3, Y_SCREEN/2, X_SCREEN, Y_SCREEN, GROUND);
+	choose_hero (player_1, 49, X_SCREEN/3, X_SCREEN, Y_SCREEN, GROUND);		//RETIRAR O INICIO EM Y, DEPENDE DA ALTURA DO HEROI!!!!!!!!!!	
+	choose_hero (player_2, 49, X_SCREEN * 2/3, X_SCREEN, Y_SCREEN, GROUND);
 
 	while(1){
 	/*	AQUI SERÁ O MENU DE ESCOLHA!

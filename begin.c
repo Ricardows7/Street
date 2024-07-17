@@ -16,60 +16,43 @@ hero* hero_create(){
 	new_hero->stun = 0;
 	new_hero->hp = 100;
 	new_hero->stamina = 100;
+	new_hero->air = false;
 	new_hero->jump = 0;
-	new_hero->control = joystick_create();
-	//new_hero->moves = create_action();
-	//new_hero->ultimate = create_special ();
-	//new_hero->state = NULL;
+
+	new_hero->control_x = joystick_create();
+	new_hero->control_y = joystick_create();
 
 	return new_hero;
-	
 }
 
-hero* choose_hero (hero* element, int type, unsigned short x, unsigned short y, unsigned short max_x, unsigned short max_y, unsigned short ground){
+hero* choose_hero (hero* element, int type, unsigned short x, unsigned short max_x, unsigned short max_y, unsigned short ground){
 
 	element->x = x;
-	element->jump = 0;
-	
-	//element->moves->timers[0] = PUNCH_COOLDOWN;
-	//element->moves->timers[1] = KICK_COOLDOWN;
 
 	if (type == 49){	//type se refere ao codigo do teclado
 		element->id = 1;
 	        element->lenght = 20;
         	element->width = 20;
-
-		//element->moves->range[0] = 3;
-		//element->moves->range[1] = 4;
 	}
 	else if (type == 50){
 		element->id = 2;
                 element->lenght = 20;
                 element->width = 20;
-
-                //element->moves->range[0] = 3;
-                //element->moves->range[1] = 4;
 	}
 	else if (type == 51){
 		element->id = 3;
                 element->lenght = 20;
                 element->width = 20;
-
-                //element->moves->range[0] = 3;
-                //element->moves->range[1] = 4;
 	}
 	else{
 		element->id = 4;
                 element->lenght = 20;
                 element->width = 20;
-
-                //element->moves->range[0] = 3;
-                //element->moves->range[1] = 4;
 	}
 
-	element->y = ground + element->lenght/2;
+	element->y = ground + element->lenght/2;	//como y spawna acima do chao, nunca passara pra baixo da tela!
 
-	if ((x - element->width/2 < 0) || (x + element->width/2 > max_x) || (y - element->lenght/2 < ground) || (y + element->lenght/2 > max_y)){
+	if ((x - element->width/2 < 0) || (x + element->width/2 > max_x) || (element->y + element->lenght/2 > max_y)){
 	       	free (element);
 		printf ("Erro na posição inicial dos jogadores!\n");
 		return NULL;
@@ -82,10 +65,20 @@ void hero_move(hero *element, char steps, unsigned char trajectory, unsigned sho
 
 	if (!trajectory){ if ((element->x - steps*STREET_STEP) - element->width/2 >= 0) element->x = element->x - steps*STREET_STEP;} 				//Verifica se a movimentação para a esquerda é desejada e possível; se sim, efetiva a mesma
 	else if (trajectory == 1){ if ((element->x + steps*STREET_STEP) + element->width/2 <= max_x) element->x = element->x + steps*STREET_STEP;}	//Verifica se a movimentação para a direita é desejada e possível; se sim, efetiva a mesma
-	else if (trajectory == 2){
-	       	if ((element->y - steps) - element->lenght/2 >= ground) element->y = element->y - steps;
-	}		//Verifica se a movimentação para cima é desejada e possível; se sim, efetiva a mesma
-	else if (trajectory == 3){ if ((element->y + steps*STREET_STEP) + element->lenght/2 <= max_y) element->y = element->y + steps*STREET_STEP;}	//Verifica se a movimentação para baixo é desejada e possível; se sim, efetiva a mesma
+	else if (trajectory == 2){	//Lógica do personagem no ar. Steps positivo = subindo, negativo = descendo
+		if (steps < 0){
+	       		if ((element->y - steps) - element->lenght/2 <= ground)		//Se descer pra baixo do chao, spawna no chao. Se nao, so desce normal		
+				element->y = element->lenght/2 + ground;
+			else
+				element->y = element->y - steps;
+		}
+		else{
+			if ((element->y + steps) + element->lenght/2 <= max_y)		//So sobe se couber na tela
+				element->y = element->y + steps;
+		}
+	
+	}
+
 }
 
 unsigned char collision (hero *element_first, hero *element_second){
@@ -118,6 +111,16 @@ unsigned char collision (hero *element_first, hero *element_second){
 }
 
 void update_position (hero *p1, hero *p2, int max_x, int max_y, int ground, int gravity){
+	if (!p1->control_y->state)
+		choose_move_y (p1);
+
+	if (!p1->control_x)
+		choose_move_x (p1);
+
+	return;
+}
+
+/*
 	if (p1->control->left){
 		hero_move (p1, 1, 0, max_x, max_y, ground);
 		if (collision (p1, p2))
@@ -144,6 +147,7 @@ void update_position (hero *p1, hero *p2, int max_x, int max_y, int ground, int 
 
 	return;
 }
+*/
 /*
 void punch (hero *player, hero *target){
 	SE ESTIVER NA TERRA, ZERA todos os campos DO PLAYER->CONTROL
