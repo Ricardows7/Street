@@ -7,7 +7,7 @@
 #include "damage.h"
 
 #define STREET_STEP 20
-#define JUMP_VEL 10
+#define JUMP_VEL 50
 
 typedef struct animation{
 	bool status;

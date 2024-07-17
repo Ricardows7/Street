@@ -11,10 +11,10 @@
 
 #include "begin.h"
 
-#define X_SCREEN 320
-#define Y_SCREEN 320
+#define X_SCREEN 1080
+#define Y_SCREEN 1080
 
-#define GRAVITY 2
+#define GRAVITY 1
 #define DEFENSE_STAMINA 0.1
 #define GROUND 5
 
@@ -64,13 +64,14 @@ int main(){
 		}
 	*/
 		if (where_to_go == 2){
-			al_wait_for_event(queue, &event);	
+			al_wait_for_event(queue, &event);
+			printf ("vai entrar no update!\n");	
 			update_position (player_1, player_2, X_SCREEN, Y_SCREEN, GROUND, GRAVITY);
 			update_position (player_2, player_1, X_SCREEN, Y_SCREEN, GROUND, GRAVITY);
 
 			if (event.type == 30){
 				al_clear_to_color (al_map_rgb(0, 0, 0));
-				al_draw_bitmap (mysha, 50, 100, 100);
+				//al_draw_bitmap (mysha, 50, 100, 100);
 				al_draw_filled_rectangle (100, 100, 340, 340, al_map_rgba_f (0,0,0.5,0.5));
 				al_draw_filled_rectangle(0, 0, X_SCREEN, 5, al_map_rgb(0, 255, 0));
       				al_draw_filled_rectangle (player_1->x-player_1->width/2, player_1->y-player_1->lenght/2, player_1->x+player_1->width/2, player_1->y+player_1->lenght/2, al_map_rgb(255, 0, 0));
@@ -80,13 +81,13 @@ int main(){
 			}
 
 			else if ((event.type == 10) || (event.type == 12)){ //FAZER ISSO VIRAR UMA FUNCAO PRA 1 SO HEROI!!! VERIFICAR SE ESTA BATENDO DE ALGUM JEITO, E SE SIM, NAO FAZER NADA! CASO ESTEJA NA TERRA
-				if (event.keyboard.keycode == 1)
+				if (event.keyboard.keycode == 209)
 					joystick_left (player_1->control, event.type);
-				else if (event.keyboard.keycode == 4)
+				else if (event.keyboard.keycode == 210)
 					joystick_right (player_1->control, event.type);
-				else if (event.keyboard.keycode == 23)
+				else if (event.keyboard.keycode == 207)
 					hero_jump (player_1, player_2, X_SCREEN, Y_SCREEN, GROUND);
-				else if (event.keyboard.keycode == 19){		//COLOCAR AQUI COM BASE NA VERIFICACAO DE EVENT.TYPE O REDIMENSIONAMENTO
+				else if (event.keyboard.keycode == 208){		//COLOCAR AQUI COM BASE NA VERIFICACAO DE EVENT.TYPE O REDIMENSIONAMENTO
 					int stat = player_1->control->down;
 					joystick_down (player_1->control, event.type);
 					if (!stat && player_1->control->down){
@@ -112,7 +113,7 @@ int main(){
 				else if (event.keyboard.keycode == 215)	//ARRUMAR AQUI TAMBEM
 					joystick_defense (player_2->control, event.type);
 			}
-			else if (event.type == 42){
+			else if (event.type == ALLEGRO_EVENT_DISPLAY_CLOSE){
 				where_to_go = 3;
 				break;
 			}

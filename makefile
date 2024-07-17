@@ -9,7 +9,7 @@ Executavel=Street
 all: $(Executavel)
 
 $(Executavel): AggressiveSquares.o begin.o joystick.o
-	gcc AggressiveSquares.o begin.o joystick.o -o $(Executavel) $(FLAGS)
+	gcc AggressiveSquares.o begin.o joystick.o -g -o $(Executavel) $(FLAGS)
 
 AggressiveSquares.o: AggressiveSquares.c
 	gcc -c AggressiveSquares.c -I$(INCLUDE_PATH) $(FLAGS)

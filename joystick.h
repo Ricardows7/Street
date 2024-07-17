@@ -3,25 +3,21 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <bool.h>
 
 typedef struct joystick{
-	unsigned char right;
-	unsigned char left;
-	unsigned char down;
-	unsigned char defense;
-	unsigned char air;	//Será alterado somente na função de pulo!
+	long acumulation;
+	int timer;
+	bool state;
+	bool air;
 } joystick;
 
 joystick* joystick_create();
 
 void joystick_destroy (joystick *element);
 
-void joystick_right (joystick *element, int type);
+void joystick_activate (joystick *element);
 
-void joystick_left (joystick *element, int type);
-
-void joystick_down (joystick *element, int type);
-
-void joystick_defense (joystick *element, int type);
+void joystick_deactivate (joystick *element);
 
 #endif

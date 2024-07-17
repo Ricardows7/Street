@@ -31,40 +31,40 @@ hero* choose_hero (hero* element, int type, unsigned short x, unsigned short y, 
 	element->x = x;
 	element->jump = 0;
 	
-	element->moves->timers[0] = PUNCH_COOLDOWN;
-	element->moves->timers[1] = KICK_COOLDOWN;
+	//element->moves->timers[0] = PUNCH_COOLDOWN;
+	//element->moves->timers[1] = KICK_COOLDOWN;
 
 	if (type == 49){	//type se refere ao codigo do teclado
 		element->id = 1;
 	        element->lenght = 20;
         	element->width = 20;
 
-		element->moves->range[0] = 3;
-		element->moves->range[1] = 4;
+		//element->moves->range[0] = 3;
+		//element->moves->range[1] = 4;
 	}
 	else if (type == 50){
 		element->id = 2;
                 element->lenght = 20;
                 element->width = 20;
 
-                element->moves->range[0] = 3;
-                element->moves->range[1] = 4;
+                //element->moves->range[0] = 3;
+                //element->moves->range[1] = 4;
 	}
 	else if (type == 51){
 		element->id = 3;
                 element->lenght = 20;
                 element->width = 20;
 
-                element->moves->range[0] = 3;
-                element->moves->range[1] = 4;
+                //element->moves->range[0] = 3;
+                //element->moves->range[1] = 4;
 	}
 	else{
 		element->id = 4;
                 element->lenght = 20;
                 element->width = 20;
 
-                element->moves->range[0] = 3;
-                element->moves->range[1] = 4;
+                //element->moves->range[0] = 3;
+                //element->moves->range[1] = 4;
 	}
 
 	element->y = ground + element->lenght/2;
@@ -124,6 +124,7 @@ void update_position (hero *p1, hero *p2, int max_x, int max_y, int ground, int 
 			hero_move (p1, -1, 0, max_x, max_y, ground);
 	}
 	if (p1->control->right){
+		printf ("direitinha!\n");
 		hero_move (p1, 1, 1, max_x, max_y, ground);
 		if (collision (p1, p2))
 			hero_move (p1, -1, 1, max_x, max_y, ground);
