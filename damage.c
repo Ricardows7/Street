@@ -1,63 +1,66 @@
 #include "damage.h"
 
-actions* create_action(){
+int check_hit (int min_x, int max_x, int min_y, int max_y, int x, int y, int lenght, int width){
+	float sq_left = x - (width/2);
+	float sq_right = x + (width/2);
+	float sq_top = y - (height/2);
+	float sq_bottom = y + (height/2);
 
-	actions *move_set = (actions*) malloc (sizeof(actions));
-	if (!move_set){
-		printf ("Erro durante alocacao de vetor de movimentos!\n");
-		return NULL;
-	}
-
-	move_set->timers[0] = 0;
-	move_set->timers[1] = 0;
-	move_set->range[0] = 0;
-	move_set->range[1] = 0;
-
-	return move_set;
+	return !(max_x < sq_left || min_x > sq_right || max_y < sq_top || min_y > sq_bottom);
 }
 
-bullet* create_bullet (int x, int y, int dam, int vel, bool track){
-	bullet *aux = (bullet*) malloc (sizeof (bullet));
-	if (!aux){
-		printf ("Erro na alocação do projétil!\n");
-		return NULL;
+void update_damage (int dam, int *hp, int *stun, bool up, bool down, int min_x, int max_x, int min_y, int max_y, int x, int y, int lenght, int width){
+	bool hit_up, hit_down;
+
+	hit_up = check_hit (min_x, max_x, min_y, max_y, x, );
+	hit_down = check_hit (min_x, max_x, min_y, max_y, x, );
+
+	if (hit_up || hit_down){
+		*stun += STUN_TIME;
+		*hp -= dam;
 	}
 
-	aux->x = x;
-	aux->y = y;
-	aux->trajectory = track;
-	aux->damage = dam;
-	aux->velocity = vel;
+	if (hit_up && up)
+		*hp += dam * 0.8;
+	else if (hit_down && down)
+		hp* += dam *0.8;
+	
+	if (*hp < 0)
+		*hp = 0;
 
-	return aux;
+	return;
 }
 
-special* create_special(){
-	special *aux = (special*) malloc (sizeof(special));
-	if (!aux){
-		printf ("Erro na alocação do especial!\n");
-		return;
-	}
-	aux->projectile = NULL;
-	if (id == 1){
-		aux->timer = 10;
-		aux->damage = 10;
-	}
-	else if (id == 2){
-		aux->timer = 10;
-		aux->damage = 10;
-	}
-	else if (id == 3){
-		aux->timer = 10;
-		aux->damage = 10;
-	}
-	else{
-		aux->timer = 10;
-		aux->damage = 10;
-	}
+void stamina_update (int state, bool drop){      //PASSAR ESSA FUNCAO PARA O DAMAGE.C!!!!!!!!!!!
+        if (!(state % SPECIAL)){
+                if (drop)
+                        p1->stamina -= SPECIAL_STAMINA;
+        }
+        else if (!(state % KICK)){
+                if (drop)
+                        p1->stamina -= KICK_STAMINA;
+        }
+        else if (!(state % PUNCH)){
+                if (drop)
+                        p1->stamina -= PUNCH_STAMINA;
+        }
+        else if (!(state % DEFENSE_UP)){
+                p1->stamina -= DEFENSE_UP_STAMINA;
+        }
+        else if (!(state % DEFENSE_DOWN)){
+                p1->stamina -= DEFENSE_DOWN_STAMINA;
+        }
+        else
+                stamina += STAMINA_RECOVERY;
+	
+	if (stamina > 100)
+		stamina = 100;
+	else if (stamina < 0)
+		stamina = 0;
 
-	return aux;
+        return;
 }
+
 /*	
 void update_damage (hero *p1, hero *p2, int type){
         int a, b, c, d, e;

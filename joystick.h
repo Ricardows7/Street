@@ -18,7 +18,8 @@
 typedef struct joystick{
 	long acumulation;
 	int timer;
-	bool state;
+	int state;
+	bool change;
 } joystick;
 
 joystick* joystick_create();

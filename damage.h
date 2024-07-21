@@ -2,30 +2,20 @@
 #define __DAMAGE__
 
 #define PUNCH_DAMAGE 3
-#define PUNCH_COOLDOWN 3 * 30
 #define KICK_DAMAGE 5
-#define KICK_COOLDOWN 5 * 30
 
-#define BDAMAGE 5
-#define BVELOCITY 5
-#define BCOOLDOWN 10
+#define SPECIAL_STAMINA 20
+#define KICK_STAMINA 5
+#define PUNCH_STAMINA 3
+#define DEFENSE_UP_STAMINA 0.5
+#define DEFENSE_DOWN_STAMINA 0.5
+#define STAMINA_RECOVERY 0.3
 
-typedef struct{
-	int timers[2];
-	int range[2];
-}actions;
+int check_hit (int min_x, int max_x, int min_y, int max_y, int x, int y, int lenght, int width);
 
-typedef struct special{
-	int timer;
-	int damage;
-}special;
+void update_damage (int dam, int *hp, int *stun, bool up, bool down, int min_x, int max_x, int min_y,
+int max_y, int x, int y, int lenght, int width);
 
-actions* create_action();
-
-special* create_special();
-
-special* special_move(special *element);
-
-special* special_destroy(special *element);
+void stamina_update (int state, bool drop);
 
 #endif
