@@ -15,8 +15,7 @@
 #define Y_SCREEN 1080
 
 #define GRAVITY 1
-#define DEFENSE_STAMINA 0.1
-#define GROUND 5
+#define GROUND 500
 
 int main(){
 
@@ -65,53 +64,93 @@ int main(){
 	*/
 		if (where_to_go == 2){
 			al_wait_for_event(queue, &event);
-			printf ("vai entrar no update!\n");	
+			//printf ("vai entrar no update!\n");	
 			update_position (player_1, player_2, X_SCREEN, Y_SCREEN, GROUND, GRAVITY);
 			update_position (player_2, player_1, X_SCREEN, Y_SCREEN, GROUND, GRAVITY);
 
 			if (event.type == 30){
 				al_clear_to_color (al_map_rgb(0, 0, 0));
-				//al_draw_bitmap (mysha, 50, 100, 100);
-				al_draw_filled_rectangle (100, 100, 340, 340, al_map_rgba_f (0,0,0.5,0.5));
-				al_draw_filled_rectangle(0, 0, X_SCREEN, 5, al_map_rgb(0, 255, 0));
-      				al_draw_filled_rectangle (player_1->x-player_1->width/2, player_1->y-player_1->lenght/2, player_1->x+player_1->width/2, player_1->y+player_1->lenght/2, al_map_rgb(255, 0, 0));
-				al_draw_filled_rectangle (player_2->x-player_2->width/2, player_2->y-player_2->lenght/2, player_2->x+player_2->width/2, player_2->y+player_2->lenght/2, al_map_rgb (255, 0, 0));
+				//al_draw_bitmap (mysha, 50, 100, 100;
+				al_draw_filled_rectangle (0, Y_SCREEN/50, 300 * (player_1->hp/100), 0, al_map_rgba_f (0.5,0,0,0.5));
+				al_draw_filled_rectangle (0, (Y_SCREEN/25) + 10, 300 * (player_1->stamina/100), (Y_SCREEN/50) + 10, al_map_rgba_f (0,0,0.5,0.5));
+
+				al_draw_filled_rectangle (X_SCREEN - (300 * (player_2->hp/100)), Y_SCREEN/50, X_SCREEN, 0, al_map_rgba_f (0.5,0,0,0.5));
+				al_draw_filled_rectangle (X_SCREEN - (300 * (player_2->stamina/100)), (Y_SCREEN/25) + 10, X_SCREEN, (Y_SCREEN/50) + 10, al_map_rgba_f (0,0,0.5,0.5));
+				al_draw_filled_rectangle(0, Y_SCREEN, X_SCREEN, GROUND, al_map_rgb(0, 255, 0));
+      				al_draw_filled_rectangle (player_1->x-player_1->width/2, player_1->y-player_1->length/2, player_1->x+player_1->width/2, player_1->y+player_1->length/2, al_map_rgb(255, 0, 0));
+				al_draw_filled_rectangle (player_2->x-player_2->width/2, player_2->y-player_2->length/2, player_2->x+player_2->width/2, player_2->y+player_2->length/2, al_map_rgb (0, 0, 255));
 
 				al_flip_display();
 			}
 
-			else if ((event.type == 10) || (event.type == 12)){ //FAZER ISSO VIRAR UMA FUNCAO PRA 1 SO HEROI!!! VERIFICAR SE ESTA BATENDO DE ALGUM JEITO, E SE SIM, NAO FAZER NADA! CASO ESTEJA NA TERRA
-				if (event.keyboard.keycode == 209)
-					joystick_left (player_1->control, event.type);
-				else if (event.keyboard.keycode == 210)
-					joystick_right (player_1->control, event.type);
-				else if (event.keyboard.keycode == 207)
-					hero_jump (player_1, player_2, X_SCREEN, Y_SCREEN, GROUND);
-				else if (event.keyboard.keycode == 208){		//COLOCAR AQUI COM BASE NA VERIFICACAO DE EVENT.TYPE O REDIMENSIONAMENTO
-					int stat = player_1->control->down;
-					joystick_down (player_1->control, event.type);
-					if (!stat && player_1->control->down){
-						player_1->y = player_1->y/2;
-						player_1->lenght = player_1->lenght/2;
-					}
-					else if (stat && !player_1->control->down){
-						player_1->y = player_1->y * 2;
-						player_1->lenght = player_1->lenght * 2;
-					}
+			else if ((event.type == 10) || (event.type == 12)){ 
+				if (event.keyboard.keycode == 1){
+					joystick_activate (player_1->control_x, event.type, WALK_LEFT);
+					joystick_deactivate (player_1->control_x, event.type, WALK_LEFT);
 				}
-					
-				else if (event.keyboard.keycode == 6)	//ARRUMAR AQUI!
-					joystick_defense (player_1->control, event.type);
-				else if (event.keyboard.keycode == 82)
-					joystick_left (player_2->control, event.type);
-				else if (event.keyboard.keycode == 83)
-					joystick_right (player_2->control, event.type);
-				else if (event.keyboard.keycode == 84)
-					hero_jump (player_2, player_1, X_SCREEN, Y_SCREEN, GROUND);
-				else if (event.keyboard.keycode == 85)
-					joystick_down (player_2->control, event.type);
-				else if (event.keyboard.keycode == 215)	//ARRUMAR AQUI TAMBEM
-					joystick_defense (player_2->control, event.type);
+				else if (event.keyboard.keycode == 4){
+					joystick_activate (player_1->control_x, event.type, WALK_RIGHT);
+					joystick_deactivate (player_1->control_x, event.type, WALK_RIGHT);
+				}
+				else if (event.keyboard.keycode == 23){
+					joystick_activate (player_1->control_y, event.type, JUMP);
+					joystick_deactivate (player_1->control_y, event.type, JUMP);
+				}
+				else if (event.keyboard.keycode == 19){		//COLOCAR AQUI COM BASE NA VERIFICACAO DE EVENT.TYPE O REDIMENSIONAMENTO
+					joystick_activate (player_1->control_y, event.type, GET_DOWN);
+					joystick_deactivate (player_1->control_y, event.type, GET_DOWN);
+				}	
+				else if (event.keyboard.keycode == 6){	//ARRUMAR AQUI!
+					joystick_activate (player_1->control_x, event.type, PUNCH);
+					joystick_deactivate (player_1->control_x, event.type, PUNCH);
+				}
+				else if (event.keyboard.keycode == 7){
+                                        joystick_activate (player_1->control_x, event.type, KICK);
+                                        joystick_deactivate (player_1->control_x, event.type, KICK);
+                                }
+				else if (event.keyboard.keycode == 8){
+                                        joystick_activate (player_1->control_x, event.type, DEFENSE_UP);
+                                        joystick_deactivate (player_1->control_x, event.type, DEFENSE_UP);
+                                }
+				else if (event.keyboard.keycode == 10){
+                                        joystick_activate (player_1->control_x, event.type, DEFENSE_DOWN);
+                                        joystick_deactivate (player_1->control_x, event.type, DEFENSE_DOWN);
+                                }
+				//PLAYER 2 DAQUI PRA BAIXO
+				else if (event.keyboard.keycode == 82){
+                                        joystick_activate (player_2->control_x, event.type, WALK_LEFT);
+                                        joystick_deactivate (player_2->control_x, event.type, WALK_LEFT);
+                                }
+                                else if (event.keyboard.keycode == 83){
+                                        joystick_activate (player_2->control_x, event.type, WALK_RIGHT);
+                                        joystick_deactivate (player_2->control_x, event.type, WALK_RIGHT);
+                                }
+                                else if (event.keyboard.keycode == 84){
+                                        joystick_activate (player_2->control_y, event.type, JUMP);
+                                        joystick_deactivate (player_2->control_y, event.type, JUMP);
+                                }
+                                else if (event.keyboard.keycode == 85){         //COLOCAR AQUI COM BASE NA VERIFICACAO DE EVENT.TYPE O REDIMENSIONAMENTO
+                                        joystick_activate (player_2->control_y, event.type, GET_DOWN);
+                                        joystick_deactivate (player_2->control_y, event.type, GET_DOWN);
+                                }
+                                else if (event.keyboard.keycode == 73){  //ARRUMAR AQUI!
+                                        joystick_activate (player_2->control_x, event.type, PUNCH);
+                                        joystick_deactivate (player_2->control_x, event.type, PUNCH);
+                                }
+                                else if (event.keyboard.keycode == 68){
+                                        joystick_activate (player_2->control_x, event.type, KICK);
+                                        joystick_deactivate (player_2->control_x, event.type, KICK);
+                                }
+                                else if (event.keyboard.keycode == 72){
+                                        joystick_activate (player_2->control_x, event.type, DEFENSE_UP);
+                                        joystick_deactivate (player_2->control_x, event.type, DEFENSE_UP);
+                                }
+                                else if (event.keyboard.keycode == 13){
+                                        joystick_activate (player_1->control_x, event.type, DEFENSE_DOWN);
+                                        joystick_deactivate (player_1->control_x, event.type, DEFENSE_DOWN);
+                                }
+				printf ("%d\n", event.keyboard.keycode);
+
 			}
 			else if (event.type == ALLEGRO_EVENT_DISPLAY_CLOSE){
 				where_to_go = 3;
