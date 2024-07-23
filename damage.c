@@ -18,7 +18,6 @@ void update_damage (int dam, float *hp, int *stun, bool up, bool down, int min_x
 	if (hit_up || hit_down){	//Se houve hit, stunna e tira vida
 		*stun += STUN_TIME;
 		*hp -= dam;
-		printf ("DEU HIT!\n");
 	}
 
 	if (hit_up && up)	//Se o hit pegou em alguma regiao sendo defendida, recupera a vida, dando o efeito de dano reduzido

@@ -65,12 +65,15 @@ int main(){
 		if (where_to_go == 2){
 			al_wait_for_event(queue, &event);
 			//printf ("vai entrar no update!\n");	
-			update_position (player_1, player_2, X_SCREEN, Y_SCREEN, GROUND, GRAVITY);
-			update_position (player_2, player_1, X_SCREEN, Y_SCREEN, GROUND, GRAVITY);
+			//update_position (player_1, player_2, X_SCREEN, Y_SCREEN, GROUND, GRAVITY);
+			//update_position (player_2, player_1, X_SCREEN, Y_SCREEN, GROUND, GRAVITY);
 
 			if (event.type == 30){
 				al_clear_to_color (al_map_rgb(0, 0, 0));
 				//al_draw_bitmap (mysha, 50, 100, 100;
+				//update_position (player_1, player_2, X_SCREEN, Y_SCREEN, GROUND, GRAVITY);
+				//update_position (player_2, player_1, X_SCREEN, Y_SCREEN, GROUND, GRAVITY);
+
 				al_draw_filled_rectangle (0, Y_SCREEN/50, 300 * (player_1->hp/100), 0, al_map_rgba_f (0.5,0,0,0.5));
 				al_draw_filled_rectangle (0, (Y_SCREEN/25) + 10, 300 * (player_1->stamina/100), (Y_SCREEN/50) + 10, al_map_rgba_f (0,0,0.5,0.5));
 
@@ -79,6 +82,10 @@ int main(){
 				al_draw_filled_rectangle(0, Y_SCREEN, X_SCREEN, GROUND, al_map_rgb(0, 255, 0));
       				al_draw_filled_rectangle (player_1->x-player_1->width/2, player_1->y-player_1->length/2, player_1->x+player_1->width/2, player_1->y+player_1->length/2, al_map_rgb(255, 0, 0));
 				al_draw_filled_rectangle (player_2->x-player_2->width/2, player_2->y-player_2->length/2, player_2->x+player_2->width/2, player_2->y+player_2->length/2, al_map_rgb (0, 0, 255));
+
+				update_position (player_1, player_2, X_SCREEN, Y_SCREEN, GROUND, GRAVITY);
+                                update_position (player_2, player_1, X_SCREEN, Y_SCREEN, GROUND, GRAVITY);
+
 
 				al_flip_display();
 			}

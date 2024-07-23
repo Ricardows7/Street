@@ -177,8 +177,8 @@ void position_x (hero *p1, hero *p2, int max_x, int max_y, int ground, int gravi
 					minimo_x = p1->x - p1->width/2 - 20;
 					maximo_x = p1->x - p1->width/2 - 10;
 				}
-				update_damage (PUNCH_DAMAGE, &p2->hp, &p2->stun, !(p2->control_x->state - DEFENSE_UP), !(p2->control_x->state - DEFENSE_DOWN), minimo_x, maximo_x, p1->y * (3/5), p1->y * (4/5), p2->x, p2->y, p2->length, p2->width);
-				al_draw_filled_rectangle (minimo_x, p1->y * (4/5), maximo_x, p1->y * (3/5), al_map_rgba_f(0.0, 1.0, 0.0, 1.0)); //PRECISO FAZER ISSO FUNCIONAR!!!
+				update_damage (PUNCH_DAMAGE, &p2->hp, &p2->stun, !(p2->control_x->state - DEFENSE_UP), !(p2->control_x->state - DEFENSE_DOWN), minimo_x, maximo_x, p1->y - (p1->length/4), p1->y, p2->x, p2->y, p2->length, p2->width);
+				al_draw_filled_rectangle (minimo_x, p1->y - (p1->length/4), maximo_x, p1->y, al_map_rgba_f(0.5, 0.3, 0.0, 0.5)); //PRECISO FAZER ISSO FUNCIONAR!!!
 
 				printf ("Desenhou o retangulo!\n");
 
