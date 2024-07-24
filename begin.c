@@ -133,6 +133,7 @@ void update_position (hero *p1, hero *p2, int max_x, int max_y, int ground, int 
 }
 
 void position_x (hero *p1, hero *p2, int max_x, int max_y, int ground, int gravity){
+			printf ("ANTES DO LACO %d\n", p1->control_x->state);
 	switch (p1->control_x->state){
 		case SPECIAL:
 			p1->control_x->timer++;
@@ -239,7 +240,7 @@ void position_x (hero *p1, hero *p2, int max_x, int max_y, int ground, int gravi
 				p1->control_x->state = 0;
 				p1->control_x->timer = 0;
 			}
-			//printf ("TO NO WALK RIGHT!!!, %d state %ld acumulation %d value\n", p1->control_x->state, p1->control_x->acumulation, WALK_RIGHT);
+			printf ("TO NO WALK RIGHT!!!, %d state %ld acumulation %d value\n", p1->control_x->state, p1->control_x->acumulation, WALK_RIGHT);
 			break;
 		default:
 			p1->control_x->timer++;

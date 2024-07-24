@@ -81,7 +81,7 @@ int choose_move_x (joystick *element, joystick *aux, float stamina, int stun){
 		element->state = DEFENSE_DOWN;
 	else if (element->acumulation % WALK_LEFT == 0 && aux->state != GET_DOWN)	//LEMBRAR DA POSSIBILIDADE DE SO RETORNAR O VALOR DO MOVIMENTO PRA OUTRA FUNCAO!!!!!!!!!!!!
 		element->state = WALK_LEFT;
-	else if (element->state % WALK_RIGHT == 0 && aux->state != GET_DOWN)	//So move se nao estiver agachado
+	else if (element->acumulation % WALK_RIGHT == 0 && aux->state != GET_DOWN)	//So move se nao estiver agachado
 		element->state = WALK_RIGHT;
 	else
 		element->state = 0;	//SE NAO FIZER NADA, ESTADO 0!!!!!!!!
