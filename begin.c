@@ -31,8 +31,8 @@ hero* choose_hero (hero* element, int type, int x, int max_x, int max_y, int gro
 
 	if (type == 49){	//type se refere ao codigo do teclado
 		element->id = 1;
-	        element->length = 20;
-        	element->width = 20;
+	        element->length = 220;
+        	element->width = 141;
 	}
 	else if (type == 50){
 		element->id = 2;
@@ -112,6 +112,17 @@ unsigned char collision (hero *element_first, hero *element_second){
 		return 0;
 }
 
+void hero_movement (hero *p1, hero *p2, char steps, unsigned char trajectory, unsigned short max_x, unsigned short max_y, unsigned short ground){
+	hero_move (p1, steps, trajectory, max_x, max_y, ground);
+	if (collision (p1, p2)){
+		hero_move (p1, -steps, trajectory, max_x, max_y, ground);
+		if (p1->air)
+			p1->jump = -p1->jump;
+	}
+
+	return;
+}
+
 void update_position (hero *p1, hero *p2, int max_x, int max_y, int ground, int gravity){
 	if (!p1->control_y->state && p1->control_y->change)	//NA FUNCAO JUMP, SE O CLOCK FOR 0 CHAMAR HERO_JUMP!!!!!!!!!!
 		choose_move_y (p1->control_y, p1->control_x, p1->stun);	//NOS ESTADOS Y, SE ESTIVER GOLPEANDO, NAO TERMINAR A FUNCAO ENQUANTO (PELO MENOS) O GOLPE NAO FOR CONCLUIDO!!!!
@@ -133,7 +144,6 @@ void update_position (hero *p1, hero *p2, int max_x, int max_y, int ground, int 
 }
 
 void position_x (hero *p1, hero *p2, int max_x, int max_y, int ground, int gravity){
-			printf ("ANTES DO LACO %d\n", p1->control_x->state);
 	switch (p1->control_x->state){
 		case SPECIAL:
 			p1->control_x->timer++;
@@ -145,16 +155,14 @@ void position_x (hero *p1, hero *p2, int max_x, int max_y, int ground, int gravi
 			p1->control_y->change = false;
                         p1->control_x->timer++;
                         if (p1->control_x->timer == 30 || p1->control_y->state == JUMP){
-                                int minimo_x, maximo_x;
-                                if (p1->x < p2->x){
-                                        minimo_x = p1->x + p1->width/2 + 10;	//MUDAR OS VALORES AQUI!!!
-                                        maximo_x = p1->x + p1->width/2 + 20;
-                                }
-                                else{
-                                        minimo_x = p1->x - p1->width/2 - 20;
-                                        maximo_x = p1->x - p1->width/2 - 10;
-                                }
-                                update_damage (KICK_DAMAGE, &p2->hp, &p2->stun, !(p2->control_x->state - DEFENSE_UP), !(p2->control_x->state - DEFENSE_DOWN), minimo_x, maximo_x, p1->y * (3/5), p1->y * (4/5), p2->x, p2->y, p2->length, p2->width);	//ATUALIZAR AS HITBOXES AQUI TAMBEM!!!
+                                int minimo_x, maximo_x, minimo_y, maximo_y;
+				bool right;
+                                if (p1->x < p2->x)
+					right = true;
+				else 
+					right = false;
+				check_hit_box (&minimo_x, &maximo_x, &minimo_y, &maximo_y, KICK, p1->id, p1->x, p1->y, p1->length, p1->width, p1->control_y->state, right);
+                                update_damage (KICK_DAMAGE, &p2->hp, &p2->stun, !(p2->control_x->state - DEFENSE_UP), !(p2->control_x->state - DEFENSE_DOWN), minimo_x, maximo_x, minimo_y, maximo_y, p2->x, p2->y, p2->length, p2->width);	//ATUALIZAR AS HITBOXES AQUI TAMBEM!!!
                                 if (!(p1->control_y->state == JUMP))      //ATUALIZAR NO JUMP A STAMINA! COMO EU FACO ISSO???
                                         stamina_update (p1->control_x->state, true, &p1->stamina);
                         }
@@ -169,19 +177,15 @@ void position_x (hero *p1, hero *p2, int max_x, int max_y, int ground, int gravi
 			p1->control_y->change = false;
 			p1->control_x->timer++;
 			if (p1->control_x->timer == 15 || p1->control_y->state == JUMP){
-				int minimo_x, maximo_x;
-				if (p1->x < p2->x){
-					minimo_x = p1->x + p1->width/2 + 10;
-					maximo_x = p1->x + p1->width/2 + 20;
-				}
-				else{
-					minimo_x = p1->x - p1->width/2 - 20;
-					maximo_x = p1->x - p1->width/2 - 10;
-				}
-				update_damage (PUNCH_DAMAGE, &p2->hp, &p2->stun, !(p2->control_x->state - DEFENSE_UP), !(p2->control_x->state - DEFENSE_DOWN), minimo_x, maximo_x, p1->y - (p1->length/4), p1->y, p2->x, p2->y, p2->length, p2->width);
-				al_draw_filled_rectangle (minimo_x, p1->y - (p1->length/4), maximo_x, p1->y, al_map_rgba_f(0.5, 0.3, 0.0, 0.5)); //PRECISO FAZER ISSO FUNCIONAR!!!
+				int minimo_x, maximo_x, minimo_y, maximo_y;
+				bool right;
+				if (p1->x < p2->x)
+					right = true;
+				else
+					right = false;
 
-				printf ("Desenhou o retangulo!\n");
+				check_hit_box (&minimo_x, &maximo_x, &minimo_y, &maximo_y, PUNCH, p1->id, p1->x, p1->y, p1->length, p1->width, p1->control_y->state, right);
+				update_damage (PUNCH_DAMAGE, &p2->hp, &p2->stun, !(p2->control_x->state - DEFENSE_UP), !(p2->control_x->state - DEFENSE_DOWN), minimo_x, maximo_x, minimo_y, maximo_y, p2->x, p2->y, p2->length, p2->width);
 
 				if (!(p1->control_y->state == JUMP))	//ATUALIZAR NO JUMP A STAMINA! COMO EU FACO ISSO???
 					stamina_update (p1->control_x->state, true, &p1->stamina);
@@ -219,7 +223,7 @@ void position_x (hero *p1, hero *p2, int max_x, int max_y, int ground, int gravi
 			break;
 		case WALK_LEFT:
 			if (p1->control_y->state != GET_DOWN){
-				hero_move(p1, 1, 0, max_x, max_y, ground);
+				hero_movement(p1, p2, 1, 0, max_x, max_y, ground);
 				p1->control_x->timer++;
 			}
 			if (p1->control_x->timer > 30)
@@ -231,7 +235,7 @@ void position_x (hero *p1, hero *p2, int max_x, int max_y, int ground, int gravi
 			break;
 		case WALK_RIGHT:	//LEMBRAR DE MUDAR MOVIMENTO PRA INCLUIR COLISAO!!!
 			if (p1->control_y->state != GET_DOWN){		//Se nao estiver agachado, move pra direita e acrescenta no timer
-				hero_move(p1, 1, 1, max_x, max_y, ground);
+				hero_movement(p1, p2, 1, 1, max_x, max_y, ground);
 				p1->control_x->timer++;
 			}
 			if (p1->control_x->timer > 30)		//se o timer estourou do limite de sprints, reseta
@@ -240,12 +244,13 @@ void position_x (hero *p1, hero *p2, int max_x, int max_y, int ground, int gravi
 				p1->control_x->state = 0;
 				p1->control_x->timer = 0;
 			}
-			printf ("TO NO WALK RIGHT!!!, %d state %ld acumulation %d value\n", p1->control_x->state, p1->control_x->acumulation, WALK_RIGHT);
 			break;
 		default:
 			p1->control_x->timer++;
-			if (p1->control_x->timer > 30)
+			if (p1->control_x->timer > 30){
+				printf ("ENTROU ERRADO! : %d\n", p1->control_x->timer);
 				p1->control_x->timer = 0;
+			}
 			break;
 	}
 }
@@ -277,7 +282,7 @@ void position_y (hero *p1, hero *p2, int max_x, int max_y, int ground, int gravi
 					p1->control_x->state = 0;
 					p1->control_x->change = false;
 					p1->control_y->timer++;
-					if (p1->control_y->timer > 60){
+					if (p1->control_y->timer > 20){
 						p1->air = false;
 						p1->control_y->state = 0;
 						p1->control_y->change = true;
@@ -288,19 +293,20 @@ void position_y (hero *p1, hero *p2, int max_x, int max_y, int ground, int gravi
 					return;
 				}
 				if (!(p1->control_x->acumulation % WALK_RIGHT) && (p1->control_x->state != WALK_RIGHT))
-					hero_move (p1, 1, 1, max_x, max_y, ground);
+					hero_movement (p1, p2, 1, 1, max_x, max_y, ground);
                                 else if (!(p1->control_x->acumulation % WALK_LEFT) && (p1->control_x->state != WALK_LEFT))
-                                        hero_move (p1, 1, 0, max_x, max_y, ground);
+                                        hero_movement (p1, p2, 1, 0, max_x, max_y, ground);
 				
 				p1->jump -= gravity;
-				hero_move (p1, p1->jump, 2, max_x, max_y, ground);	//LOGICA DE GRAVIDADE
-				printf ("MTA PAZ!\n");
+				hero_movement (p1, p2, p1->jump, 2, max_x, max_y, ground);
+				if (p1->control_y->timer < 15)
+					p1->control_y->timer++;
 			}
 			else{
 				p1->control_x->change = false;
 				p1->control_x->state = 0;
 				p1->control_y->timer++;	//ZERO O EIXO X DURANTE O PULO????
-				if (p1->control_y->timer > 30){		//So taca o personagem no ar depois da animacao de pulo
+				if (p1->control_y->timer > 10){		//So taca o personagem no ar depois da animacao de pulo
 					hero_jump (p1, p2, max_x, max_y, ground);
 					p1->control_x->change = true;
 					p1->control_x->timer = 0;

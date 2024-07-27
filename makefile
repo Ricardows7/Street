@@ -8,8 +8,8 @@ Executavel=Street
 
 all: $(Executavel)
 
-$(Executavel): AggressiveSquares.o begin.o joystick.o damage.o
-	gcc AggressiveSquares.o begin.o joystick.o damage.o -g -o $(Executavel) $(FLAGS)
+$(Executavel): AggressiveSquares.o begin.o joystick.o damage.o picture.o
+	gcc AggressiveSquares.o begin.o joystick.o damage.o picture.o -g -o $(Executavel) $(FLAGS)
 
 AggressiveSquares.o: AggressiveSquares.c
 	gcc -c AggressiveSquares.c -I$(INCLUDE_PATH) $(FLAGS)
@@ -22,6 +22,10 @@ joystick.o: joystick.c joystick.h
 
 damage.o: damage.c damage.h
 	gcc -c damage.c -I$(INCLUDE_PATH) $(FLAGS)
+
+picture.o: picture.c picture.h
+	gcc -c picture.c -I$(INCLUDE_PATH) $(FLAGS)
+	
 clean:
 	rm -f *.o *.gch
 

@@ -9,6 +9,263 @@ int check_hit (int min_x, int max_x, int min_y, int max_y, int x, int y, int len
 	return !(max_x < sq_left || min_x > sq_right || max_y < sq_top || min_y > sq_bottom);
 }
 
+void stand_punch (int *min_x, int *max_x, int *min_y, int *max_y, int id){
+	switch (id){
+		case 1:
+			*min_x = 10;
+			*max_x = 20;
+			*min_y = -20;
+			*max_y = 0;
+			break;
+		case 2:
+			*min_x = 10;
+                        *max_x = 20;
+                        *min_y = -20;
+                        *max_y = 0;
+                        break;
+		case 3:
+			*min_x = 10;
+                        *max_x = 20;
+                        *min_y = -20;
+                        *max_y = 0;
+                        break;
+		default:
+			*min_x = 10;
+                        *max_x = 20;
+                        *min_y = -20;
+                        *max_y = 0;
+                        break;
+	}
+
+	return;
+}
+
+void down_punch (int *min_x, int *max_x, int *min_y, int *max_y, int id){
+        switch (id){
+                case 1:
+                        *min_x = 10;
+                        *max_x = 20;
+                        *min_y = -20;
+                        *max_y = 0;
+                        break;
+                case 2:
+                        *min_x = 10;
+                        *max_x = 20;
+                        *min_y = -20;
+                        *max_y = 0;
+                        break;
+                case 3:
+                        *min_x = 10;
+                        *max_x = 20;
+                        *min_y = -20;
+                        *max_y = 0;
+                        break;
+                default:
+                        *min_x = 10;
+                        *max_x = 20;
+                        *min_y = -20;
+                        *max_y = 0;
+                        break;
+        }
+
+        return;
+}
+
+void up_punch (int *min_x, int *max_x, int *min_y, int *max_y, int id){
+        switch (id){
+                case 1:
+                        *min_x = 10;
+                        *max_x = 20;
+                        *min_y = -20;
+                        *max_y = 0;
+                        break;
+                case 2:
+                        *min_x = 10;
+                        *max_x = 20;
+                        *min_y = -20;
+                        *max_y = 0;
+                        break;
+                case 3:
+                        *min_x = 10;
+                        *max_x = 20;
+                        *min_y = -20;
+                        *max_y = 0;
+                        break;
+                default:
+                        *min_x = 10;
+                        *max_x = 20;
+                        *min_y = -20;
+                        *max_y = 0;
+                        break;
+        }
+
+        return;
+}
+
+void stand_kick (int *min_x, int *max_x, int *min_y, int *max_y, int id){
+        switch (id){
+                case 1:
+                        *min_x = 10;
+                        *max_x = 20;
+                        *min_y = -20;
+                        *max_y = 0;
+                        break;
+                case 2:
+                        *min_x = 10;
+                        *max_x = 20;
+                        *min_y = -20;
+                        *max_y = 0;
+                        break;
+                case 3:
+                        *min_x = 10;
+                        *max_x = 20;
+                        *min_y = -20;
+                        *max_y = 0;
+                        break;
+                default:
+                        *min_x = 10;
+                        *max_x = 20;
+                        *min_y = -20;
+                        *max_y = 0;
+                        break;
+        }
+
+        return;
+}
+
+void down_kick (int *min_x, int *max_x, int *min_y, int *max_y, int id){
+        switch (id){
+                case 1:
+                        *min_x = 10;
+                        *max_x = 20;
+                        *min_y = -20;
+                        *max_y = 0;
+                        break;
+                case 2:
+                        *min_x = 10;
+                        *max_x = 20;
+                        *min_y = -20;
+                        *max_y = 0;
+                        break;
+                case 3:
+                        *min_x = 10;
+                        *max_x = 20;
+                        *min_y = -20;
+                        *max_y = 0;
+                        break;
+                default:
+                        *min_x = 10;
+                        *max_x = 20;
+                        *min_y = -20;
+                        *max_y = 0;
+                        break;
+        }
+
+        return;
+}
+
+void up_kick (int *min_x, int *max_x, int *min_y, int *max_y, int id){
+        switch (id){
+                case 1:
+                        *min_x = 10;
+                        *max_x = 20;
+                        *min_y = -20;
+                        *max_y = 0;
+                        break;
+                case 2:
+                        *min_x = 10;
+                        *max_x = 20;
+                        *min_y = -20;
+                        *max_y = 0;
+                        break;
+                case 3:
+                        *min_x = 10;
+                        *max_x = 20;
+                        *min_y = -20;
+                        *max_y = 0;
+                        break;
+                default:
+                        *min_x = 10;
+                        *max_x = 20;
+                        *min_y = -20;
+                        *max_y = 0;
+                        break;
+        }
+
+        return;
+}
+
+void special_select (int *min_x, int *max_x, int *min_y, int *max_y, int id){
+        switch (id){
+                case 1:
+                        *min_x = 10;
+                        *max_x = 20;
+                        *min_y = -20;
+                        *max_y = 0;
+                        break;
+                case 2:
+                        *min_x = 10;
+                        *max_x = 20;
+                        *min_y = -20;
+                        *max_y = 0;
+                        break;
+                case 3:
+                        *min_x = 10;
+                        *max_x = 20;
+                        *min_y = -20;
+                        *max_y = 0;
+                        break;
+                default:
+                        *min_x = 10;
+                        *max_x = 20;
+                        *min_y = -20;
+                        *max_y = 0;
+                        break;
+        }
+
+        return;
+}
+
+void check_hit_box (int *min_x, int *max_x, int *min_y, int *max_y, int move, int id, int x, int y, int length, int width, int state_y, bool rigth){
+	int minimo_x, maximo_x, minimo_y, maximo_y;
+
+	switch(move){
+		case KICK:
+			if (!state_y)
+				stand_kick (&minimo_x, &maximo_x, &minimo_y, &maximo_y, id);	
+			else if (state_y == JUMP)
+				up_kick (&minimo_x, &maximo_x, &minimo_y, &maximo_y, id);
+			else
+				down_kick (&minimo_x, &maximo_x, &minimo_y, &maximo_y, id);
+			break;
+		case PUNCH:
+			if (!state_y)
+				stand_punch (&minimo_x, &maximo_x, &minimo_y, &maximo_y, id);
+			else if (state_y == JUMP)
+				up_punch (&minimo_x, &maximo_x, &minimo_y, &maximo_y, id);
+			else
+				down_punch (&minimo_x, &maximo_x, &minimo_y, &maximo_y, id);
+			break;
+		default:
+			special_select (&minimo_x, &maximo_x, &minimo_y, &maximo_y, id);
+			break;
+	}
+
+	*min_y = y + minimo_y;
+	*max_y = y + maximo_y;
+
+	if (rigth){
+		*min_x = x + width/2 + minimo_x;
+		*max_x = x + width/2 + maximo_x;
+	}
+	else{
+		*min_x = x - width/2 - maximo_x;
+		*max_x = x - width/2 - minimo_x;
+	}
+
+	return;
+}
+
 void update_damage (int dam, float *hp, int *stun, bool up, bool down, int min_x, int max_x, int min_y, int max_y, int x, int y, int length, int width){
 	bool hit_up, hit_down;
 
@@ -27,6 +284,8 @@ void update_damage (int dam, float *hp, int *stun, bool up, bool down, int min_x
 	
 	if (*hp < 0)
 		*hp = 0;
+
+	al_draw_filled_rectangle (min_x, min_y, max_x, max_y, al_map_rgba_f(0.5, 0.3, 0.0, 0.5));
 
 	return;
 }

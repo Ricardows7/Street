@@ -7,10 +7,12 @@
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_primitives.h>
 #include <allegro5/allegro_color.h>
-
+#include <allegro5/allegro_image.h>
+#include <allegro5/allegro_font.h>
+#include <allegro5/allegro_ttf.h>
+#include <allegro5/allegro_native_dialog.h>
 
 #include "joystick.h"
-#include "damage.h"
 
 #define STREET_STEP 10
 #define JUMP_VEL 25
@@ -36,6 +38,8 @@ void hero_move(hero *element, char steps, unsigned char trajectory, unsigned sho
 hero *choose_hero (hero *element, int type, int x, int max_x, int max_y, int ground);
 
 unsigned char collision (hero *element_first, hero *element_second);
+
+void hero_movement (hero *p1, hero *p2, char steps, unsigned char trajectory, unsigned short max_x, unsigned short max_y, unsigned short ground);
 
 void update_position (hero *p1, hero *p2, int max_x, int max_y, int ground, int gravity);
 

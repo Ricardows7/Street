@@ -10,12 +10,13 @@
 #include <stdio.h>
 
 #include "begin.h"
+#include "picture.h"
 
-#define X_SCREEN 1080
-#define Y_SCREEN 1080
+#define X_SCREEN 1280
+#define Y_SCREEN 720
 
 #define GRAVITY 1
-#define GROUND 500
+#define GROUND 700
 
 int main(){
 
@@ -41,7 +42,12 @@ int main(){
 	al_init_image_addon();
 	
 	ALLEGRO_BITMAP* mysha = al_load_bitmap ("mysha.png");
-
+	ALLEGRO_BITMAP* turtle = al_load_bitmap ("Michelangelo.png");
+	ALLEGRO_BITMAP* leo = al_load_bitmap ("sodaleonard.png");
+	if (!turtle || !leo){
+		printf ("DEU RUUUIM!");
+		return 1;
+	}
 	ALLEGRO_EVENT event;
 	
 	al_start_timer(timer);	
@@ -65,13 +71,12 @@ int main(){
 		if (where_to_go == 2){
 			al_wait_for_event(queue, &event);
 			//printf ("vai entrar no update!\n");	
-			//update_position (player_1, player_2, X_SCREEN, Y_SCREEN, GROUND, GRAVITY);
-			//update_position (player_2, player_1, X_SCREEN, Y_SCREEN, GROUND, GRAVITY);
-
-			if (event.type == 30){
+			update_position (player_1, player_2, X_SCREEN, Y_SCREEN, GROUND, GRAVITY);
+			update_position (player_2, player_1, X_SCREEN, Y_SCREEN, GROUND, GRAVITY);
+			//printa_stand (player_1, turtle);
+			if (event.type == ALLEGRO_EVENT_TIMER){
 				al_clear_to_color (al_map_rgb(0, 0, 0));
 				//al_draw_bitmap (mysha, 50, 100, 100;
-				//update_position (player_1, player_2, X_SCREEN, Y_SCREEN, GROUND, GRAVITY);
 				//update_position (player_2, player_1, X_SCREEN, Y_SCREEN, GROUND, GRAVITY);
 
 				al_draw_filled_rectangle (0, Y_SCREEN/50, 300 * (player_1->hp/100), 0, al_map_rgba_f (0.5,0,0,0.5));
@@ -83,10 +88,22 @@ int main(){
       				al_draw_filled_rectangle (player_1->x-player_1->width/2, player_1->y-player_1->length/2, player_1->x+player_1->width/2, player_1->y+player_1->length/2, al_map_rgb(255, 0, 0));
 				al_draw_filled_rectangle (player_2->x-player_2->width/2, player_2->y-player_2->length/2, player_2->x+player_2->width/2, player_2->y+player_2->length/2, al_map_rgb (0, 0, 255));
 
-				update_position (player_1, player_2, X_SCREEN, Y_SCREEN, GROUND, GRAVITY);
-                                update_position (player_2, player_1, X_SCREEN, Y_SCREEN, GROUND, GRAVITY);
-
-
+				//update_position (player_1, player_2, X_SCREEN, Y_SCREEN, GROUND, GRAVITY);
+                                //update_position (player_2, player_1, X_SCREEN, Y_SCREEN, GROUND, GRAVITY);
+				player_2->id = 3;
+					switch (player_1->control_y->state){
+						case GET_DOWN:
+							printa_down (player_1, turtle, (player_1->x > player_2->x));
+							break;
+						case JUMP:
+							printa_jump (player_1, turtle, (player_1->x > player_2->x), GROUND);
+							break;
+						case 0:
+							printa_down_defense (player_1, turtle, (player_1->x > player_2->x));
+							break;
+					}
+				//printa_jump (player_1, turtle, (player_1->x > player_2->x));
+					//printa_stand (player_2, leo);
 				al_flip_display();
 			}
 

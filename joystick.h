@@ -22,7 +22,7 @@ typedef struct joystick{
 	int timer;
 	int state;
 	bool change;
-} joystick;
+}joystick;
 
 joystick* joystick_create();
 
