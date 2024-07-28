@@ -13,16 +13,16 @@ void printa_up_defense (hero *p, ALLEGRO_BITMAP *image, bool rev);
 
 void printa_down_defense (hero *p, ALLEGRO_BITMAP *image, bool rev);
 
-void draw_air_punch();
+void printa_stand_punch (hero *p, ALLEGRO_BITMAP *image, bool rev);
 
-void draw_air_kick();
+void printa_down_punch (hero *p, ALLEGRO_BITMAP *image, bool rev);
 
-void draw_air();
+void printa_up_punch (hero *p, ALLEGRO_BITMAP *image, bool rev);
 
-void draw_down();
+void printa_stand_kick (hero *p, ALLEGRO_BITMAP *image, bool rev);
 
-void draw_down_punch();
+void printa_down_kick (hero *p, ALLEGRO_BITMAP *image, bool rev);
 
-void draw_down_kick();
+void printa_up_kick (hero *p, ALLEGRO_BITMAP *image, bool rev);
 
 #endif

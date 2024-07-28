@@ -166,7 +166,7 @@ void position_x (hero *p1, hero *p2, int max_x, int max_y, int ground, int gravi
                                 if (!(p1->control_y->state == JUMP))      //ATUALIZAR NO JUMP A STAMINA! COMO EU FACO ISSO???
                                         stamina_update (p1->control_x->state, true, &p1->stamina);
                         }
-			else if (p1->control_x->timer > 60){
+			else if (p1->control_x->timer > 30){
 				p1->control_x->state = 0;
                                 p1->control_x->timer = 0;
 				p1->control_y->change = true;
@@ -176,7 +176,7 @@ void position_x (hero *p1, hero *p2, int max_x, int max_y, int ground, int gravi
 		case PUNCH:	//SE ESTIVER NO CHAO MAS JUMP ESTIVER ATIVO, NAO FAZ NADA! NO FIM DA FUNCAO EM Y DESATIVA O GOLPE!!!
 			p1->control_y->change = false;
 			p1->control_x->timer++;
-			if (p1->control_x->timer == 15 || p1->control_y->state == JUMP){
+			if (p1->control_x->timer == 15 || ((p1->control_y->state == JUMP) && (p1->control_x->timer > 10))){
 				int minimo_x, maximo_x, minimo_y, maximo_y;
 				bool right;
 				if (p1->x < p2->x)

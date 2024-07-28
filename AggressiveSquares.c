@@ -42,7 +42,7 @@ int main(){
 	al_init_image_addon();
 	
 	ALLEGRO_BITMAP* mysha = al_load_bitmap ("mysha.png");
-	ALLEGRO_BITMAP* turtle = al_load_bitmap ("Michelangelo.png");
+	ALLEGRO_BITMAP* turtle = al_load_bitmap ("sodaleonard.png");
 	ALLEGRO_BITMAP* leo = al_load_bitmap ("sodaleonard.png");
 	if (!turtle || !leo){
 		printf ("DEU RUUUIM!");
@@ -90,16 +90,24 @@ int main(){
 
 				//update_position (player_1, player_2, X_SCREEN, Y_SCREEN, GROUND, GRAVITY);
                                 //update_position (player_2, player_1, X_SCREEN, Y_SCREEN, GROUND, GRAVITY);
-				player_2->id = 3;
+				player_1->id = 4;
 					switch (player_1->control_y->state){
 						case GET_DOWN:
-							printa_down (player_1, turtle, (player_1->x > player_2->x));
+							if (player_1->control_x->state == KICK){
+								printa_down_punch (player_1, turtle, (player_1->x > player_2->x));
+								printf ("TA INDO!\n");
+							}
+							else
+								printa_down (player_1, turtle, (player_1->x > player_2->x));
 							break;
 						case JUMP:
-							printa_jump (player_1, turtle, (player_1->x > player_2->x), GROUND);
+							if (player_1->control_x->state == KICK)
+								printa_up_kick (player_1, turtle, (player_1->x > player_2->x));
+							else
+								printa_jump (player_1, turtle, (player_1->x > player_2->x), GROUND);
 							break;
 						case 0:
-							printa_down_defense (player_1, turtle, (player_1->x > player_2->x));
+							printa_down_punch (player_1, turtle, (player_1->x > player_2->x));
 							break;
 					}
 				//printa_jump (player_1, turtle, (player_1->x > player_2->x));
