@@ -1,6 +1,6 @@
 #include "picture.h"
 
-void printa_stand (hero *p, ALLEGRO_BITMAP* image, bool rev){
+void printa_walk_right (hero *p, ALLEGRO_BITMAP* image, bool rev){
 	int a = 45;
         int b = 82;
 	int sw, dx;
@@ -113,6 +113,7 @@ void printa_stand (hero *p, ALLEGRO_BITMAP* image, bool rev){
 		case 1:	//RAFAELO
 			dx = p->x - p->width/2 - 10;
                         sw = p->width + 30;
+			printf ("O VALOR E: %d\n", p->control_x->timer);
                         if (rev){
                                 sw = -sw;
                                 dx = dx - sw - 10;
@@ -143,6 +144,29 @@ void printa_stand (hero *p, ALLEGRO_BITMAP* image, bool rev){
                         break;
 
 	}
+	return;
+}
+
+void printa_walk_left (hero *p, ALLEGRO_BITMAP* image, bool rev){
+	int safe = p->control_x->timer;
+	
+	printf ("maoe!\n");
+	if (p->control_x->timer < 5)
+		p->control_x->timer = 23;
+	else if (p->control_x->timer < 10)
+		p->control_x->timer = 18;
+	else if (p->control_x->timer < 15)
+		safe = safe * 1;
+	else if (p->control_x->timer < 20)
+		p->control_x->timer = 7;
+	else
+		p->control_x->timer = 3;
+
+	printf ("ate aqui blz!\n");
+	printa_walk_right (p, image, rev);
+
+	p->control_x->timer = safe;
+
 	return;
 }
 
@@ -893,6 +917,63 @@ void printa_up_kick (hero *p, ALLEGRO_BITMAP* image, bool rev){
         }
         return;
 }
+
+void print_hero (hero *p, bool rev, int ground){
+	//stun vem aqui???????????????
+	printf ("O VALOR STATE E : %d %ld\n", p->control_x->state, p->control_x->acumulation);	
+	switch (p->control_x->state){
+		case SPECIAL:
+			//A FAZER!!!
+			break;
+		case PUNCH:
+			if (!p->control_y->state)
+				printa_stand_punch (p, p->image, rev);
+			else if (p->control_y->state == JUMP)
+				printa_up_punch (p, p->image, rev);
+			else
+				printa_down_punch (p, p->image, rev);
+			break;
+		case KICK:
+			if (!p->control_y->state)
+                                printa_stand_kick (p, p->image, rev);
+                        else if (p->control_y->state == JUMP)
+                                printa_up_kick (p, p->image, rev);
+                        else
+                                printa_down_kick (p, p->image, rev);
+                        break;
+		case DEFENSE_UP:
+			printa_up_defense (p, p->image, rev);
+			break;
+		case DEFENSE_DOWN:
+			printa_down_defense (p, p->image, rev);
+			break;
+		case WALK_RIGHT:
+			if (p->control_y->state == JUMP){
+				printa_jump (p, p->image, rev, ground);
+				break;
+			}
+			printa_walk_right (p, p->image, rev);
+			break;
+		case WALK_LEFT:
+			if (p->control_y->state == JUMP){
+				printa_jump (p, p->image, rev, ground);
+				break;
+			}
+			printa_walk_left (p, p->image, rev);
+			break;
+		case 0:
+			if (!p->control_y->state)
+				//printa_stand A FAZER!!!!!
+				break;
+			else if (p->control_y->state == JUMP)
+				printa_jump (p, p->image, rev, ground);
+			else
+				printa_down (p, p->image, rev);
+			break;
+		}
+	return;
+}
+
 
 /*
 

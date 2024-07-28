@@ -30,6 +30,7 @@ typedef struct {
 	int jump;
 	joystick *control_x;
 	joystick *control_y;
+	ALLEGRO_BITMAP *image;
 } hero;																									
 hero* hero_create();
 

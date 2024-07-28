@@ -22,6 +22,8 @@ hero* hero_create(){
 	new_hero->control_x = joystick_create();
 	new_hero->control_y = joystick_create();
 
+	new_hero->image = NULL;
+
 	return new_hero;
 }
 
@@ -29,25 +31,29 @@ hero* choose_hero (hero* element, int type, int x, int max_x, int max_y, int gro
 
 	element->x = x;
 
+	element->length = 220;
+      	element->width = 141;
+
 	if (type == 49){	//type se refere ao codigo do teclado
 		element->id = 1;
-	        element->length = 220;
-        	element->width = 141;
+	        element->image = al_load_bitmap ("rafaelo.png");
 	}
 	else if (type == 50){
 		element->id = 2;
-                element->length = 20;
-                element->width = 20;
+                element->image = al_load_bitmap ("donatello_2.png");
 	}
 	else if (type == 51){
 		element->id = 3;
-                element->length = 20;
-                element->width = 20;
+                element->image = al_load_bitmap ("Michelangelo.png");
 	}
 	else{
 		element->id = 4;
-                element->length = 20;
-                element->width = 20;
+                element->image = al_load_bitmap ("sodaleonard.png");
+	}
+
+	if (!element->image){
+		printf ("Erro no load das imagens!\n");
+		return NULL;
 	}
 
 	element->y = ground - element->length/2;	//como y spawna acima do chao, nunca passara pra baixo da tela!
@@ -228,7 +234,7 @@ void position_x (hero *p1, hero *p2, int max_x, int max_y, int ground, int gravi
 			}
 			if (p1->control_x->timer > 30)
 				p1->control_x->timer = 0;
-			if (p1->control_x->acumulation % WALK_LEFT == 0){ 	//SE LARGAR O BOTAO DE EVENTO CONTINUO, CORRIGI AQUI O STATE
+			if (p1->control_x->acumulation % WALK_LEFT != 0){ 	//SE LARGAR O BOTAO DE EVENTO CONTINUO, CORRIGI AQUI O STATE
 				p1->control_x->state = 0;
 				p1->control_x->timer = 0;
 			}
@@ -236,19 +242,23 @@ void position_x (hero *p1, hero *p2, int max_x, int max_y, int ground, int gravi
 		case WALK_RIGHT:	//LEMBRAR DE MUDAR MOVIMENTO PRA INCLUIR COLISAO!!!
 			if (p1->control_y->state != GET_DOWN){		//Se nao estiver agachado, move pra direita e acrescenta no timer
 				hero_movement(p1, p2, 1, 1, max_x, max_y, ground);
+				printf ("ENTROU AQUI! %d\n", p1->control_x->timer);
 				p1->control_x->timer++;
+				printf ("ENTROU AQUI 2! %d %d %d\n", p1->control_x->timer, p1->control_x->state, p1->control_y->state);
 			}
-			if (p1->control_x->timer > 30)		//se o timer estourou do limite de sprints, reseta
+			if (p1->control_x->timer > 30){		//se o timer estourou do limite de sprints, reseta
+				printf ("ERROOOOOOOOOOOOOOOOOOOOOOOOOOOOOO\n");
 				p1->control_x->timer = 0;
+			}
 			if (p1->control_x->acumulation % WALK_RIGHT != 0){	//Se largou o botão, nao anda mais
 				p1->control_x->state = 0;
 				p1->control_x->timer = 0;
+				printf ("ERRO ERRO ERRO ERRO ERRO\n");
 			}
 			break;
-		default:
+		case 0:
 			p1->control_x->timer++;
 			if (p1->control_x->timer > 30){
-				printf ("ENTROU ERRADO! : %d\n", p1->control_x->timer);
 				p1->control_x->timer = 0;
 			}
 			break;
@@ -313,7 +323,7 @@ void position_y (hero *p1, hero *p2, int max_x, int max_y, int ground, int gravi
 				}
 			}
 			break;
-		default:
+		case 0:
 			p1->control_y->timer++;
 			if (p1->control_y->timer > 30)
 				p1->control_y->timer = 0;
@@ -343,173 +353,10 @@ void hero_destroy(hero *element){
         joystick_destroy (element->control_x);
 	joystick_destroy (element->control_y);
 
+	al_destroy_bitmap (element->image);
+
         free (element);
 	element = NULL;
 
         return;
 }
-
-/*
-	if (p1->control->left){
-		hero_move (p1, 1, 0, max_x, max_y, ground);
-		if (collision (p1, p2))
-			hero_move (p1, -1, 0, max_x, max_y, ground);
-	}
-	if (p1->control->right){
-		printf ("direitinha!\n");
-		hero_move (p1, 1, 1, max_x, max_y, ground);
-		if (collision (p1, p2))
-			hero_move (p1, -1, 1, max_x, max_y, ground);
-	}
-	if (p1->control->air){	//PULAR!!!!!!!!!!!
-		p1->jump -= gravity;
-		hero_move (p1, p1->jump, 2, max_x, max_y, ground);
-		if (collision (p1, p2)){
-			p1->jump = -p1->jump;
-			hero_move (p1, p1->jump, 2, max_x, max_y, ground);
-		}
-		if (p1->y - p1->lenght/2 <= ground){
-			p1->jump = 0;
-			p1->control->air = 0;
-		}
-	}
-
-	return;
-}
-*/
-/*
-void punch (hero *player, hero *target){
-	SE ESTIVER NA TERRA, ZERA todos os campos DO PLAYER->CONTROL
-
-	if (player->moves->timer[0] < 0){
-		player->moves->timer[0] = PUNCH_COOLDOWN;
-		player->state[1].status = false;	???
-		return;
-	}
-	if (player->state[1].status == 0)	??? ISSO VAI NO INICIO! SE NAO TIVER SETADO PRA SOCO, OU TIVER SETADO PRA OUTRO GOLPE
-		return;
-
-	player->moves->timer[0] -= 1;
-	if (player->moves->timer[0] >= PUNCH_COOLDOWN * 4/5 || player->moves->timer[0] <= PUNCH_COOLDOWN / 5)
-		printar sprite normal;
-	else if (player->moves->timer[0] >= PUNCH_COOLDOWN * 3/5)
-		ajusta a sprite a ser printada;
-	else if (player->moves->timer[0] >= PUNCH_COOLDOWN * 2/5){
-		ajusta a sprite a ser printada;
-		clean_hit ();
-	}
-	else
-		ajusta a sprite a ser printada;
-	
-	return;
-
-}
-
-void clean_hit (int x_origin, y_origin, x_ext, y_ext, hero *source, hero *target){ //funcao que verifica se a hitbox e alvo se interceptam
-
-}
-
-void printa_hero (hero *player, hero *aux){
-	SE ESTIVER BATENDO DE ALGUM JEITO, RETORNA!!!!!!
-	if (player->control->air){
-		printa a sprite em relacao a aux (COM BASE NA ID DO HERO!)
-	}
-	if (estiver batendo)
-		return;
-	
-	if (player->control->left)
-		printa indo pra esquerda com base nas posicoes;
-	else if (player->control->right)
-		
-*/
-/*
-void update_damage (hero *p1, hero *p2, int type){
-	int a, b, c, d, e;
-
-	if (type == 3){
-		return;
-	}
-
-	if (type == 1)
-		e = 0;
-	else
-		e = 1;
-
-	a = p1->x + p1->moves->range[e];
-	b = p2->x - p2->width/2;
-	c = p2->x + p2->width/2;
-	d = p1->x - p1->moves->range[e];
-
-	if (((p1->x <= p2->x) && (a >= b)) || ((p1->x >= p2->x) && (c >= d))){//se p2 estiver na area de impacto em x
-		a = ((p1->y + p1->lenght/2) * 3) / 5;
-		b = p2->y + p2->lenght/2;
-		c = p2->y - p2->lenght/2;
-		d = ((p1->y + p1->lenght/2) * 4) / 5;
-	
-		if (type == 1){
-			if (((p1->y <= p2->y) && (d >= c)) || ((p1->y >= p2->y) && (a <= b)))	//se for soco e estar na altura certa NO CHAO!
-				p2->hp -= p1->moves->damage[0];
-		}
-		else{	//se for chute NO CHAO
-			if (abs(p2->x - p1->x) <= c)	//se p2 estiver abaixo da reta de 45° do chute
-			      p2->hp -= p1->moves->damage[1];	
-		}
-
-	else if ();
-	
-	if (p2 esta no alcance do tiro de p1){
-	}
-
-	return;f (((p1->x <= p2->x) && (a >= b)) || ((p1->x >= p2->x) && (c >= d))){//se p2 estiver na area de impacto em x
-                a = ((p1->y + p1->lenght/2) * 3) / 5;
-                b = p2->y + p2->lenght/2;
-                c = p2->y - p2->lenght/2;
-                d = ((p1->y + p1->lenght/2) * 4) / 5;
-
-                if (type == 1){
-                        if (((p1->y <= p2->y) && (d >= c)) || ((p1->y >= p2->y) && (a <= b)))   //se for soco e estar na altura certa NO CHAO!
-                                p2->hp -= p1->moves->damage[0];
-                }
-                else{   //se for chute NO CHAO
-                        if (abs(p2->x - p1->x) <= c)    //se p2 estiver abaixo da reta de 45° do chute
-                              p2->hp -= p1->moves->damage[1];
-                }
-
-        else if ();
-
-        if (p2 esta no alcance do tiro de p1){
-        }
-
-        return;
-}
-f (((p1->x <= p2->x) && (a >= b)) || ((p1->x >= p2->x) && (c >= d))){//se p2 estiver na area de impacto em x
-                a = ((p1->y + p1->lenght/2) * 3) / 5;
-                b = p2->y + p2->lenght/2;
-                c = p2->y - p2->lenght/2;
-                d = ((p1->y + p1->lenght/2) * 4) / 5;
-
-                if (type == 1){
-                        if (((p1->y <= p2->y) && (d >= c)) || ((p1->y >= p2->y) && (a <= b)))   //se for soco e estar na altura certa NO CHAO!
-                                p2->hp -= p1->moves->damage[0];
-                }
-                else{   //se for chute NO CHAO
-                        if (abs(p2->x - p1->x) <= c)    //se p2 estiver abaixo da reta de 45° do chute
-                              p2->hp -= p1->moves->damage[1];
-                }
-
-        else if ();
-
-        if (p2 esta no alcance do tiro de p1){
-f (((p1->x <= p2->x) && (a >= b)) || ((p1->x >= p2->x) && (c >= d))){//se p2 estiver na area de impacto em x
-                a = ((p1->y + p1->lenght/2) * 3) / 5;
-                b = p2->y + p2->lenght/2;
-                c = p2->y - p2->lenght/2;
-                d = ((p1->y + p1->lenght/2) * 4) / 5;
-
-                if (type == 1){
-                        if (((p1->y <= p2->y) && (d >= c)) || ((p1->y >= p2->y) && (a <= b)))   //se for soco e estar na altura certa NO CHAO!
-                                p2->hp -= p1->moves->damage[0];
-                }
-                else{   //se for chute NO CHAO
-                        if (abs(p2-
-*/
