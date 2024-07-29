@@ -160,12 +160,14 @@ void position_x (hero *p1, hero *p2, int max_x, int max_y, int ground, int gravi
 			p1->control_y->change = false;
 			switch (p1->id){
 				case 1:
+					p1->hitted = false;
 					if (!p1->trajectory)
 						hero_movement (p1, p2, 2, 1, max_x, max_y, ground);
 					else
 						hero_movement (p1, p2, 2, 0, max_x, max_y, ground);
 					break;
 				case 2:
+					p1->hitted = false;
 					if (p1->control_x->acumulation % WALK_RIGHT == 0)
 						hero_movement (p1, p2, 1, 1, max_x, max_y, ground);
 					else if (p1->control_x->acumulation % WALK_LEFT == 0)
