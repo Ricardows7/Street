@@ -65,9 +65,11 @@ int choose_move_y (joystick *element, joystick *aux, int stun){	//REVISAR AS CON
 	return 0;
 }
 
-int choose_move_x (joystick *element, joystick *aux, float stamina, int stun){
+int choose_move_x (joystick *element, joystick *aux, float stamina, int stun, int x_1, int x_2, bool *traj, bool *hitted){
 	if (stun > 0)	//se o personagem estiver stunado, nao realiza movimentacao alguma
 		return -1;
+
+	*traj = (x_1 > x_2);
 
 	if (element->acumulation % SPECIAL == 0 && !aux->state && stamina >= SPECIAL_STAMINA)//REVER ESSA LOGICA DO !AUX (TEM ACUMULATION EM Y TAMBEM!!!!!!
 		element->state = SPECIAL;
@@ -91,7 +93,8 @@ int choose_move_x (joystick *element, joystick *aux, float stamina, int stun){
 		element->state = 0;	//SE NAO FIZER NADA, ESTADO 0!!!!!!!!
 		return 0;
 	}
-	
+
+	*hitted = false;
 	element->timer = 0;
 
 	return 0;

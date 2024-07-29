@@ -18,6 +18,8 @@ hero* hero_create(){
 	new_hero->stamina = 100;
 	new_hero->air = false;
 	new_hero->jump = 0;
+	new_hero->trajectory = false;
+	new_hero->hitted = false;
 
 	new_hero->control_x = joystick_create();
 	new_hero->control_y = joystick_create();
@@ -134,12 +136,12 @@ void update_position (hero *p1, hero *p2, int max_x, int max_y, int ground, int 
 		choose_move_y (p1->control_y, p1->control_x, p1->stun);	//NOS ESTADOS Y, SE ESTIVER GOLPEANDO, NAO TERMINAR A FUNCAO ENQUANTO (PELO MENOS) O GOLPE NAO FOR CONCLUIDO!!!!
 					//PENSAR NO QUE FAZER QUANDO ESTIVER GOLPEANDO E CAIR NO CHAO!!!(TESTAR SE CHEGAR NO CHAO EM Y) E ESTIVER GOLPEANDO CANCELA????
 	if (verify_action (p1->control_x->state) && p1->control_x->change)	//coloco pra chamar caso so esteja andando?
-		choose_move_x (p1->control_x, p1->control_y, p1->stamina, p1->stun);
+		choose_move_x (p1->control_x, p1->control_y, p1->stamina, p1->stun, p1->x, p2->x, &p1->trajectory, &p1->hitted);
 
 	position_x (p1, p2, max_x, max_y, ground, gravity);
 	position_y (p1, p2, max_x, max_y, ground, gravity);
 
-	stamina_update (p1->control_x->state, false, &p1->stamina);     //VER A LOGICA DISSO DEPOIS!
+	stamina_update (p1->control_x->state, false, &p1->stamina, false);     //VER A LOGICA DISSO DEPOIS!
 
         if (p1->stun > 0)
                 p1->stun--;
@@ -150,29 +152,58 @@ void update_position (hero *p1, hero *p2, int max_x, int max_y, int ground, int 
 }
 
 void position_x (hero *p1, hero *p2, int max_x, int max_y, int ground, int gravity){
+	int minimo_x, maximo_x, minimo_y, maximo_y, store;
+
 	switch (p1->control_x->state){
 		case SPECIAL:
 			p1->control_x->timer++;
-			//CHAMAR FUNCAO SPECIAL
-			//ADICIONAR NO CLOCK
-			//AO FINAL, TIRAR ESSE STATE E RESETAR O CLOCK!!!!!!!!!!
+			p1->control_y->change = false;
+			switch (p1->id){
+				case 1:
+					if (!p1->trajectory)
+						hero_movement (p1, p2, 2, 1, max_x, max_y, ground);
+					else
+						hero_movement (p1, p2, 2, 0, max_x, max_y, ground);
+					break;
+				case 2:
+					if (p1->control_x->acumulation % WALK_RIGHT == 0)
+						hero_movement (p1, p2, 1, 1, max_x, max_y, ground);
+					else if (p1->control_x->acumulation % WALK_LEFT == 0)
+						hero_movement (p1, p2, 1, 0, max_x, max_y, ground);
+					break;
+				case 3:
+					if (!p1->trajectory)
+                                                hero_movement (p1, p2, 1, 0, max_x, max_y, ground);
+                                        else
+                                                hero_movement (p1, p2, 1, 1, max_x, max_y, ground);
+					if (p1->control_x->timer > 30){
+						p1->control_x->state = 0;
+						p1->control_x->timer = 0;
+						p1->control_y->change = true;
+					}
+                                        break;
+				case 4:
+					if (p1->control_x->timer > 30){
+                                                p1->control_x->state = 0;
+                                                p1->control_x->timer = 0;
+                                                p1->control_y->change = true;
+                                        }
+					break;
+			}
+			store = check_hit_box (&minimo_x, &maximo_x, &minimo_y, &maximo_y, SPECIAL, p1->id, p1->x, p1->y, p1->length, p1->width, p1->control_y->state, p1->trajectory, p1->control_x->timer, p1->control_x->state, &p1->stamina);
+			update_damage (KICK_DAMAGE, &p2->hp, &p2->stun, !(p2->control_x->state - DEFENSE_UP), !(p2->control_x->state - DEFENSE_DOWN), minimo_x, maximo_x, minimo_y, maximo_y, p2->x, p2->y, p2->length, p2->width, store, &p1->hitted);
+			if (p1->control_x->timer > 60){
+				p1->control_x->state = 0;
+				p1->control_x->timer = 0;
+				p1->control_y->change = true;
+			}
 			break;
 		case KICK:		//NAO MUDO O ESTADO DO Y??????????
 			p1->control_y->change = false;
                         p1->control_x->timer++;
-                        if (p1->control_x->timer == 30 || p1->control_y->state == JUMP){
-                                int minimo_x, maximo_x, minimo_y, maximo_y;
-				bool right;
-                                if (p1->x < p2->x)
-					right = true;
-				else 
-					right = false;
-				check_hit_box (&minimo_x, &maximo_x, &minimo_y, &maximo_y, KICK, p1->id, p1->x, p1->y, p1->length, p1->width, p1->control_y->state, right);
-                                update_damage (KICK_DAMAGE, &p2->hp, &p2->stun, !(p2->control_x->state - DEFENSE_UP), !(p2->control_x->state - DEFENSE_DOWN), minimo_x, maximo_x, minimo_y, maximo_y, p2->x, p2->y, p2->length, p2->width);	//ATUALIZAR AS HITBOXES AQUI TAMBEM!!!
-                                if (!(p1->control_y->state == JUMP))      //ATUALIZAR NO JUMP A STAMINA! COMO EU FACO ISSO???
-                                        stamina_update (p1->control_x->state, true, &p1->stamina);
-                        }
-			else if (p1->control_x->timer > 30){
+			store = check_hit_box (&minimo_x, &maximo_x, &minimo_y, &maximo_y, KICK, p1->id, p1->x, p1->y, p1->length, p1->width, p1->control_y->state, p1->trajectory, p1->control_x->timer, p1->control_x->state, &p1->stamina);
+                     	update_damage (KICK_DAMAGE, &p2->hp, &p2->stun, !(p2->control_x->state - DEFENSE_UP), !(p2->control_x->state - DEFENSE_DOWN), minimo_x, maximo_x, minimo_y, maximo_y, p2->x, p2->y, p2->length, p2->width, store, &p1->hitted);	//ATUALIZAR AS HITBOXES AQUI TAMBEM!
+			if (p1->control_x->timer > 30 && !p1->air){
 				p1->control_x->state = 0;
                                 p1->control_x->timer = 0;
 				p1->control_y->change = true;
@@ -182,21 +213,11 @@ void position_x (hero *p1, hero *p2, int max_x, int max_y, int ground, int gravi
 		case PUNCH:	//SE ESTIVER NO CHAO MAS JUMP ESTIVER ATIVO, NAO FAZ NADA! NO FIM DA FUNCAO EM Y DESATIVA O GOLPE!!!
 			p1->control_y->change = false;
 			p1->control_x->timer++;
-			if (p1->control_x->timer == 15 || ((p1->control_y->state == JUMP) && (p1->control_x->timer > 10))){
-				int minimo_x, maximo_x, minimo_y, maximo_y;
-				bool right;
-				if (p1->x < p2->x)
-					right = true;
-				else
-					right = false;
+			store = check_hit_box (&minimo_x, &maximo_x, &minimo_y, &maximo_y, PUNCH, p1->id, p1->x, p1->y, p1->length, p1->width, p1->control_y->state, p1->trajectory, p1->control_x->timer, p1->control_x->state, &p1->stamina);
+			//printf ("O VALOR DE STORE E: %d\n");
+			update_damage (PUNCH_DAMAGE, &p2->hp, &p2->stun, !(p2->control_x->state - DEFENSE_UP), !(p2->control_x->state - DEFENSE_DOWN), minimo_x, maximo_x, minimo_y, maximo_y, p2->x, p2->y, p2->length, p2->width, store, &p1->hitted);
 
-				check_hit_box (&minimo_x, &maximo_x, &minimo_y, &maximo_y, PUNCH, p1->id, p1->x, p1->y, p1->length, p1->width, p1->control_y->state, right);
-				update_damage (PUNCH_DAMAGE, &p2->hp, &p2->stun, !(p2->control_x->state - DEFENSE_UP), !(p2->control_x->state - DEFENSE_DOWN), minimo_x, maximo_x, minimo_y, maximo_y, p2->x, p2->y, p2->length, p2->width);
-
-				if (!(p1->control_y->state == JUMP))	//ATUALIZAR NO JUMP A STAMINA! COMO EU FACO ISSO???
-					stamina_update (p1->control_x->state, true, &p1->stamina);
-			}
-			else if (p1->control_x->timer > 30){
+			if (p1->control_x->timer > 30 && !p1->air){
 				p1->control_x->state = 0;
 				p1->control_x->timer = 0;
 				p1->control_y->change = true;
@@ -207,7 +228,7 @@ void position_x (hero *p1, hero *p2, int max_x, int max_y, int ground, int gravi
 			p1->control_x->timer++;
 			if (p1->control_x->timer > 30)
 				p1->control_x->timer = 0;
-			stamina_update (p1->control_x->state, true, &p1->stamina);
+			stamina_update (p1->control_x->state, true, &p1->stamina, false);
 			if ((p1->control_x->acumulation % DEFENSE_UP != 0) || (p1->stamina < DEFENSE_STAMINA)){
 				p1->control_x->state = 0;
 				p1->control_x->timer = 0;
@@ -215,12 +236,11 @@ void position_x (hero *p1, hero *p2, int max_x, int max_y, int ground, int gravi
 			}
 			break;
 		case DEFENSE_DOWN:
-			printf ("VALORES SAO %ld ac %d st\n", p1->control_x->acumulation, p1->control_x->state);
 			p1->control_y->change = false;	//Trava o eixo y enquanto esta defendendo
 			p1->control_x->timer++;
 			if (p1->control_x->timer > 30)
 				p1->control_x->timer = 0;
-			stamina_update (p1->control_x->state, true, &p1->stamina);
+			stamina_update (p1->control_x->state, true, &p1->stamina, false);
 			if ((p1->control_x->acumulation % DEFENSE_DOWN != 0) || (p1->stamina < DEFENSE_STAMINA)){	//encerra o estado se soltar o botao ou acabar a stamina
 				p1->control_x->state = 0;
 				p1->control_x->timer = 0;
@@ -242,25 +262,21 @@ void position_x (hero *p1, hero *p2, int max_x, int max_y, int ground, int gravi
 		case WALK_RIGHT:	//LEMBRAR DE MUDAR MOVIMENTO PRA INCLUIR COLISAO!!!
 			if (p1->control_y->state != GET_DOWN){		//Se nao estiver agachado, move pra direita e acrescenta no timer
 				hero_movement(p1, p2, 1, 1, max_x, max_y, ground);
-				printf ("ENTROU AQUI! %d\n", p1->control_x->timer);
 				p1->control_x->timer++;
-				printf ("ENTROU AQUI 2! %d %d %d\n", p1->control_x->timer, p1->control_x->state, p1->control_y->state);
 			}
-			if (p1->control_x->timer > 30){		//se o timer estourou do limite de sprints, reseta
-				printf ("ERROOOOOOOOOOOOOOOOOOOOOOOOOOOOOO\n");
+			if (p1->control_x->timer > 30)		//se o timer estourou do limite de sprints, reseta
 				p1->control_x->timer = 0;
-			}
 			if (p1->control_x->acumulation % WALK_RIGHT != 0){	//Se largou o botão, nao anda mais
 				p1->control_x->state = 0;
 				p1->control_x->timer = 0;
-				printf ("ERRO ERRO ERRO ERRO ERRO\n");
 			}
 			break;
 		case 0:
-			p1->control_x->timer++;
+			p1->control_x->timer = 23;
+			/*p1->control_x->timer++;
 			if (p1->control_x->timer > 30){
 				p1->control_x->timer = 0;
-			}
+			}*/
 			break;
 	}
 }
@@ -271,13 +287,14 @@ void position_y (hero *p1, hero *p2, int max_x, int max_y, int ground, int gravi
 			if (p1->control_y->timer == 0){	//Quando ativar, reduz a altura pela metade
 				p1->y += p1->length/4;
 				p1->length /= 2;
-			}		
-			if (p1->control_y->timer < 30)		//atualiza o clock pra frente
+			}
+			if (p1->control_y->timer < 30)
 				p1->control_y->timer++;
+
 			if (p1->control_y->acumulation % GET_DOWN != 0 && verify_action (p1->control_x->state)){	//condicao pra sair do estado agachado
 				p1->control_y->timer++;		//FACO UM ESTADO PRA NAO APERTAR ENQUANTO LEVANTANDO???
 				p1->control_x->change = false;	
-				if (p1->control_y->timer >= 60){
+				if (p1->control_y->timer >= 30){
 					p1->control_y->timer = 0;
 					p1->control_y->state = 0;
 					p1->control_x->change = true;

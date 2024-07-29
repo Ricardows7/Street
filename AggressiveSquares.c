@@ -47,8 +47,8 @@ int main(){
 
 	int where_to_go = 2;
 
-	choose_hero (player_1, 30, X_SCREEN/3, X_SCREEN, Y_SCREEN, GROUND);		//RETIRAR O INICIO EM Y, DEPENDE DA ALTURA DO HEROI!!!!!!!!!!	
-	choose_hero (player_2, 50, X_SCREEN * 2/3, X_SCREEN, Y_SCREEN, GROUND);
+	choose_hero (player_1, 49, X_SCREEN/3, X_SCREEN, Y_SCREEN, GROUND);		//RETIRAR O INICIO EM Y, DEPENDE DA ALTURA DO HEROI!!!!!!!!!!	
+	choose_hero (player_2, 51, X_SCREEN * 2/3, X_SCREEN, Y_SCREEN, GROUND);
 
 	while(1){
 	/*	AQUI SERÁ O MENU DE ESCOLHA!
@@ -80,8 +80,8 @@ int main(){
 				update_position (player_1, player_2, X_SCREEN, Y_SCREEN, GROUND, GRAVITY);
                                 update_position (player_2, player_1, X_SCREEN, Y_SCREEN, GROUND, GRAVITY);
 				
-				print_hero (player_1, (player_1->x > player_2->x), GROUND);
-				print_hero (player_2, (player_2->x > player_1->x), GROUND);
+				print_hero (player_1, player_1->trajectory, GROUND);
+				print_hero (player_2, player_2->trajectory, GROUND);
 
 				al_flip_display();
 			}
@@ -119,6 +119,10 @@ int main(){
                                         joystick_activate (player_1->control_x, event.type, DEFENSE_DOWN);
                                         joystick_deactivate (player_1->control_x, event.type, DEFENSE_DOWN);
                                 }
+				else if (event.keyboard.keycode == 3){
+					joystick_activate (player_1->control_x, event.type, SPECIAL);
+					joystick_deactivate (player_1->control_x, event.type, SPECIAL);
+				}
 				//PLAYER 2 DAQUI PRA BAIXO
 				else if (event.keyboard.keycode == 82){
                                         joystick_activate (player_2->control_x, event.type, WALK_LEFT);
@@ -151,6 +155,10 @@ int main(){
                                 else if (event.keyboard.keycode == 13){
                                         joystick_activate (player_2->control_x, event.type, DEFENSE_DOWN);
                                         joystick_deactivate (player_2->control_x, event.type, DEFENSE_DOWN);
+                                }
+				else if (event.keyboard.keycode == 74){
+                                        joystick_activate (player_2->control_x, event.type, SPECIAL);
+                                        joystick_deactivate (player_2->control_x, event.type, SPECIAL);
                                 }
 				printf ("%d\n", event.keyboard.keycode);
 

@@ -34,7 +34,7 @@ void joystick_deactivate (joystick *element, int type, long move);
 
 int choose_move_y (joystick *element, joystick *aux, int stun);
 
-int choose_move_x (joystick *element, joystick *aux, float stamina, int stun);
+int choose_move_x (joystick *element, joystick *aux, float stamina, int stun, int x_1, int x_2, bool *traj, bool *hitted);
 
 int verify_action (int value);
 

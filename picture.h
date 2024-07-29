@@ -27,6 +27,8 @@ void printa_down_kick (hero *p, ALLEGRO_BITMAP *image, bool rev);
 
 void printa_up_kick (hero *p, ALLEGRO_BITMAP *image, bool rev);
 
+void printa_special (hero *p, ALLEGRO_BITMAP *image, bool rev);
+
 void print_hero (hero *p, bool rev, int ground);
 
 #endif

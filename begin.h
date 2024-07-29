@@ -28,6 +28,8 @@ typedef struct {
 	float stamina;
 	bool air;
 	int jump;
+	bool trajectory;
+	bool hitted;
 	joystick *control_x;
 	joystick *control_y;
 	ALLEGRO_BITMAP *image;

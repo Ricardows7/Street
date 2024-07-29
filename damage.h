@@ -20,11 +20,11 @@
 
 int check_hit (int min_x, int max_x, int min_y, int max_y, int x, int y, int lenght, int width);
 
-void check_hit_box (int *min_x, int *max_x, int *min_y, int *max_y, int move, int id, int x, int y, int length, int width, int state_y, bool right);
+int check_hit_box (int *min_x, int *max_x, int *min_y, int *max_y, int move, int id, int x, int y, int length, int width, int state_y, bool right, int clock, int state_x, float *stamina);
 
 void update_damage (int dam, float *hp, int *stun, bool up, bool down, int min_x, int max_x, int min_y,
-int max_y, int x, int y, int lenght, int width);
+int max_y, int x, int y, int lenght, int width, int store, bool *hitted);
 
-void stamina_update (int state, bool drop, float *stamina);
+void stamina_update (int state, bool drop, float *stamina, bool air);
 
 #endif

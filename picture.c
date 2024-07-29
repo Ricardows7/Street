@@ -592,7 +592,7 @@ void printa_up_punch (hero *p, ALLEGRO_BITMAP* image, bool rev){
                         if (p->control_x->timer < 10){
                                  if (rev){
                                         sw = -sw;
-                                        dx = dx - sw - 60;
+                                        dx = dx - sw - 30;
                                 }
                                 al_draw_scaled_bitmap (image, 273, 776, 54, 76, dx, dy - 45, sw, sh + 50, 0);
                         }
@@ -601,7 +601,7 @@ void printa_up_punch (hero *p, ALLEGRO_BITMAP* image, bool rev){
 				sw += 20;
                                 if (rev){
                                         sw = -sw;
-                                        dx = dx - sw - 100;
+                                        dx = dx - sw - 70;
                                 }
                                 al_draw_scaled_bitmap (image, 405, 784, 68, 75, dx, dy - 10, sw, sh + 70, 0);
                         }
@@ -708,7 +708,7 @@ void printa_stand_kick (hero *p, ALLEGRO_BITMAP* image, bool rev){
                         sw = p->width + 50;
                         dy = p->y - p->length/2;
                         sh = p->length;
-                        if (p->control_x->timer < -1 || p->control_x->timer > 200){
+                        if (p->control_x->timer < 10 || p->control_x->timer > 20){
                                  if (rev){
                                         sw = -sw;
                                         dx = dx - sw + 10;
@@ -760,7 +760,7 @@ void printa_down_kick (hero *p, ALLEGRO_BITMAP* image, bool rev){
                         sw = p->width + 170;
                         dy = p->y - p->length/2;
                         sh = p->length;
-                        if (p->control_x->timer < 10){
+                        if (p->control_x->timer < 10 || p->control_x->timer > 20){
                                 if (rev){
                                         sw = -sw;
                                         dx = dx - sw + 50;
@@ -781,7 +781,7 @@ void printa_down_kick (hero *p, ALLEGRO_BITMAP* image, bool rev){
                         sw = p->width + 30;
                         dy = p->y - p->length/2;
                         sh = p->length;
-                        if (p->control_x->timer < 10){
+                        if (p->control_x->timer < 10 || p->control_x->timer > 20){
                                 if (rev){
                                         sw = -sw;
                                         dx = dx - sw + 10;
@@ -792,7 +792,7 @@ void printa_down_kick (hero *p, ALLEGRO_BITMAP* image, bool rev){
                                 dx += 60;
                                 if (rev){
                                         sw = -sw;
-                                        dx = dx - sw - 20;
+                                        dx = dx - sw - 120;
                                 }
                                 al_draw_scaled_bitmap (image, 411, 637, 84, 61, dx, dy - 20, sw, sh + 30, 0);
                         }
@@ -802,7 +802,7 @@ void printa_down_kick (hero *p, ALLEGRO_BITMAP* image, bool rev){
                         sw = p->width + 30;
                         dy = p->y - p->length/2;
                         sh = p->length;
-                        if (p->control_x->timer < 10){
+                        if (p->control_x->timer < 10 || p->control_x->timer > 20){
                                 if (rev){
                                         sw = -sw;
                                         dx = dx - sw - 10;
@@ -918,12 +918,195 @@ void printa_up_kick (hero *p, ALLEGRO_BITMAP* image, bool rev){
         return;
 }
 
+void printa_special (hero *p, ALLEGRO_BITMAP *image, bool rev){
+	int dx, sw, dy, sh;
+
+	switch (p->id){
+		case 1:
+			dx = p->x - p->width/2 - 30;
+                        sw = p->width + 50;
+                        dy = p->y - p->length/2;
+                        sh = p->length;
+			printf ("aqui tambem!!!!!!\n");
+                        if (p->control_x->timer < 5){
+                                 if (rev){
+                                        sw = -sw;
+                                        dx = dx - sw + 10;
+                                }
+                                al_draw_scaled_bitmap (image, 72, 1322, 58, 85, dx, dy - 20, sw, sh + 40, 0);
+                        }
+                        else if (p->control_x->timer < 15){
+                                sw += 150;
+                               	dx -= 30;
+                                if (rev){
+                                        sw = -sw;
+                                        dx = dx - sw - 70;
+                                }
+                                al_draw_scaled_bitmap (image, 344, 1344, 130, 47, dx, dy + 40, sw, sh - 100, 0);
+                        }
+			else{
+				sw += 150;
+                                dx -= 30;
+                                if (rev){
+                                        sw = -sw;
+                                        dx = dx - sw - 70;
+                                }
+                                al_draw_scaled_bitmap (image, 210, 1344, 130, 47, dx, dy + 40, sw, sh - 100, 0);
+                        }
+                        break;
+		case 2:
+			dx = p->x - p->width/2 + 10;
+                        sw = p->width;
+                        dy = p->y - p->length/2;
+                        sh = p->length;
+                        if (p->control_x->timer < 10){
+                                 if (rev){
+                                        sw = -sw;
+                                        dx = dx - sw - 10;
+                                }
+                                al_draw_scaled_bitmap (image, 183, 1165, 42, 67, dx, dy + 10, sw, sh + 10, 0);
+                        }
+                        else if (p->control_x->timer % 10 < 2){
+                                sw += 150;
+                                dx -= 80;
+                                if (rev){
+                                        sw = -sw;
+                                        dx = dx - sw - 10;
+                                }
+                                al_draw_scaled_bitmap (image, 9, 1485, 102, 56, dx, dy + 5, sw, sh + 10, 0);
+                        }
+                        else if (p->control_x->timer % 10 < 4){
+                           	sw += 80;
+                                dx -= 50;
+                                if (rev){
+                                        sw = -sw;
+                                        dx = dx - sw - 20;
+                                }
+                                al_draw_scaled_bitmap (image, 113, 1488, 70, 51, dx, dy + 5, sw, sh + 10, 0);
+                        }
+			else if (p->control_x->timer % 10 < 6){
+				sw += 10;
+                                dx -= 10;
+                                if (rev){
+                                        sw = -sw;
+                                        dx = dx - sw - 10;
+                                }
+                                al_draw_scaled_bitmap (image, 188, 1487, 48, 51, dx, dy, sw, sh + 10, 0);
+			}
+			else if (p->control_x->timer % 10 < 8){
+				sw += 80;
+                                dx -= 55;
+                                if (rev){
+                                        sw = -sw;
+                                        dx = dx - sw + 10;
+                                }
+                                al_draw_scaled_bitmap (image, 235, 1487, 72, 54, dx, dy + 5, sw, sh + 10, 0);
+                        }
+			else{
+				sw += 150;
+                                dx -= 80;
+                                if (rev){
+                                        sw = -sw;
+                                        dx = dx - sw - 10;
+                                }
+                                al_draw_scaled_bitmap (image, 310, 1491, 100, 51, dx, dy + 5, sw, sh + 10, 0);
+                        }
+                        break;
+		case 3:
+			dx = p->x - p->width/2 + 10;
+             		sw = p->width;
+           		dy = p->y - p->length/2;
+             		sh = p->length;
+            		if (p->control_x->timer < 5){
+          			if (rev){
+                        	 	sw = -sw;
+                         		dx = dx - sw - 10;
+                		}
+              			al_draw_scaled_bitmap (image, 2, 1129, 64, 74, dx, dy, sw, sh + 10, 0);
+           		}
+			else if (p->control_x->timer < 10){
+				dx -= 20;
+				sw += 30;
+				if (rev){
+                        	        sw = -sw;
+                        	       	dx = dx - sw - 10;
+                       		}
+                        	al_draw_scaled_bitmap (image, 68, 1139, 82, 62, dx, dy, sw, sh + 10, 0);
+                	}
+			else if (p->control_x->timer < 15){
+				dx += 20;
+				if (rev){
+                                	sw = -sw;
+                                	dx = dx - sw - 50;
+                        	}
+                        	al_draw_scaled_bitmap (image, 159, 1127, 44, 85, dx, dy, sw, sh + 10, 0);
+                	}
+			else if (p->control_x->timer < 20){
+				if (rev){
+                                	sw = -sw;
+                                	dx = dx - sw - 20;
+                        	}
+                        	al_draw_scaled_bitmap (image, 208, 1141, 49, 69, dx, dy + 25, sw, sh - 10, 0);
+                	}
+			else if (p->control_x->timer < 25){
+				dx -= 30;
+				sw += 40;
+				if (rev){
+                                	sw = -sw;
+                                	dx = dx - sw;
+                        	}
+                        	al_draw_scaled_bitmap (image, 258, 1137, 84, 66, dx, dy, sw, sh + 10, 0);
+                	}
+			else{
+				dx += 10;
+				if (rev){
+                                	sw = -sw;
+                                	dx = dx - sw - 40;
+                        	}
+                        	al_draw_scaled_bitmap (image, 347, 1132, 59, 82, dx, dy - 20, sw, sh + 30, 0);
+                	}
+			break;
+		case 4:
+			dx = p->x - p->width/2 + 10;
+            		sw = p->width + 30;
+         		dy = p->y - p->length/2;
+          		sh = p->length;
+         		if (p->control_x->timer < 20){
+              			if (rev){
+                        		sw = -sw;
+                           		dx = dx - sw - 50;
+                 		}
+              			al_draw_scaled_bitmap (image, 226, 2766, 82, 110, dx, dy - 95, sw, sh + 120, 0);
+         		}
+			else if (p->control_x->timer < 25){
+				sw += 40;
+				dx += 10;
+				if (rev){
+                                	sw = -sw;
+                                	dx = dx - sw - 110;
+                        	}
+                        	al_draw_scaled_bitmap (image, 314, 2784, 100, 88, dx, dy - 40, sw, sh + 70, 0);
+                	}
+			else{
+				sw += 250;
+				if (rev){
+                                	sw = -sw;
+                                	dx = dx - sw - 300;
+                        	}
+                        	al_draw_scaled_bitmap (image, 418, 2782, 208, 88, dx, dy -60, sw, sh + 120, 0);
+                	}
+			break;
+        }
+	return;
+}
+
 void print_hero (hero *p, bool rev, int ground){
 	//stun vem aqui???????????????
-	printf ("O VALOR STATE E : %d %ld\n", p->control_x->state, p->control_x->acumulation);	
+	//printf ("O VALOR STATE E : %d %ld\n", p->control_x->state, p->control_x->acumulation);	
 	switch (p->control_x->state){
 		case SPECIAL:
-			//A FAZER!!!
+			printf ("veio aqui!\n");
+			printa_special (p, p->image, rev);
 			break;
 		case PUNCH:
 			if (!p->control_y->state)
@@ -963,8 +1146,7 @@ void print_hero (hero *p, bool rev, int ground){
 			break;
 		case 0:
 			if (!p->control_y->state)
-				//printa_stand A FAZER!!!!!
-				break;
+				printa_special (p, p->image, rev);
 			else if (p->control_y->state == JUMP)
 				printa_jump (p, p->image, rev, ground);
 			else
@@ -972,62 +1154,4 @@ void print_hero (hero *p, bool rev, int ground){
 			break;
 		}
 	return;
-}
-
-
-/*
-
-	switch (p->control_x->state){
-		case SPECIAL:
-			//printa special;
-			break;
-		case PUNCH:
-			if (!p->control_y->state){
-				if (p->control_x->timer < 10)
-
-				else if (p->control_x->timer < 20)
-
-				else
-			}
-			else if (p->control_y->state == JUMP){
-			}
-			else{
-			}
-			break;
-		case KICK:
-			break;
-		case DEFENSE_UP:
-			break;
-		case DEFENSE_DOWN;
-			break;
-		case WALK_RIGHT:
-			break;
-		case WALK_LEFT:
-			break;
-		default:
-			break;
-	}
-
-	return;
-}
-
-void printa_heroi (heroi *p){
-	switch (p->id){
-		case 1: 
-			
-printa_hero_1 (p);
-			break;
-		case 2: 
-			printa_hero_2 (p);
-			break;
-		case 3:
-			printa_hero_3 (p);
-			break;
-		case 4:
-			printa_hero_4 (p);
-			break;
-	}
-
-	return;
-}
-*/			
+}			
