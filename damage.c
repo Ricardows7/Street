@@ -515,7 +515,7 @@ int check_hit_box (int *min_x, int *max_x, int *min_y, int *max_y, int move, int
 	return 1;
 }
 
-void update_damage (int dam, float *hp, int *stun, bool up, bool down, int min_x, int max_x, int min_y, int max_y, int x, int y, int length, int width, int store, bool *hitted){
+void update_damage (float dam, float *hp, int *stun, bool up, bool down, int min_x, int max_x, int min_y, int max_y, int x, int y, int length, int width, int store, bool *hitted){
 	bool hit_up, hit_down;
 
 	if (!store || *hitted)	//se nao estiver no momento de dar hit, retorna
@@ -525,7 +525,7 @@ void update_damage (int dam, float *hp, int *stun, bool up, bool down, int min_x
 	hit_down = check_hit (min_x, max_x, min_y, max_y, x, y-(length/4), length/2, width);
 
 	if (hit_up || hit_down){	//Se houve hit, stunna e tira vida
-		*stun += STUN_TIME;
+		*stun = STUN_TIME;
 		*hp -= dam;
 		*hitted = true;
 	}
@@ -538,7 +538,7 @@ void update_damage (int dam, float *hp, int *stun, bool up, bool down, int min_x
 	if (*hp < 0)
 		*hp = 0;
 
-	al_draw_filled_rectangle (min_x, min_y, max_x, max_y, al_map_rgba_f(0.5, 0.3, 0.0, 0.5));
+	//al_draw_filled_rectangle (min_x, min_y, max_x, max_y, al_map_rgba_f(0.5, 0.3, 0.0, 0.5));
 
 	return;
 }
@@ -550,13 +550,13 @@ void stamina_update (int state, bool drop, float *stamina, bool air){
         }
         else if (state == KICK){
                 if (drop && air)
-                        *stamina -= KICK_STAMINA;
+                        *stamina -= KICK_AIR_STAMINA;
 		else if (drop)
 			*stamina -= KICK_STAMINA;
         }
         else if (state == PUNCH){
                 if (drop && air)
-                        *stamina -= PUNCH_STAMINA;
+                        *stamina -= PUNCH_AIR_STAMINA;
 		else if (drop)
 			*stamina -= PUNCH_STAMINA;
         }

@@ -1227,27 +1227,27 @@ void character_menu(ALLEGRO_DISPLAY* display, ALLEGRO_BITMAP* maps, ALLEGRO_BITM
 }
 
 void bars(ALLEGRO_DISPLAY *display, int max_x, int max_y, hero *p1, hero *p2) {
-    	int bar_width = 350;   // largura da barra
-    	int bar_height = 25;   // altura da barra
-    	int padding = 7;      // espaço entre as barras e a borda da tela
-	int square_side = 30;	//tamanho do quadrado de rounds
+    	float bar_width = 350;   // largura da barra
+    	float bar_height = 25;   // altura da barra
+    	float padding = 7;      // espaço entre as barras e a borda da tela
+		int square_side = 30;	//tamanho do quadrado de rounds
     // Molde esquerda superior
     	al_draw_filled_rectangle(padding, padding, (3*padding) + bar_width, (3*padding) + bar_height, al_map_rgb(0, 0, 0));
     // Barra de vida esquerda superior
     	al_draw_filled_rectangle(2 * padding, 2 * padding, ((2*padding) + bar_width), (2*padding) + bar_height, al_map_rgba_f(0.5, 0.5, 0.5, 0.5));
-	al_draw_filled_rectangle(2 * padding, 2 * padding, ((2*padding) + bar_width) * (p1->hp/100), (2*padding) + bar_height, al_map_rgb(255, 0, 0));
+	al_draw_filled_rectangle(2 * padding, 2 * padding, (2*padding) + (bar_width * (p1->hp/100)), (2*padding) + bar_height, al_map_rgb(255, 0, 0));
 
     // Molde direita superior
     	al_draw_filled_rectangle(max_x - (3*padding) - bar_width, padding, max_x - padding, (3*padding) + bar_height, al_map_rgb(0, 0, 0));
     // Barra de vida direita superior
     	al_draw_filled_rectangle (max_x - (2*padding) - bar_width, 2*padding, (max_x - (2*padding)), (2*padding) + bar_height, al_map_rgba_f(0.5, 0.5, 0.5, 0.5));
-    	al_draw_filled_rectangle (max_x - (2*padding) - bar_width, 2*padding, (max_x - (2*padding)) * (p2->hp/100), (2*padding) + bar_height, al_map_rgb(255, 0, 0));
+    	al_draw_filled_rectangle (max_x - (2*padding) - (bar_width * (p2->hp/100)), 2*padding, (max_x - (2*padding)), (2*padding) + bar_height, al_map_rgb(255, 0, 0));
 
     // Molde esquerda superior (stamina)
     	al_draw_filled_rectangle(padding, (4*padding) + bar_height, (3*padding) + bar_width, (6*padding) + (bar_height*2), al_map_rgb(0, 0, 0));
     // Barra de stamina esquerda superior
     	al_draw_filled_rectangle(2*padding, (5*padding) + bar_height, ((2*padding) + bar_width), (5*padding) + (2*bar_height), al_map_rgba_f(0.5,0.5,0.5,0.5));
-    	al_draw_filled_rectangle(2*padding, (5*padding) + bar_height, ((2*padding) + bar_width) * (p1->stamina/100), (5*padding) + (2*bar_height), al_map_rgb(0, 0, 255));
+    	al_draw_filled_rectangle(2*padding, (5*padding) + bar_height, ((2*padding) + (bar_width * (p1->stamina/100))), (5*padding) + (2*bar_height), al_map_rgb(0, 0, 255));
 
     // Molde direita superior (stamina)
     	al_draw_filled_rectangle(max_x - (3*padding) - bar_width, (4*padding) + bar_height, max_x - padding, (6*padding) + (bar_height * 2), al_map_rgb(0, 0, 0));
@@ -1272,7 +1272,7 @@ void bars(ALLEGRO_DISPLAY *display, int max_x, int max_y, hero *p1, hero *p2) {
 	al_draw_filled_rectangle (max_x - (2*square_x) - (2*padding), min_y, max_x - (2*padding) - square_x, min_y + 2*padding + square_side, al_map_rgb(0,0,0));
         al_draw_filled_rectangle (max_x - (2*square_x) - padding, min_y + padding, max_x - 3*padding - square_x, min_y + padding + square_side, al_map_rgb(0,255,0));
 	
-	printf ("OS HPS SAO %f, %f!\n", p1->hp, p2->hp);
+	printf ("AS STAMINAS SAO %f, %f!\n", p1->stamina, p2->stamina);
 }
 /*
 void menu (ALLEGRO_BITMAP *intro, int selected_option, int max_x, int max_y){
@@ -1312,6 +1312,11 @@ void menu (ALLEGRO_BITMAP *intro, int selected_option, int max_x, int max_y){
 	
 void pause (hero *p1, hero *p2, ALLEGRO_DISPLAY *disp, int max_x, int max_y){	//da pra fazer???
 	while (1){		//PRINTAR NA TELA NESSA FUNCAO???
+
+		PRINTAR UMA TELA PRETA TRANSPARENTE AQUI!
+
+		al_draw_text(font, al_map_rgb(255, 255, 255), max_x / 2, max_y / 2, ALLEGRO_ALIGN_CENTER, "PAUSED");
+		al_draw_text(font, al_map_rgb(255, 255, 255), max_x / 2, (max_y / 2) + 50, ALLEGRO_ALIGN_CENTER, "Press ENTER to continue!");
 }
 void end (){
 	if (p1->hp == 0)
@@ -1319,7 +1324,7 @@ void end (){
 	if (p2->hp == 0)
 		score1++;
 
-	if (score1 == 2){
+	if (score1 > score2){ !!!!!!!!!!!
 		if (score == 2)
 			print draw;
 		else
@@ -1328,7 +1333,7 @@ void end (){
 	}
 	else if (score2 == 2){
 	}
-	else{
+	else{	logica pra restartar!
 		choose_hero ();
 		choose_hero ();
 		p1->control_x->state = 0;

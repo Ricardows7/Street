@@ -114,6 +114,8 @@ unsigned char collision (hero *element_first, hero *element_second){
 	else
 		d = 0;
 
+	printf ("%d %d %d %d\n", a,b,c,d);
+
 	if ((a || b) && (c || d))
 		return 1;
 	else
@@ -123,11 +125,12 @@ unsigned char collision (hero *element_first, hero *element_second){
 void hero_movement (hero *p1, hero *p2, char steps, unsigned char trajectory, unsigned short max_x, unsigned short max_y, unsigned short ground){
 	hero_move (p1, steps, trajectory, max_x, max_y, ground);
 	if (collision (p1, p2)){
-		hero_move (p1, -steps, trajectory, max_x, max_y, ground);
-		if (p1->air)
-			p1->jump = -p1->jump;
+		hero_move (p1, -steps -10, trajectory, max_x, max_y, ground);
+		//if (p1->air)
+		//	p1->jump = -p1->jump;
 	}
-
+	
+	printf ("%d\n", p1->jump);
 	return;
 }
 
@@ -156,6 +159,7 @@ void update_position (hero *p1, hero *p2, int max_x, int max_y, int ground, int 
 
 void position_x (hero *p1, hero *p2, int max_x, int max_y, int ground, int gravity){
 	int minimo_x, maximo_x, minimo_y, maximo_y, store;
+	float damage;
 
 	switch (p1->control_x->state){
 		case SPECIAL:
@@ -168,6 +172,7 @@ void position_x (hero *p1, hero *p2, int max_x, int max_y, int ground, int gravi
 						hero_movement (p1, p2, 2, 1, max_x, max_y, ground);
 					else
 						hero_movement (p1, p2, 2, 0, max_x, max_y, ground);
+					damage = RAFA_SPECIAL;
 					break;
 				case 2:
 					p1->hitted = false;
@@ -175,12 +180,13 @@ void position_x (hero *p1, hero *p2, int max_x, int max_y, int ground, int gravi
 						hero_movement (p1, p2, 1, 1, max_x, max_y, ground);
 					else if (p1->control_x->acumulation % WALK_LEFT == 0)
 						hero_movement (p1, p2, 1, 0, max_x, max_y, ground);
+					damage = DONA_SPECIAL;
 					break;
 				case 3:
 					if (!p1->trajectory)
-                                                hero_movement (p1, p2, 1, 0, max_x, max_y, ground);
+                                                hero_movement (p1, p2, 2, 0, max_x, max_y, ground);
                                         else
-                                                hero_movement (p1, p2, 1, 1, max_x, max_y, ground);
+                                                hero_movement (p1, p2, 2, 1, max_x, max_y, ground);
 					if (p1->control_x->timer > 30){
 						p1->control_x->state = 0;
 						p1->control_x->timer = 0;
@@ -189,15 +195,18 @@ void position_x (hero *p1, hero *p2, int max_x, int max_y, int ground, int gravi
                                         break;
 				case 4:
 					if (p1->control_x->timer > 30){
-                                                p1->control_x->state = 0;
+               									p1->control_x->state = 0;
                                                 p1->control_x->timer = 0;
                                                 p1->control_y->change = true;
                                         }
+					damage = LEO_SPECIAL;
 					break;
 			}
+			printf ("O DANO E: %f\n", damage);
 			store = check_hit_box (&minimo_x, &maximo_x, &minimo_y, &maximo_y, SPECIAL, p1->id, p1->x, p1->y, p1->length, p1->width, p1->control_y->state, p1->trajectory, p1->control_x->timer, p1->control_x->state, &p1->stamina);
-			update_damage (KICK_DAMAGE, &p2->hp, &p2->stun, !(p2->control_x->state - DEFENSE_UP), !(p2->control_x->state - DEFENSE_DOWN), minimo_x, maximo_x, minimo_y, maximo_y, p2->x, p2->y, p2->length, p2->width, store, &p1->hitted);
+			update_damage(damage, &p2->hp, &p2->stun, !(p2->control_x->state - DEFENSE_UP), !(p2->control_x->state - DEFENSE_DOWN), minimo_x, maximo_x, minimo_y, maximo_y, p2->x, p2->y, p2->length, p2->width, store, &p1->hitted);
 			if (p1->control_x->timer > 60){
+				stamina_update (p1->control_x->state, true, &p1->stamina, false);          
 				p1->control_x->state = 0;
 				p1->control_x->timer = 0;
 				p1->control_y->change = true;
