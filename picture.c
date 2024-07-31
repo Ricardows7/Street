@@ -1007,8 +1007,8 @@ void printa_special (hero *p, ALLEGRO_BITMAP *image, bool rev){
                                 dx -= 80;
                                 if (rev){
                                         sw = -sw;
-                                        dx = dx - sw - 10;
-                                }
+					dx = dx - sw - 10;
+				}
                                 al_draw_scaled_bitmap (image, 310, 1491, 100, 51, dx, dy + 5, sw, sh + 10, 0);
                         }
                         break;
@@ -1154,4 +1154,187 @@ void print_hero (hero *p, bool rev, int ground){
 			break;
 		}
 	return;
-}			
+}		
+
+void character_menu(ALLEGRO_DISPLAY* display, ALLEGRO_BITMAP* maps, ALLEGRO_BITMAP *bits[], int selected_character1, int selected_character2, int selected_map, bool characters_chosen, int max_x, int max_y){
+
+	if (selected_character1 < 0 || selected_character1 > 3)
+		return;
+	if (selected_character2 < 0 || selected_character2 > 3)
+		return;
+
+	ALLEGRO_FONT* font = al_create_builtin_font();
+    	// Calcula as dimensões e posições dos quadrados de personagens
+  	int square_size = max_x / 5;
+    	int margin = (max_x - 4 * square_size) / 5;
+
+    	int x_positions[4];
+    	for (int i = 0; i < 4; i++){
+        	x_positions[i] = margin + i * (square_size + margin);
+    	}
+    	int y_position = max_y / 4;
+
+    	// Calcula as dimensões e posições dos retângulos de mapas
+    	int rect_width = max_x / 3;
+    	int rect_height = max_y / 8;
+    	int map_margin = (max_x - 2 * rect_width) / 3;
+
+    	int map_x_positions[2];
+    	for (int i = 0; i < 2; i++){
+        	map_x_positions[i] = map_margin + i * (rect_width + map_margin);
+    	}
+    	int map_y_position = max_y * 3 / 4;
+
+    	// Desenha os quadrados dos personagens
+    	for (int i = 0; i < 4; i++){
+        	al_draw_rectangle(x_positions[i], y_position, x_positions[i] + square_size, y_position + square_size, al_map_rgb(255, 255, 255), 2);
+    	}
+
+	al_draw_scaled_bitmap (bits[0], 66, 0, 68, 65, x_positions[0], y_position - 5, square_size + 10, square_size, 0);
+	al_draw_scaled_bitmap (bits[1], 86, 0, 58, 52, x_positions[1] + 3, y_position, square_size - 3, square_size - 3, 0);
+	al_draw_scaled_bitmap (bits[2], 68, 13, 64, 64, x_positions[2], y_position + 3, square_size - 3, square_size - 5, 0);
+	al_draw_scaled_bitmap (bits[3], 495, 202, 62, 67, x_positions[3] + 4, y_position - 20, square_size - 7, square_size + 15, 0);
+
+    	// Desenha os retângulos dos mapas se os personagens foram escolhidos
+    	if (characters_chosen){
+        	for (int i = 0; i < 2; i++) {
+            	al_draw_rectangle(map_x_positions[i], map_y_position, map_x_positions[i] + rect_width, map_y_position + rect_height, al_map_rgb(255, 255, 255), 2);
+        	}
+		al_draw_scaled_bitmap (maps, 745, 295, 714, 170, map_x_positions[0], map_y_position, rect_width, rect_height, 0);
+		al_draw_scaled_bitmap (maps, 338, 55, 714, 155, map_x_positions[1], map_y_position, rect_width, rect_height, 0);
+
+        	// Desenha a flechinha indicando o mapa selecionado
+        	int map_arrow_x = map_x_positions[selected_map] + rect_width / 2;
+        	int map_arrow_y = map_y_position - 20;
+        	al_draw_filled_triangle(map_arrow_x, map_arrow_y, map_arrow_x - 10, map_arrow_y - 20, map_arrow_x + 10, map_arrow_y - 20, al_map_rgb(0, 255, 0));
+		al_draw_text(font, al_map_rgb(255, 255, 255), max_x / 2, y_position - 50, ALLEGRO_ALIGN_CENTER, "Choose your map");
+    	}
+	else
+		al_draw_text(font, al_map_rgb(255, 255, 255), max_x / 2, y_position - 50, ALLEGRO_ALIGN_CENTER, "Choose your players");
+
+    	// Desenha a flechinha indicando o primeiro personagem selecionado
+    	int arrow_x1 = x_positions[selected_character1] + square_size / 2;
+    	int arrow_y1 = y_position - 20;
+    	al_draw_filled_triangle(arrow_x1, arrow_y1, arrow_x1 - 10, arrow_y1 - 20, arrow_x1 + 10, arrow_y1 - 20, al_map_rgb(255, 0, 0));
+
+    	// Desenha a flechinha indicando o segundo personagem selecionado
+    	int arrow_x2 = x_positions[selected_character2] + square_size / 2;
+    	int arrow_y2 = y_position - 20;
+    	al_draw_filled_triangle(arrow_x2, arrow_y2, arrow_x2 - 10, arrow_y2 - 20, arrow_x2 + 10, arrow_y2 - 20, al_map_rgb(0, 0, 255));
+
+    	// Destroi a fonte criada para evitar vazamento de memória
+    	al_destroy_font(font);
+}
+
+void bars(ALLEGRO_DISPLAY *display, int max_x, int max_y, hero *p1, hero *p2) {
+    	int bar_width = 350;   // largura da barra
+    	int bar_height = 25;   // altura da barra
+    	int padding = 7;      // espaço entre as barras e a borda da tela
+	int square_side = 30;	//tamanho do quadrado de rounds
+    // Molde esquerda superior
+    	al_draw_filled_rectangle(padding, padding, (3*padding) + bar_width, (3*padding) + bar_height, al_map_rgb(0, 0, 0));
+    // Barra de vida esquerda superior
+    	al_draw_filled_rectangle(2 * padding, 2 * padding, ((2*padding) + bar_width), (2*padding) + bar_height, al_map_rgba_f(0.5, 0.5, 0.5, 0.5));
+	al_draw_filled_rectangle(2 * padding, 2 * padding, ((2*padding) + bar_width) * (p1->hp/100), (2*padding) + bar_height, al_map_rgb(255, 0, 0));
+
+    // Molde direita superior
+    	al_draw_filled_rectangle(max_x - (3*padding) - bar_width, padding, max_x - padding, (3*padding) + bar_height, al_map_rgb(0, 0, 0));
+    // Barra de vida direita superior
+    	al_draw_filled_rectangle (max_x - (2*padding) - bar_width, 2*padding, (max_x - (2*padding)), (2*padding) + bar_height, al_map_rgba_f(0.5, 0.5, 0.5, 0.5));
+    	al_draw_filled_rectangle (max_x - (2*padding) - bar_width, 2*padding, (max_x - (2*padding)) * (p2->hp/100), (2*padding) + bar_height, al_map_rgb(255, 0, 0));
+
+    // Molde esquerda superior (stamina)
+    	al_draw_filled_rectangle(padding, (4*padding) + bar_height, (3*padding) + bar_width, (6*padding) + (bar_height*2), al_map_rgb(0, 0, 0));
+    // Barra de stamina esquerda superior
+    	al_draw_filled_rectangle(2*padding, (5*padding) + bar_height, ((2*padding) + bar_width), (5*padding) + (2*bar_height), al_map_rgba_f(0.5,0.5,0.5,0.5));
+    	al_draw_filled_rectangle(2*padding, (5*padding) + bar_height, ((2*padding) + bar_width) * (p1->stamina/100), (5*padding) + (2*bar_height), al_map_rgb(0, 0, 255));
+
+    // Molde direita superior (stamina)
+    	al_draw_filled_rectangle(max_x - (3*padding) - bar_width, (4*padding) + bar_height, max_x - padding, (6*padding) + (bar_height * 2), al_map_rgb(0, 0, 0));
+    // Barra de stamina direita superior
+    	al_draw_filled_rectangle(max_x - (2*padding) - bar_width, (5*padding) + bar_height, (max_x - 2*padding), (5*padding) + (2*bar_height), al_map_rgba_f(0.5,0.5,0.5,0.5));
+    	al_draw_filled_rectangle(max_x - (2*padding) - bar_width, (5*padding) + bar_height, (max_x - 2*padding) * (p2->stamina/100), (5*padding) + (2*bar_height), al_map_rgb(0,0,255));
+
+	int min_y = 7*padding + 2*bar_height;
+	int square_x = square_side + 2*padding;
+
+	//1 molde
+	al_draw_filled_rectangle (padding, min_y, 3*padding + square_side, min_y + 2*padding + square_side, al_map_rgb(0,0,0));
+	al_draw_filled_rectangle (2*padding, min_y + padding, 2*padding + square_side, min_y + padding + square_side, al_map_rgb(0,255,0));
+
+	al_draw_filled_rectangle (square_x + 2*padding, min_y, square_x + 4*padding + square_side, min_y + 2*padding + square_side, al_map_rgb(0,0,0));
+        al_draw_filled_rectangle (square_x + 3*padding, min_y + padding, square_x + 3*padding + square_side, min_y + padding + square_side, al_map_rgb(0,255,0));
+
+	//rounds hero 2
+	al_draw_filled_rectangle (max_x - square_x - padding, min_y, max_x - padding, min_y + 2*padding + square_side, al_map_rgb(0,0,0));
+	al_draw_filled_rectangle (max_x - square_x, min_y + padding, max_x - 2*padding, min_y + padding + square_side, al_map_rgb(0,255,0));
+
+	al_draw_filled_rectangle (max_x - (2*square_x) - (2*padding), min_y, max_x - (2*padding) - square_x, min_y + 2*padding + square_side, al_map_rgb(0,0,0));
+        al_draw_filled_rectangle (max_x - (2*square_x) - padding, min_y + padding, max_x - 3*padding - square_x, min_y + padding + square_side, al_map_rgb(0,255,0));
+	
+	printf ("OS HPS SAO %f, %f!\n", p1->hp, p2->hp);
+}
+/*
+void menu (ALLEGRO_BITMAP *intro, int selected_option, int max_x, int max_y){
+	al_draw_scaled_bitmap ();
+
+	int padding = 20; // Espaço entre as opções
+	
+    	int text_height = al_get_font_line_height(font);
+
+    	// Coordenadas y para as opções
+    	int y1 = display_height - 3 * (text_height + padding);
+    	int y2 = display_height - 2 * (text_height + padding);
+    	int y3 = display_height - 1 * (text_height + padding);
+
+    	// Opção "1 Player"
+    	al_draw_text(font, al_map_rgb(255, 255, 255), max_x / 2, y1, ALLEGRO_ALIGN_CENTER, "1 Player");
+
+    	// Opção "2 Players"
+    	al_draw_text(font, al_map_rgb(255, 255, 255), max_x / 2, y2, ALLEGRO_ALIGN_CENTER, "2 Players");
+
+    	// Opção "Quit"
+    	al_draw_text(font, al_map_rgb(255, 255, 255), max_x / 2, y3, ALLEGRO_ALIGN_CENTER, "Quit");
+
+	if (selected_option == 1){
+		arrow_x = x_position + square_size / 2;
+        	arrow_y = y_position - 20;
+	}
+	else if (selected_option == 2){
+	}
+	else{
+	}
+
+        al_draw_filled_triangle(arrow_x1, arrow_y1, arrow_x1 - 10, arrow_y1 - 20, arrow_x1 + 10, arrow_y1 - 20, al_map_rgb(255, 0, 0));
+
+	return;
+}
+	
+void pause (hero *p1, hero *p2, ALLEGRO_DISPLAY *disp, int max_x, int max_y){	//da pra fazer???
+	while (1){		//PRINTAR NA TELA NESSA FUNCAO???
+}
+void end (){
+	if (p1->hp == 0)
+		score2++;
+	if (p2->hp == 0)
+		score1++;
+
+	if (score1 == 2){
+		if (score == 2)
+			print draw;
+		else
+			print player_1 wins
+		SE PRESSIONAR ENTER VOLTA PRO MENU PRINCIPAL!
+	}
+	else if (score2 == 2){
+	}
+	else{
+		choose_hero ();
+		choose_hero ();
+		p1->control_x->state = 0;
+		p1->control_y->state = 0;
+	}
+
+	return;
+}
+*/

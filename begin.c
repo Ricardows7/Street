@@ -36,22 +36,16 @@ hero* choose_hero (hero* element, int type, int x, int max_x, int max_y, int gro
 	element->length = 220;
       	element->width = 141;
 
-	if (type == 49){	//type se refere ao codigo do teclado
-		element->id = 1;
+	element->id = type + 1;
+
+	if (element->id == 1)
 	        element->image = al_load_bitmap ("rafaelo.png");
-	}
-	else if (type == 50){
-		element->id = 2;
+	else if (element->id == 2)
                 element->image = al_load_bitmap ("donatello_2.png");
-	}
-	else if (type == 51){
-		element->id = 3;
+	else if (element->id == 3)
                 element->image = al_load_bitmap ("Michelangelo.png");
-	}
-	else{
-		element->id = 4;
+	else
                 element->image = al_load_bitmap ("sodaleonard.png");
-	}
 
 	if (!element->image){
 		printf ("Erro no load das imagens!\n");
@@ -65,6 +59,12 @@ hero* choose_hero (hero* element, int type, int x, int max_x, int max_y, int gro
 		printf ("Erro na posição inicial dos jogadores!\n");
 		return NULL;
 	}
+
+	element->hp = 100;
+	element->stamina = 100;
+	element->stun = 0;
+	element->air = false;
+	element->jump = 0;
 
 	return element;
 }
@@ -137,6 +137,9 @@ void update_position (hero *p1, hero *p2, int max_x, int max_y, int ground, int 
 					//PENSAR NO QUE FAZER QUANDO ESTIVER GOLPEANDO E CAIR NO CHAO!!!(TESTAR SE CHEGAR NO CHAO EM Y) E ESTIVER GOLPEANDO CANCELA????
 	if (verify_action (p1->control_x->state) && p1->control_x->change)	//coloco pra chamar caso so esteja andando?
 		choose_move_x (p1->control_x, p1->control_y, p1->stamina, p1->stun, p1->x, p2->x, &p1->trajectory, &p1->hitted);
+
+	if (!p1->hp)
+		return;
 
 	position_x (p1, p2, max_x, max_y, ground, gravity);
 	position_y (p1, p2, max_x, max_y, ground, gravity);

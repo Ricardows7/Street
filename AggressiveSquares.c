@@ -16,7 +16,7 @@
 #define Y_SCREEN 720
 
 #define GRAVITY 1
-#define GROUND 700
+#define GROUND 600
 
 int main(){
 
@@ -42,40 +42,97 @@ int main(){
 	al_init_image_addon();
 	
 	ALLEGRO_EVENT event;
-	
+	ALLEGRO_BITMAP* bits[4];
+	bits[0] = al_load_bitmap ("rafaelo.png");
+	bits[1] = al_load_bitmap ("donatello_2.png");
+	bits[2] = al_load_bitmap ("Michelangelo.png");
+	bits[3] = al_load_bitmap ("sodaleonard.png");
+
+	ALLEGRO_BITMAP* maps = al_load_bitmap ("mapa.png");
+	int dimension [4];
+
 	al_start_timer(timer);	
 
 	int where_to_go = 2;
-
-	choose_hero (player_1, 49, X_SCREEN/3, X_SCREEN, Y_SCREEN, GROUND);		//RETIRAR O INICIO EM Y, DEPENDE DA ALTURA DO HEROI!!!!!!!!!!	
-	choose_hero (player_2, 51, X_SCREEN * 2/3, X_SCREEN, Y_SCREEN, GROUND);
-
+	bool hero_chosen = false;
+	int p1_chosen = 0, p2_chosen = 0, map_chosen = 0;
 	while(1){
-	/*	AQUI SERÁ O MENU DE ESCOLHA!
-		if (where_to_go == 1){
+		if (where_to_go == 2){
+			hero_chosen = false;
+			choose_hero (player_1, p1_chosen, X_SCREEN/3, X_SCREEN, Y_SCREEN, GROUND);
+                  	choose_hero (player_2, p2_chosen, X_SCREEN/3, X_SCREEN, Y_SCREEN, GROUND);
 			while (1){
 				al_wait_for_event(queue, &event);
-				printf ("Selecione o Player 1!\n");
-				if (49 <= event.keyboard.keycode && event.keyboard.keycode <= 52)
-					player1 = choose_hero (player1, event.keyboard.keycode, 
+				if (event.type == ALLEGRO_EVENT_TIMER){
+					al_clear_to_color (al_map_rgb (0,0,0));
+
+					character_menu (disp, maps, bits, p1_chosen, p2_chosen, map_chosen, hero_chosen, X_SCREEN, Y_SCREEN);
+
+					al_flip_display();
+				}
+				else if (event.type == 10){
+					if (event.keyboard.keycode == 83 && !hero_chosen)
+						p2_chosen = (p2_chosen + 1) % 4;
+					else if (event.keyboard.keycode == 82 && !hero_chosen)
+						p2_chosen = (3 + p2_chosen) % 4;
+					else if (event.keyboard.keycode == 4){
+						if (!hero_chosen)
+							p1_chosen = (p1_chosen + 1) % 4;
+						else
+							map_chosen = (map_chosen + 1) % 2;
+					}
+					else if (event.keyboard.keycode == 1){
+						if (!hero_chosen)
+							p1_chosen = (3 + p1_chosen) % 4;
+						else
+							map_chosen = (1 + map_chosen) % 2;
+					}
+					else if (event.keyboard.keycode == 67){
+						if (!hero_chosen)
+							hero_chosen = true;
+						else{
+							where_to_go = 3;
+							choose_hero (player_1, p1_chosen, X_SCREEN/3, X_SCREEN, Y_SCREEN, GROUND);
+                				        choose_hero (player_2, p2_chosen, X_SCREEN * 2/3, X_SCREEN, Y_SCREEN, GROUND);
+							if (map_chosen == 0){
+								dimension[0] = 745;
+								dimension[1] = 295;
+								dimension[2] = 714;
+								dimension[3] = 170;
+							}
+							else{
+								dimension[0] = 338;
+                                                                dimension[1] = 55;
+                                                                dimension[2] = 714;
+                                                                dimension[3] = 155;
+							}
+							break;
+						}
+					}	
+				}
+				else if (event.type == ALLEGRO_EVENT_DISPLAY_CLOSE){
+					where_to_go = 4;
+					break;
+				}
 			}	
 		}
-	*/
-		if (where_to_go == 2){
+		if (where_to_go == 3){
 			al_wait_for_event(queue, &event);	
 			//update_position (player_1, player_2, X_SCREEN, Y_SCREEN, GROUND, GRAVITY);
 			//update_position (player_2, player_1, X_SCREEN, Y_SCREEN, GROUND, GRAVITY);
 			if (event.type == ALLEGRO_EVENT_TIMER){
 				al_clear_to_color (al_map_rgb(0, 0, 0));
+				al_draw_scaled_bitmap (maps, dimension[0], dimension[1], dimension[2], dimension[3], 0, 0, X_SCREEN, Y_SCREEN, 0);
 
-				al_draw_filled_rectangle (0, Y_SCREEN/50, 300 * (player_1->hp/100), 0, al_map_rgba_f (0.5,0,0,0.5));
-				al_draw_filled_rectangle (0, (Y_SCREEN/25) + 10, 300 * (player_1->stamina/100), (Y_SCREEN/50) + 10, al_map_rgba_f (0,0,0.5,0.5));
+				//al_draw_filled_rectangle (0, Y_SCREEN/50, 300 * (player_1->hp/100), 0, al_map_rgba_f (0.5,0,0,0.5));
+				//al_draw_filled_rectangle (0, (Y_SCREEN/25) + 10, 300 * (player_1->stamina/100), (Y_SCREEN/50) + 10, al_map_rgba_f (0,0,0.5,0.5));
 
-				al_draw_filled_rectangle (X_SCREEN - (300 * (player_2->hp/100)), Y_SCREEN/50, X_SCREEN, 0, al_map_rgba_f (0.5,0,0,0.5));
-				al_draw_filled_rectangle (X_SCREEN - (300 * (player_2->stamina/100)), (Y_SCREEN/25) + 10, X_SCREEN, (Y_SCREEN/50) + 10, al_map_rgba_f (0,0,0.5,0.5));
-				al_draw_filled_rectangle(0, Y_SCREEN, X_SCREEN, GROUND, al_map_rgb(0, 255, 0));
-      				al_draw_filled_rectangle (player_1->x-player_1->width/2, player_1->y-player_1->length/2, player_1->x+player_1->width/2, player_1->y+player_1->length/2, al_map_rgb(255, 0, 0));
-				al_draw_filled_rectangle (player_2->x-player_2->width/2, player_2->y-player_2->length/2, player_2->x+player_2->width/2, player_2->y+player_2->length/2, al_map_rgb (0, 0, 255));
+				//al_draw_filled_rectangle (X_SCREEN - (300 * (player_2->hp/100)), Y_SCREEN/50, X_SCREEN, 0, al_map_rgba_f (0.5,0,0,0.5));
+				//al_draw_filled_rectangle (X_SCREEN - (300 * (player_2->stamina/100)), (Y_SCREEN/25) + 10, X_SCREEN, (Y_SCREEN/50) + 10, al_map_rgba_f (0,0,0.5,0.5));
+
+      				//al_draw_filled_rectangle (player_1->x-player_1->width/2, player_1->y-player_1->length/2, player_1->x+player_1->width/2, player_1->y+player_1->length/2, al_map_rgb(255, 0, 0));
+				//al_draw_filled_rectangle (player_2->x-player_2->width/2, player_2->y-player_2->length/2, player_2->x+player_2->width/2, player_2->y+player_2->length/2, al_map_rgb (0, 0, 255));
+				bars (disp, X_SCREEN, Y_SCREEN, player_1, player_2);
 
 				update_position (player_1, player_2, X_SCREEN, Y_SCREEN, GROUND, GRAVITY);
                                 update_position (player_2, player_1, X_SCREEN, Y_SCREEN, GROUND, GRAVITY);
@@ -164,7 +221,7 @@ int main(){
 
 			}
 			else if (event.type == ALLEGRO_EVENT_DISPLAY_CLOSE){
-				where_to_go = 3;
+				where_to_go = 4;
 				break;
 			}
 		}
@@ -176,7 +233,8 @@ int main(){
 	al_destroy_display(disp);
 	al_destroy_timer(timer);
 	al_destroy_event_queue(queue);
-
+	for (int i = 0; i < 4; i++)
+		al_destroy_bitmap (bits[i]);
 	printf ("Ta dando free!\n"); 
   
 	hero_destroy (player_1);
