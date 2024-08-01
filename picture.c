@@ -1253,7 +1253,7 @@ void bars(ALLEGRO_DISPLAY *display, int max_x, int max_y, hero *p1, hero *p2) {
     	al_draw_filled_rectangle(max_x - (3*padding) - bar_width, (4*padding) + bar_height, max_x - padding, (6*padding) + (bar_height * 2), al_map_rgb(0, 0, 0));
     // Barra de stamina direita superior
     	al_draw_filled_rectangle(max_x - (2*padding) - bar_width, (5*padding) + bar_height, (max_x - 2*padding), (5*padding) + (2*bar_height), al_map_rgba_f(0.5,0.5,0.5,0.5));
-    	al_draw_filled_rectangle(max_x - (2*padding) - bar_width, (5*padding) + bar_height, (max_x - 2*padding) * (p2->stamina/100), (5*padding) + (2*bar_height), al_map_rgb(0,0,255));
+    	al_draw_filled_rectangle(max_x - (2*padding) - (bar_width * (p2->stamina/100)), (5*padding) + bar_height, (max_x - 2*padding), (5*padding) + (2*bar_height), al_map_rgb(0,0,255));
 
 	int min_y = 7*padding + 2*bar_height;
 	int square_x = square_side + 2*padding;
