@@ -1250,6 +1250,59 @@ void printa_stun (hero *p, ALLEGRO_BITMAP *image, bool rev){
 
 	return;
 }
+
+void printa_stand (hero *p, ALLEGRO_BITMAP* image, bool rev){
+	int dx, sw, dy, sh;
+
+        switch (p->id){
+                case 1:
+                        dx = p->x - p->width/2;
+                        sw = p->width + 40;
+                        dy = p->y - p->length/2;
+                        sh = p->length;
+                        if (rev){
+                                sw = -sw;
+                                dx = dx - sw - 30;
+                        }
+                        al_draw_scaled_bitmap (image, 1, 251, 60, 77, dx, dy - 20, sw, sh + 40, 0);
+                        break;
+		case 2:
+			dx = p->x - p->width/2 - 20;
+                        sw = p->width + 60;
+                        dy = p->y - p->length/2;
+                        sh = p->length;
+                        if (rev){
+                                sw = -sw;
+                                dx = dx - sw - 20;
+                        }
+                        al_draw_scaled_bitmap (image, 71, 1246, 65, 69, dx, dy - 20, sw, sh + 40, 0);
+                        break;
+		case 3:
+			dx = p->x - p->width/2 - 10;
+                        sw = p->width + 10;
+                        dy = p->y - p->length/2;
+                        sh = p->length;
+                        if (!rev){
+                                sw = -sw;
+                                dx = dx - sw + 10;
+                        }
+                        al_draw_scaled_bitmap (image, 4, 171, 55, 78, dx, dy - 10, sw, sh + 20, 0);
+                        break;
+		case 4:
+			dx = p->x - p->width/2;
+                        sw = p->width + 40;
+                        dy = p->y - p->length/2;
+                        sh = p->length;
+                        if (rev){
+                                sw = -sw;
+                                dx = dx - sw - 30;
+                        }
+                        al_draw_scaled_bitmap (image, 10, 108, 55, 104, dx, dy - 75, sw, sh + 100, 0);
+                        break;
+	}
+	return;
+}
+
 void print_hero (hero *p, bool rev, int ground){
 	
 	if (!p->hp){
@@ -1305,7 +1358,7 @@ void print_hero (hero *p, bool rev, int ground){
 			break;
 		case 0:
 			if (!p->control_y->state)
-				printa_special (p, p->image, rev);
+				printa_stand (p, p->image, rev);
 			else if (p->control_y->state == JUMP)
 				printa_jump (p, p->image, rev, ground);
 			else
