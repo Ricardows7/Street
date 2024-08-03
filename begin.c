@@ -29,7 +29,31 @@ hero* hero_create(){
 	return new_hero;
 }
 
+void reset_hero (hero *p){
+	p->stun = 0;
+	p->hp = 100;
+	p->stamina = 100;
+	p->air = false;
+	p->jump = 0;
+	p->trajectory = false;
+	p->hitted = false;
+	
+	p->control_x->acumulation = 1;
+	p->control_x->state = 0;
+	p->control_x->timer = 0;
+	p->control_x->change = true;
+
+	p->control_y->acumulation = 1;
+        p->control_y->state = 0;
+        p->control_y->timer = 0;
+        p->control_y->change = true;
+
+	return;
+}
+
 hero* choose_hero (hero* element, int type, int x, int max_x, int max_y, int ground){
+
+	reset_hero (element);
 
 	element->x = x;
 
@@ -60,15 +84,42 @@ hero* choose_hero (hero* element, int type, int x, int max_x, int max_y, int gro
 		return NULL;
 	}
 
-	element->hp = 100;
-	element->stamina = 100;
-	element->stun = 0;
-	element->air = false;
-	element->jump = 0;
-
 	return element;
 }
 
+int aleat (){
+	return (rand() % 100) + 1;
+}
+
+void robot (hero *element, hero *target){
+	int value = aleat();
+	element->control_x->acumulation = 1;
+
+	if (element->x < target->x){
+		if ((element->x + element->width/2 + 50) < (target->x - target->width/2)){
+			joystick_activate (element->control_x, 10, WALK_RIGHT);
+			return;
+		}
+	}
+	else{
+		if ((element->x - element->width/2 - 50) > (target->x + target->width/2)){
+			joystick_activate (element->control_x, 10, WALK_LEFT);
+			return;
+		}
+	}
+	
+	printf ("O VALOR E : %d\n", value);
+
+	if (value < 11)
+		joystick_activate (element->control_x, 10, SPECIAL);
+	else if (value < 51)
+		joystick_activate (element->control_x, 10, KICK);
+	else
+		joystick_activate (element->control_x, 10, PUNCH);
+	
+	return;
+}
+	
 void hero_move(hero *element, char steps, unsigned char trajectory, unsigned short max_x, unsigned short max_y, unsigned short ground){							//Implementação da função "square_move" (-1)
 
 	if (!trajectory){ if ((element->x - steps*STREET_STEP) - element->width/2 >= 0) element->x = element->x - steps*STREET_STEP;} 				//Verifica se a movimentação para a esquerda é desejada e possível; se sim, efetiva a mesma
@@ -125,9 +176,9 @@ unsigned char collision (hero *element_first, hero *element_second){
 void hero_movement (hero *p1, hero *p2, char steps, unsigned char trajectory, unsigned short max_x, unsigned short max_y, unsigned short ground){
 	hero_move (p1, steps, trajectory, max_x, max_y, ground);
 	if (collision (p1, p2)){
-		hero_move (p1, -steps -10, trajectory, max_x, max_y, ground);
-		//if (p1->air)
-		//	p1->jump = -p1->jump;
+		hero_move (p1, -steps, trajectory, max_x, max_y, ground);
+		if (p1->air && trajectory == 2)
+			p1->jump = -p1->jump;
 	}
 	
 	printf ("%d\n", p1->jump);
@@ -141,8 +192,13 @@ void update_position (hero *p1, hero *p2, int max_x, int max_y, int ground, int 
 	if (verify_action (p1->control_x->state) && p1->control_x->change)	//coloco pra chamar caso so esteja andando?
 		choose_move_x (p1->control_x, p1->control_y, p1->stamina, p1->stun, p1->x, p2->x, &p1->trajectory, &p1->hitted);
 
-	if (!p1->hp)
+	if (!p1->hp){
+		p1->control_y->acumulation = 1;
+		if (p1->control_x->timer < 10)
+			p1->control_x->timer++;
+		position_y (p1,p2,max_x,max_y,ground,gravity);
 		return;
+	}
 
 	position_x (p1, p2, max_x, max_y, ground, gravity);
 	position_y (p1, p2, max_x, max_y, ground, gravity);
@@ -195,7 +251,7 @@ void position_x (hero *p1, hero *p2, int max_x, int max_y, int ground, int gravi
                                         break;
 				case 4:
 					if (p1->control_x->timer > 30){
-               									p1->control_x->state = 0;
+               					p1->control_x->state = 0;
                                                 p1->control_x->timer = 0;
                                                 p1->control_y->change = true;
                                         }
@@ -204,7 +260,7 @@ void position_x (hero *p1, hero *p2, int max_x, int max_y, int ground, int gravi
 			}
 			printf ("O DANO E: %f\n", damage);
 			store = check_hit_box (&minimo_x, &maximo_x, &minimo_y, &maximo_y, SPECIAL, p1->id, p1->x, p1->y, p1->length, p1->width, p1->control_y->state, p1->trajectory, p1->control_x->timer, p1->control_x->state, &p1->stamina);
-			update_damage(damage, &p2->hp, &p2->stun, !(p2->control_x->state - DEFENSE_UP), !(p2->control_x->state - DEFENSE_DOWN), minimo_x, maximo_x, minimo_y, maximo_y, p2->x, p2->y, p2->length, p2->width, store, &p1->hitted);
+			update_damage(damage, &p2->hp, &p2->stun, !(p2->control_x->state - DEFENSE_UP), !(p2->control_x->state - DEFENSE_DOWN), minimo_x, maximo_x, minimo_y, maximo_y, p2->x, p2->y, p2->length, p2->width, store, &p1->hitted, &p2->control_x->timer);
 			if (p1->control_x->timer > 60){
 				stamina_update (p1->control_x->state, true, &p1->stamina, false);          
 				p1->control_x->state = 0;
@@ -216,8 +272,8 @@ void position_x (hero *p1, hero *p2, int max_x, int max_y, int ground, int gravi
 			p1->control_y->change = false;
                         p1->control_x->timer++;
 			store = check_hit_box (&minimo_x, &maximo_x, &minimo_y, &maximo_y, KICK, p1->id, p1->x, p1->y, p1->length, p1->width, p1->control_y->state, p1->trajectory, p1->control_x->timer, p1->control_x->state, &p1->stamina);
-                     	update_damage (KICK_DAMAGE, &p2->hp, &p2->stun, !(p2->control_x->state - DEFENSE_UP), !(p2->control_x->state - DEFENSE_DOWN), minimo_x, maximo_x, minimo_y, maximo_y, p2->x, p2->y, p2->length, p2->width, store, &p1->hitted);	//ATUALIZAR AS HITBOXES AQUI TAMBEM!
-			if (p1->control_x->timer > 30 && !p1->air){
+                     	update_damage (KICK_DAMAGE, &p2->hp, &p2->stun, !(p2->control_x->state - DEFENSE_UP), !(p2->control_x->state - DEFENSE_DOWN), minimo_x, maximo_x, minimo_y, maximo_y, p2->x, p2->y, p2->length, p2->width, store, &p1->hitted, &p2->control_x->timer);	//ATUALIZAR AS HITBOXES AQUI TAMBEM!
+			if (p1->control_x->timer > 20 && !p1->air){
 				p1->control_x->state = 0;
                                 p1->control_x->timer = 0;
 				p1->control_y->change = true;
@@ -229,9 +285,9 @@ void position_x (hero *p1, hero *p2, int max_x, int max_y, int ground, int gravi
 			p1->control_x->timer++;
 			store = check_hit_box (&minimo_x, &maximo_x, &minimo_y, &maximo_y, PUNCH, p1->id, p1->x, p1->y, p1->length, p1->width, p1->control_y->state, p1->trajectory, p1->control_x->timer, p1->control_x->state, &p1->stamina);
 			//printf ("O VALOR DE STORE E: %d\n");
-			update_damage (PUNCH_DAMAGE, &p2->hp, &p2->stun, !(p2->control_x->state - DEFENSE_UP), !(p2->control_x->state - DEFENSE_DOWN), minimo_x, maximo_x, minimo_y, maximo_y, p2->x, p2->y, p2->length, p2->width, store, &p1->hitted);
+			update_damage (PUNCH_DAMAGE, &p2->hp, &p2->stun, !(p2->control_x->state - DEFENSE_UP), !(p2->control_x->state - DEFENSE_DOWN), minimo_x, maximo_x, minimo_y, maximo_y, p2->x, p2->y, p2->length, p2->width, store, &p1->hitted, &p2->control_x->timer);
 
-			if (p1->control_x->timer > 30 && !p1->air){
+			if (p1->control_x->timer > 20 && !p1->air){
 				p1->control_x->state = 0;
 				p1->control_x->timer = 0;
 				p1->control_y->change = true;

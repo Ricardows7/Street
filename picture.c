@@ -398,7 +398,7 @@ void printa_stand_punch (hero *p, ALLEGRO_BITMAP* image, bool rev){
                         sw = p->width + 100;
                         dy = p->y - p->length/2;
                         sh = p->length;
-			if (p->control_x->timer < 10 || p->control_x->timer > 20){
+			if (p->control_x->timer < 5 || p->control_x->timer > 15){
 				if (rev){
                                 	sw = -sw;
                                 	dx = dx - sw + 55;
@@ -420,7 +420,7 @@ void printa_stand_punch (hero *p, ALLEGRO_BITMAP* image, bool rev){
                         sw = p->width + 100;
                         dy = p->y - p->length/2;
                         sh = p->length;
-			if (p->control_x->timer < 10 || p->control_x->timer > 20){
+			if (p->control_x->timer < 5 || p->control_x->timer > 15){
                                 if (rev){
                                         sw = -sw;
                                         dx = dx - sw + 55;
@@ -442,7 +442,7 @@ void printa_stand_punch (hero *p, ALLEGRO_BITMAP* image, bool rev){
                         sw = p->width + 100;
                         dy = p->y - p->length/2;
                         sh = p->length;
-                      	if (p->control_x->timer < 10 || p->control_x->timer > 20){
+                      	if (p->control_x->timer < 5 || p->control_x->timer > 15){
                                 if (rev){
                                         sw = -sw;
                                         dx = dx - sw + 20;
@@ -464,7 +464,7 @@ void printa_stand_punch (hero *p, ALLEGRO_BITMAP* image, bool rev){
                         sw = p->width + 100;
                         dy = p->y - p->length/2;
                         sh = p->length;
-                        if (p->control_x->timer < 10 || p->control_x->timer > 20){
+                        if (p->control_x->timer < 5 || p->control_x->timer > 15){
                                 if (rev){
                                         sw = -sw;
                                         dx = dx - sw + 35;
@@ -510,7 +510,7 @@ void printa_down_punch (hero *p, ALLEGRO_BITMAP* image, bool rev){
                               	sw = -sw;
                                	dx = dx - sw - 70;
                        	}	
-                       	al_draw_scaled_bitmap (image, 261, 590, 69, 70, dx, dy - 35, sw, sh + 40, 0);
+                       	al_draw_scaled_bitmap (image, 261, 591, 69, 70, dx, dy - 35, sw, sh + 40, 0);
                         break;
 		case 3:	//mike
 			dx = p->x - p->width/2 + 20;
@@ -642,7 +642,7 @@ void printa_stand_kick (hero *p, ALLEGRO_BITMAP* image, bool rev){
                         sw = p->width + 70;
                         dy = p->y - p->length/2;
                         sh = p->length;
-                        if (p->control_x->timer < 10 || p->control_x->timer > 20){
+                        if (p->control_x->timer < 5 || p->control_x->timer > 15){
                                  if (rev){
                                         sw = -sw;
                                       	dx = dx - sw + 10;
@@ -664,7 +664,7 @@ void printa_stand_kick (hero *p, ALLEGRO_BITMAP* image, bool rev){
                         sw = p->width + 70;
                         dy = p->y - p->length/2;
                         sh = p->length;
-                        if (p->control_x->timer < 10 || p->control_x->timer > 20){
+                        if (p->control_x->timer < 5 || p->control_x->timer > 15){
                                  if (rev){
                                         sw = -sw;
                                         dx = dx - sw + 10;
@@ -686,7 +686,7 @@ void printa_stand_kick (hero *p, ALLEGRO_BITMAP* image, bool rev){
                         sw = p->width + 70;
                         dy = p->y - p->length/2;
                         sh = p->length;
-                        if (p->control_x->timer < 10 || p->control_x->timer > 20){
+                        if (p->control_x->timer < 5 || p->control_x->timer > 15){
                                  if (rev){
                                         sw = -sw;
                                         dx = dx - sw + 10;
@@ -708,7 +708,7 @@ void printa_stand_kick (hero *p, ALLEGRO_BITMAP* image, bool rev){
                         sw = p->width + 50;
                         dy = p->y - p->length/2;
                         sh = p->length;
-                        if (p->control_x->timer < 10 || p->control_x->timer > 20){
+                        if (p->control_x->timer < 5 || p->control_x->timer > 15){
                                  if (rev){
                                         sw = -sw;
                                         dx = dx - sw + 10;
@@ -738,7 +738,7 @@ void printa_down_kick (hero *p, ALLEGRO_BITMAP* image, bool rev){
                         sw = p->width + 70;
                         dy = p->y - p->length/2;
                         sh = p->length;
-                        if (p->control_x->timer < 10 || p->control_x->timer > 20){
+                        if (p->control_x->timer < 5 || p->control_x->timer > 15){
                                  if (rev){
                                         sw = -sw;
                                         dx = dx - sw - 10;
@@ -760,7 +760,7 @@ void printa_down_kick (hero *p, ALLEGRO_BITMAP* image, bool rev){
                         sw = p->width + 170;
                         dy = p->y - p->length/2;
                         sh = p->length;
-                        if (p->control_x->timer < 10 || p->control_x->timer > 20){
+                        if (p->control_x->timer < 5 || p->control_x->timer > 15){
                                 if (rev){
                                         sw = -sw;
                                         dx = dx - sw + 50;
@@ -781,7 +781,7 @@ void printa_down_kick (hero *p, ALLEGRO_BITMAP* image, bool rev){
                         sw = p->width + 30;
                         dy = p->y - p->length/2;
                         sh = p->length;
-                        if (p->control_x->timer < 10 || p->control_x->timer > 20){
+                        if (p->control_x->timer < 5 || p->control_x->timer > 15){
                                 if (rev){
                                         sw = -sw;
                                         dx = dx - sw + 10;
@@ -802,7 +802,7 @@ void printa_down_kick (hero *p, ALLEGRO_BITMAP* image, bool rev){
                         sw = p->width + 30;
                         dy = p->y - p->length/2;
                         sh = p->length;
-                        if (p->control_x->timer < 10 || p->control_x->timer > 20){
+                        if (p->control_x->timer < 5 || p->control_x->timer > 15){
                                 if (rev){
                                         sw = -sw;
                                         dx = dx - sw - 10;
@@ -1100,9 +1100,168 @@ void printa_special (hero *p, ALLEGRO_BITMAP *image, bool rev){
 	return;
 }
 
+void printa_dead (hero *p, ALLEGRO_BITMAP* image, bool rev){
+	int dx, sw, dy, sh;
+
+	printf ("TA NO PRINTA_DEAD!\n");
+
+	switch (p->id){
+		case 1:
+			dx = p->x - p->width/2;
+                        sw = p->width + 30;
+                        dy = p->y - p->length/2;
+                        sh = p->length;
+                        if (p->control_x->timer < 7){
+                                if (rev){
+                                        sw = -sw;
+                                        dx = dx - sw - 30;
+                                }
+                                al_draw_scaled_bitmap (image, 417, 1515, 87, 62, dx, dy - 20, sw, sh, 0);
+                        }
+			else{
+				dx -= 20;
+				sw += 30;
+				if (!rev){
+                                        sw = -sw;
+                                        dx = dx - sw - 30;
+                                }
+                                al_draw_scaled_bitmap (image, 47, 1642, 88, 36, dx, dy + 140, sw, sh - 100, 0);
+			}
+			break;
+		case 2:
+			dx = p->x - p->width/2 - 10;
+                        sw = p->width + 40;
+                        dy = p->y - p->length/2;
+                        sh = p->length;
+                        if (p->control_x->timer < 7){
+                                if (rev){
+                                        sw = -sw;
+                                        dx = dx - sw - 20;
+                                }
+                                al_draw_scaled_bitmap (image, 120, 1756, 82, 59, dx, dy - 20, sw, sh, 0);
+                        }
+                        else{
+                                dx -= 20;
+                                sw += 30;
+                                if (rev){
+                                        sw = -sw;
+                                        dx = dx - sw - 10;
+                                }
+                                al_draw_scaled_bitmap (image, 205, 1780, 87, 39, dx, dy + 140, sw, sh - 100, 0);
+                        }
+                        break;
+		case 3:
+			dx = p->x - p->width/2 - 10;
+                        sw = p->width + 40;
+                        dy = p->y - p->length/2;
+                        sh = p->length;
+                        if (p->control_x->timer < 7){
+                                if (rev){
+                                        sw = -sw;
+                                        dx = dx - sw - 20;
+                                }
+                                al_draw_scaled_bitmap (image, 173, 966, 78, 51, dx, dy - 10, sw, sh - 40, 0);
+                        }
+                        else{
+                                dx -= 20;
+                                sw += 30;
+                                if (!rev){
+                                        sw = -sw;
+                                        dx = dx - sw - 10;
+                                }
+                                al_draw_scaled_bitmap (image, 316, 986, 97, 39, dx, dy + 140, sw, sh - 100, 0);
+                        }
+                        break;
+		case 4:
+			dx = p->x - p->width/2 - 10;
+                        sw = p->width + 50;
+                        dy = p->y - p->length/2;
+                        sh = p->length;
+                        if (p->control_x->timer < 7){
+                                if (rev){
+                                        sw = -sw;
+                                        dx = dx - sw - 20;
+                                }
+                                al_draw_scaled_bitmap (image, 575, 3428, 90, 67, dx, dy - 10, sw, sh - 40, 0);
+                        }
+                        else{
+                                dx -= 20;
+                                sw += 60;
+                                if (rev){
+                                        sw = -sw;
+                                        dx = dx - sw - 10;
+                                }
+                                al_draw_scaled_bitmap (image, 665, 3441, 106, 45, dx, dy + 140, sw, sh - 100, 0);
+                        }
+                        break;
+	}
+	return;
+}
+
+void printa_stun (hero *p, ALLEGRO_BITMAP *image, bool rev){
+	int dx, sw, dy, sh;
+
+        switch (p->id){
+		case 1:
+			dx = p->x - p->width/2;
+                        sw = p->width + 30;
+                        dy = p->y - p->length/2;
+                        sh = p->length;
+                        if (rev){
+                                sw = -sw;
+                                dx = dx - sw - 30;
+                        }
+                        al_draw_scaled_bitmap (image, 289, 1503, 59, 84, dx, dy - 20, sw, sh + 40, 0);
+                        break;
+		case 2:
+			dx = p->x - p->width/2;
+                        sw = p->width + 30;
+                        dy = p->y - p->length/2;
+                        sh = p->length;
+                        if (rev){
+                                sw = -sw;
+                                dx = dx - sw - 30;
+                        }
+                        al_draw_scaled_bitmap (image, 387, 80, 52, 72, dx, dy - 20, sw, sh + 40, 0);
+                        break;
+		case 3:
+			dx = p->x - p->width/2;
+                        sw = p->width + 20;
+                        dy = p->y - p->length/2;
+                        sh = p->length;
+                        if (rev){
+                                sw = -sw;
+                                dx = dx - sw - 30;
+                        }
+                        al_draw_scaled_bitmap (image, 122, 953, 49, 80, dx, dy - 20, sw, sh + 40, 0);
+                        break;
+                case 4:
+                        dx = p->x - p->width/2;
+                        sw = p->width + 30;
+                        dy = p->y - p->length/2;
+                        sh = p->length;
+                 	if (rev){
+                        	sw = -sw;
+                        	dx = dx - sw - 30;
+                	}
+                	al_draw_scaled_bitmap (image, 65, 3404, 63, 96, dx, dy - 20, sw, sh + 40, 0);
+                	break;
+	}
+
+	return;
+}
 void print_hero (hero *p, bool rev, int ground){
-	//stun vem aqui???????????????
-	//printf ("O VALOR STATE E : %d %ld\n", p->control_x->state, p->control_x->acumulation);	
+	
+	if (!p->hp){
+		printa_dead (p, p->image, rev);
+		return;
+	}
+
+	if (p->stun > 0){
+		printa_stun (p, p->image, rev);
+		return;
+	}
+
 	switch (p->control_x->state){
 		case SPECIAL:
 			printf ("veio aqui!\n");
@@ -1226,7 +1385,7 @@ void character_menu(ALLEGRO_DISPLAY* display, ALLEGRO_BITMAP* maps, ALLEGRO_BITM
     	al_destroy_font(font);
 }
 
-void bars(ALLEGRO_DISPLAY *display, int max_x, int max_y, hero *p1, hero *p2) {
+void bars(ALLEGRO_DISPLAY *display, int max_x, int max_y, int s1, int s2, hero *p1, hero *p2) {
     	float bar_width = 350;   // largura da barra
     	float bar_height = 25;   // altura da barra
     	float padding = 7;      // espaço entre as barras e a borda da tela
@@ -1260,86 +1419,135 @@ void bars(ALLEGRO_DISPLAY *display, int max_x, int max_y, hero *p1, hero *p2) {
 
 	//1 molde
 	al_draw_filled_rectangle (padding, min_y, 3*padding + square_side, min_y + 2*padding + square_side, al_map_rgb(0,0,0));
-	al_draw_filled_rectangle (2*padding, min_y + padding, 2*padding + square_side, min_y + padding + square_side, al_map_rgb(0,255,0));
+	if (s1)
+		al_draw_filled_rectangle (2*padding, min_y + padding, 2*padding + square_side, min_y + padding + square_side, al_map_rgb(0,255,0));
 
 	al_draw_filled_rectangle (square_x + 2*padding, min_y, square_x + 4*padding + square_side, min_y + 2*padding + square_side, al_map_rgb(0,0,0));
-        al_draw_filled_rectangle (square_x + 3*padding, min_y + padding, square_x + 3*padding + square_side, min_y + padding + square_side, al_map_rgb(0,255,0));
+	if (s1 == 2)
+        	al_draw_filled_rectangle (square_x + 3*padding, min_y + padding, square_x + 3*padding + square_side, min_y + padding + square_side, al_map_rgb(0,255,0));
 
 	//rounds hero 2
 	al_draw_filled_rectangle (max_x - square_x - padding, min_y, max_x - padding, min_y + 2*padding + square_side, al_map_rgb(0,0,0));
-	al_draw_filled_rectangle (max_x - square_x, min_y + padding, max_x - 2*padding, min_y + padding + square_side, al_map_rgb(0,255,0));
+	if (s2)
+		al_draw_filled_rectangle (max_x - square_x, min_y + padding, max_x - 2*padding, min_y + padding + square_side, al_map_rgb(0,255,0));
 
 	al_draw_filled_rectangle (max_x - (2*square_x) - (2*padding), min_y, max_x - (2*padding) - square_x, min_y + 2*padding + square_side, al_map_rgb(0,0,0));
-        al_draw_filled_rectangle (max_x - (2*square_x) - padding, min_y + padding, max_x - 3*padding - square_x, min_y + padding + square_side, al_map_rgb(0,255,0));
+	if (s2 == 2)
+        	al_draw_filled_rectangle (max_x - (2*square_x) - padding, min_y + padding, max_x - 3*padding - square_x, min_y + padding + square_side, al_map_rgb(0,255,0));
 	
-	printf ("AS STAMINAS SAO %f, %f!\n", p1->stamina, p2->stamina);
+	printf ("OS SCORES SAO  %d, %d!\n", s1, s2);
 }
-/*
-void menu (ALLEGRO_BITMAP *intro, int selected_option, int max_x, int max_y){
-	al_draw_scaled_bitmap ();
 
-	int padding = 20; // Espaço entre as opções
-	
+void menu (ALLEGRO_BITMAP *intro, int selected_option, int max_x, int max_y){
+    	al_draw_scaled_bitmap(intro, 3, 310, 250, 130, 100, 100, max_x - 200, max_y / 2, 0);
+
+    	ALLEGRO_FONT* font = al_create_builtin_font();
+
+	if (!font){
+		printf ("ERRO");
+		return;
+	}
+    	int padding = 40; // Espaço entre as opções
     	int text_height = al_get_font_line_height(font);
 
     	// Coordenadas y para as opções
-    	int y1 = display_height - 3 * (text_height + padding);
-    	int y2 = display_height - 2 * (text_height + padding);
-    	int y3 = display_height - 1 * (text_height + padding);
+    	int y1 = max_y - 3 * (text_height + padding) - 100;
+    	int y2 = max_y - 2 * (text_height + padding) - 100;
+    	int y3 = max_y - 1 * (text_height + padding) - 100;
 
-    	// Opção "1 Player"
+    	// Desenha as opções de menu
     	al_draw_text(font, al_map_rgb(255, 255, 255), max_x / 2, y1, ALLEGRO_ALIGN_CENTER, "1 Player");
-
-    	// Opção "2 Players"
     	al_draw_text(font, al_map_rgb(255, 255, 255), max_x / 2, y2, ALLEGRO_ALIGN_CENTER, "2 Players");
-
-    	// Opção "Quit"
     	al_draw_text(font, al_map_rgb(255, 255, 255), max_x / 2, y3, ALLEGRO_ALIGN_CENTER, "Quit");
 
-	if (selected_option == 1){
-		arrow_x = x_position + square_size / 2;
-        	arrow_y = y_position - 20;
-	}
-	else if (selected_option == 2){
-	}
-	else{
-	}
+    	// Coordenadas x para a seta
+    	int arrow_x = max_x / 2 - 100;
+    	float arrow_y;
 
-        al_draw_filled_triangle(arrow_x1, arrow_y1, arrow_x1 - 10, arrow_y1 - 20, arrow_x1 + 10, arrow_y1 - 20, al_map_rgb(255, 0, 0));
-
-	return;
-}
+    	// Define a posição y da seta com base na opção selecionada
+    	if (!selected_option)
+        	arrow_y = y1 + text_height / 2;
+	else if (selected_option == 1)
+        	arrow_y = y2 + text_height / 2;
+     	else 
+        	arrow_y = y3 + text_height / 2;
 	
-void pause (hero *p1, hero *p2, ALLEGRO_DISPLAY *disp, int max_x, int max_y){	//da pra fazer???
-	while (1){		//PRINTAR NA TELA NESSA FUNCAO???
+    	// Desenha a seta ao lado da opção selecionada
+    	al_draw_filled_triangle(arrow_x, arrow_y, arrow_x - 20, arrow_y - 10, arrow_x - 20, arrow_y + 10, al_map_rgb(255, 0, 0));
 
-		PRINTAR UMA TELA PRETA TRANSPARENTE AQUI!
-
-		al_draw_text(font, al_map_rgb(255, 255, 255), max_x / 2, max_y / 2, ALLEGRO_ALIGN_CENTER, "PAUSED");
-		al_draw_text(font, al_map_rgb(255, 255, 255), max_x / 2, (max_y / 2) + 50, ALLEGRO_ALIGN_CENTER, "Press ENTER to continue!");
+    	al_destroy_font(font);
 }
-void end (){
-	if (p1->hp == 0)
-		score2++;
-	if (p2->hp == 0)
-		score1++;
 
-	if (score1 > score2){ !!!!!!!!!!!
-		if (score == 2)
-			print draw;
-		else
-			print player_1 wins
-		SE PRESSIONAR ENTER VOLTA PRO MENU PRINCIPAL!
-	}
-	else if (score2 == 2){
-	}
-	else{	logica pra restartar!
-		choose_hero ();
-		choose_hero ();
-		p1->control_x->state = 0;
-		p1->control_y->state = 0;
-	}
+int stopped (ALLEGRO_DISPLAY *disp, ALLEGRO_EVENT_QUEUE* queue, ALLEGRO_EVENT event, int max_x, int max_y, int *paused, int *direction){	//da pra fazer???
+	ALLEGRO_FONT* font = al_create_builtin_font();
+	
+	al_draw_filled_rectangle (0,0,max_x,max_y,al_map_rgba_f(0.0,0.0,0.0,0.5));
 
+	al_draw_text(font, al_map_rgb(255, 255, 255), max_x / 2, max_y/2, ALLEGRO_ALIGN_CENTER, "PAUSED");
+	al_draw_text(font, al_map_rgb(255, 255, 255), (max_x / 2), (max_y/2) + 50, ALLEGRO_ALIGN_CENTER, "Press ENTER to continue or Esc to quit");
+	al_flip_display();
+
+	al_destroy_font(font);
+	
+	while (1){
+		al_wait_for_event(queue, &event);
+		if (event.type == 10){
+	       		if (event.keyboard.keycode == 67){
+				*paused = 0;
+				printf ("FOOOOOOOIIIII");
+				return 1;
+			}
+			else if (event.keyboard.keycode == 59){
+				*paused = 0;
+				*direction = 1;
+				return 0;
+			}
+		}
+		else if (event.type == ALLEGRO_EVENT_DISPLAY_CLOSE){
+			*direction = 4;
+			return 0;
+		}
+	}
+	return 0;
+}
+
+void end (hero *p1, hero *p2, int *score_1, int *score_2, int max_x, int max_y, int ground, int *ended){
+	int reset = 0;
+	ALLEGRO_FONT* font = al_create_builtin_font();
+
+	if (!(*ended)){
+		if (p1->hp == 0){
+			*score_2 += 1;
+			reset += 1;
+		}
+		if (p2->hp == 0){
+			*score_1 += 1;
+			reset += 1;
+		}
+	}
+	else
+		reset++;
+
+	if (reset > 0){
+		if (*score_1 == 2){
+			al_draw_filled_rectangle (0,0,max_x,max_y,al_map_rgba_f(0.0,0.0,0.0,0.5));
+			if (*score_2 == 2)
+				al_draw_text(font, al_map_rgb(255, 255, 255), max_x / 2, max_y/2, ALLEGRO_ALIGN_CENTER, "PLAYER_1 TIES WITH PLAYER_2!");
+			else
+				al_draw_text(font, al_map_rgb(255, 255, 255), max_x / 2, max_y/2, ALLEGRO_ALIGN_CENTER, "PLAYER_1 WINS!");
+			al_draw_text(font, al_map_rgb(255, 255, 255), max_x / 2, max_y/2 + 50, ALLEGRO_ALIGN_CENTER, "Press Enter to continue");
+			*ended = 1;
+		}
+		else if (*score_2 == 2){
+			al_draw_filled_rectangle (0,0,max_x,max_y,al_map_rgba_f(0.0,0.0,0.0,0.5));
+			al_draw_text(font, al_map_rgb(255, 255, 255), max_x / 2, max_y/2, ALLEGRO_ALIGN_CENTER, "PLAYER_2 WINS!");
+			al_draw_text(font, al_map_rgb(255, 255, 255), max_x / 2, max_y/2 + 50, ALLEGRO_ALIGN_CENTER, "Press Enter to continue");
+			*ended = 1;
+		}
+		else{
+			p1 = choose_hero (p1, p1->id-1, max_x/3, max_x, max_y, ground);
+			p2 = choose_hero (p2, p2->id-1, max_x * 2/3, max_x, max_y, ground);
+		}
+	}
 	return;
 }
-*/

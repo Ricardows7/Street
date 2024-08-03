@@ -3,7 +3,6 @@
 #include <stdbool.h>
 #include <stdio.h>
 
-
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_primitives.h>
 #include <allegro5/allegro_color.h>
@@ -35,6 +34,10 @@ typedef struct {
 	ALLEGRO_BITMAP *image;
 } hero;																									
 hero* hero_create();
+
+void reset_hero (hero *p);
+
+void robot (hero *element, hero *target);
 
 void hero_move(hero *element, char steps, unsigned char trajectory, unsigned short max_x, unsigned short max_y, unsigned short ground);
 

@@ -12,7 +12,7 @@ int check_hit (int min_x, int max_x, int min_y, int max_y, int x, int y, int len
 int stand_punch (int *min_x, int *max_x, int *min_y, int *max_y, int id, int clock, int state_x, float *stamina, bool right){
 	switch (id){
 		case 1:
-			if ((clock <= 20) && (clock >= 10)){
+			if ((clock <= 15) && (clock >= 5)){
                                 *min_x = 40;
                                 *max_x = 85;
                                 *min_y = -50;
@@ -21,13 +21,13 @@ int stand_punch (int *min_x, int *max_x, int *min_y, int *max_y, int id, int clo
                                         *min_x -= 40;
                                         *max_x -= 35;
                                 }
-                                if (clock == 20)
+                                if (clock == 15)
                                         stamina_update (state_x, true, stamina, false);
                                 return 1;
                         }
 			break;
 		case 2:
-			if ((clock <= 20) && (clock >= 10)){
+			if ((clock <= 15) && (clock >= 5)){
                                 *min_x = 0;
                                 *max_x = 130;
                                 *min_y = -125;
@@ -36,13 +36,13 @@ int stand_punch (int *min_x, int *max_x, int *min_y, int *max_y, int id, int clo
                                         *min_x -= 20;
                                         *max_x -= 5;
                                 }
-                                if (clock == 20)
+                                if (clock == 15)
                                         stamina_update (state_x, true, stamina, false);
                                 return 1;
                         }
                         break;
 		case 3:
-			if ((clock <= 20) && (clock >= 10)){
+			if ((clock <= 15) && (clock >= 5)){
                                 *min_x = 50;
                                 *max_x = 100;
                                 *min_y = -150;
@@ -51,13 +51,13 @@ int stand_punch (int *min_x, int *max_x, int *min_y, int *max_y, int id, int clo
                                         *min_x -= 20;
                                         *max_x -= 5;
                                 }
-                                if (clock == 20)
+                                if (clock == 15)
                                         stamina_update (state_x, true, stamina, false);
                                 return 1;
                         }
                         break;
 		case 4:
-			if ((clock <= 20) && (clock >= 10)){
+			if ((clock <= 15) && (clock >= 5)){
 				*min_x = 40;
                         	*max_x = 110;
                         	*min_y = -45;
@@ -66,7 +66,7 @@ int stand_punch (int *min_x, int *max_x, int *min_y, int *max_y, int id, int clo
 					*min_x -= 20;
                                 	*max_x -= 15;
 				}
-				if (clock == 20)
+				if (clock == 15)
 					stamina_update (state_x, true, stamina, false);
 				return 1;
 			}
@@ -85,7 +85,7 @@ int down_punch (int *min_x, int *max_x, int *min_y, int *max_y, int id, int cloc
                         *max_y = -12;
                         if (right)
                                 *min_x -= 20;
-                        if (!clock)
+                        if (clock == 5)
                                 stamina_update (state_x, true, stamina, false);
                         return 1;
                         break;
@@ -98,7 +98,7 @@ int down_punch (int *min_x, int *max_x, int *min_y, int *max_y, int id, int cloc
                                 *min_x -= 10;
                                 *max_x -= 10;
                         }
-                        if (!clock)
+                        if (clock == 5)
                                 stamina_update (state_x, true, stamina, false);
                         return 1;
                         break;
@@ -109,7 +109,7 @@ int down_punch (int *min_x, int *max_x, int *min_y, int *max_y, int id, int cloc
                         *max_y = -10;
                         if (right)
                                 *min_x -= 30;
-                        if (!clock)
+                        if (clock == 5)
                                 stamina_update (state_x, true, stamina, false);
                         return 1;
                         break;
@@ -122,7 +122,7 @@ int down_punch (int *min_x, int *max_x, int *min_y, int *max_y, int id, int cloc
 				*min_x -= 30;
 				*max_x -= 30;
 			}
-			if (!clock)
+			if (clock == 5)
 				stamina_update (state_x, true, stamina, false);
 			return 1;
                         break;
@@ -142,7 +142,7 @@ int up_punch (int *min_x, int *max_x, int *min_y, int *max_y, int id, int clock,
                 	*max_y = 80;
                  	if (right)
                          	*min_x -= 20;
-                        if (!clock)
+                        if (clock == 10)
                                 stamina_update (state_x, true, stamina, true);
                         return 1;
                         break;
@@ -161,7 +161,7 @@ int up_punch (int *min_x, int *max_x, int *min_y, int *max_y, int id, int clock,
                                 if (right)
                                         *min_x -= 20;
                         }
-                        if (!clock)
+                        if (clock == 5)
                                 stamina_update (state_x, true, stamina, true);
                         return 1;
                         break;
@@ -182,7 +182,7 @@ int up_punch (int *min_x, int *max_x, int *min_y, int *max_y, int id, int clock,
                                         *max_x -= 0;
                                 }
                         }
-                        if (!clock)
+                        if (clock == 5)
                                 stamina_update (state_x, true, stamina, true);
                         return 1;
                         break;
@@ -203,7 +203,7 @@ int up_punch (int *min_x, int *max_x, int *min_y, int *max_y, int id, int clock,
 					*max_x -= 20;
 				}
 			}
-			if (!clock)
+			if (clock == 5)
 				stamina_update (state_x, true, stamina, true);
 			return 1;
                         break;
@@ -215,7 +215,7 @@ int up_punch (int *min_x, int *max_x, int *min_y, int *max_y, int id, int clock,
 int stand_kick (int *min_x, int *max_x, int *min_y, int *max_y, int id, int clock, int state_x, float *stamina, bool right){
         switch (id){
                 case 1:
-                        if ((clock >= 10) && (clock <= 20)){
+                        if ((clock >= 5) && (clock <= 15)){
                                 *min_x = 30;
                                 *max_x = 85;
                                 *min_y = -130;
@@ -230,7 +230,7 @@ int stand_kick (int *min_x, int *max_x, int *min_y, int *max_y, int id, int cloc
                         }
                         break;
                 case 2:
-                        if ((clock >= 10) && (clock <= 20)){
+                        if ((clock >= 5) && (clock <= 15)){
                                 *min_x = 10;
                                 *max_x = 95;
                                 *min_y = -100;
@@ -243,7 +243,7 @@ int stand_kick (int *min_x, int *max_x, int *min_y, int *max_y, int id, int cloc
                         }
                         break;
                 case 3:
-                        if ((clock >= 10) && (clock <= 20)){
+                        if ((clock >= 5) && (clock <= 15)){
                                 *min_x = 10;
                                 *max_x = 95;
                                 *min_y = -105;
@@ -256,7 +256,7 @@ int stand_kick (int *min_x, int *max_x, int *min_y, int *max_y, int id, int cloc
                         }
                         break;
                 case 4:
-			if ((clock >= 10) && (clock <= 20)){
+			if ((clock >= 5) && (clock <= 15)){
                         	*min_x = 10;
                         	*max_x = 130;
                         	*min_y = -30;
@@ -276,7 +276,7 @@ int stand_kick (int *min_x, int *max_x, int *min_y, int *max_y, int id, int cloc
 int down_kick (int *min_x, int *max_x, int *min_y, int *max_y, int id, int clock, int state_x, float *stamina, bool right){
         switch (id){
                 case 1:
-                        if ((clock >= 10) && (clock <= 20)){
+                        if ((clock >= 5) && (clock <= 15)){
                                 *min_x = 15;
                                 *max_x = 80;
                                 *min_y = 30;
@@ -289,7 +289,7 @@ int down_kick (int *min_x, int *max_x, int *min_y, int *max_y, int id, int clock
                         }
                         break;
                 case 2:
-                        if ((clock >= 10) && (clock <= 20)){
+                        if ((clock >= 5) && (clock <= 15)){
                                 *min_x = 30;
                                 *max_x = 90;
                                 *min_y = -110;
@@ -302,7 +302,7 @@ int down_kick (int *min_x, int *max_x, int *min_y, int *max_y, int id, int clock
                         }
                         break;
                 case 3:
-                        if ((clock >= 10) && (clock <= 20)){
+                        if ((clock >= 5) && (clock <= 15)){
                                 *min_x = 5;
                                 *max_x = 63;
                                 *min_y = 30;
@@ -315,7 +315,7 @@ int down_kick (int *min_x, int *max_x, int *min_y, int *max_y, int id, int clock
                         }
                         break;
                 case 4:
-			if ((clock >= 10) && (clock <= 20)){
+			if ((clock >= 5) && (clock <= 15)){
                         	*min_x = 10;
                         	*max_x = 60;
                         	*min_y = 30;
@@ -354,7 +354,7 @@ int up_kick (int *min_x, int *max_x, int *min_y, int *max_y, int id, int clock, 
                      	*max_x = 80;
                   	*min_y = 60;
                  	*max_y = 110;
-                        if (!clock)
+                        if (clock == 10)
                                 stamina_update (state_x, true, stamina, true);
                         return 1;
                         break;
@@ -388,7 +388,7 @@ int up_kick (int *min_x, int *max_x, int *min_y, int *max_y, int id, int clock, 
                                         *max_x -= 20;
                                 }
                         }
-                        if (!clock)
+                        if (clock == 10)
                                 stamina_update (state_x, true, stamina, true);
                         return 1;
                         break;
@@ -492,7 +492,6 @@ int check_hit_box (int *min_x, int *max_x, int *min_y, int *max_y, int move, int
 				store = down_punch (&minimo_x, &maximo_x, &minimo_y, &maximo_y, id, clock, state_x, stamina, right);
 			break;
 		case SPECIAL:
-			printf ("GANGUE ESTEVE AQUI!\n");
 			store = special_select (&minimo_x, &maximo_x, &minimo_y, &maximo_y, id, clock, state_x, stamina, right);
 			break;
 	}
@@ -515,10 +514,13 @@ int check_hit_box (int *min_x, int *max_x, int *min_y, int *max_y, int move, int
 	return 1;
 }
 
-void update_damage (float dam, float *hp, int *stun, bool up, bool down, int min_x, int max_x, int min_y, int max_y, int x, int y, int length, int width, int store, bool *hitted){
+void update_damage (float dam, float *hp, int *stun, bool up, bool down, int min_x, int max_x, int min_y, int max_y, int x, int y, int length, int width, int store, bool *hitted, int *timer){
 	bool hit_up, hit_down;
 
 	if (!store || *hitted)	//se nao estiver no momento de dar hit, retorna
+		return;
+
+	if (*hp <= 0)
 		return;
 
 	hit_up = check_hit (min_x, max_x, min_y, max_y, x, y+(length/4), length/2, width);	//verifica se houve hit na porção superior e/ou inferior da box do player2
@@ -535,8 +537,10 @@ void update_damage (float dam, float *hp, int *stun, bool up, bool down, int min
 	else if (hit_down && down)
 		*hp += dam *0.8;
 	
-	if (*hp < 0)
+	if (*hp < 0){
 		*hp = 0;
+		*timer = 0;
+	}
 
 	//al_draw_filled_rectangle (min_x, min_y, max_x, max_y, al_map_rgba_f(0.5, 0.3, 0.0, 0.5));
 
