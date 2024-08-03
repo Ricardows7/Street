@@ -1,7 +1,7 @@
 #ifndef __IMAGE__
 #define __IMAGE__
 
-#include "begin.h"
+#include "hero.h"
 
 void printa_walk_right (hero *p, ALLEGRO_BITMAP* image, bool rev);
 

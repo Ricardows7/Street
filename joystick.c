@@ -49,7 +49,7 @@ void joystick_deactivate (joystick *element, int type, long move){	//funcao para
 	return;
 }
 
-int choose_move_y (joystick *element, joystick *aux, int stun){	//REVISAR AS CONDIÇÕES!!!
+int choose_move_y (joystick *element, joystick *aux, int stun){
 	if (stun > 0)
 		return -1;
 
@@ -69,9 +69,10 @@ int choose_move_x (joystick *element, joystick *aux, float stamina, int stun, in
 	if (stun > 0)	//se o personagem estiver stunado, nao realiza movimentacao alguma
 		return -1;
 
-	*traj = (x_1 > x_2);
+	*traj = (x_1 > x_2);	//Calcula a posicao do oponente
+	*hitted = false;        //Reseta se acertou o oponente ou nao
 
-	if (element->acumulation % SPECIAL == 0 && !aux->state && stamina >= SPECIAL_STAMINA)//REVER ESSA LOGICA DO !AUX (TEM ACUMULATION EM Y TAMBEM!!!!!!
+	if (element->acumulation % SPECIAL == 0 && !aux->state && stamina >= SPECIAL_STAMINA)	//Condicoes para escolher o movimento (ter pressionado o botao, estar com eixo y livre, ter stamina o bastante)
 		element->state = SPECIAL;
 	else if (element->acumulation % KICK == 0 && stamina >= KICK_STAMINA)
 		element->state = KICK;
@@ -81,8 +82,8 @@ int choose_move_x (joystick *element, joystick *aux, float stamina, int stun, in
 		element->state = DEFENSE_UP;
 	else if ((element->acumulation % DEFENSE_DOWN == 0) && (!aux->state) && (stamina >= DEFENSE_STAMINA))
 		element->state = DEFENSE_DOWN;
-	else if (element->acumulation % WALK_LEFT == 0 && aux->state != GET_DOWN){	//LEMBRAR DA POSSIBILIDADE DE SO RETORNAR O VALOR DO MOVIMENTO PRA OUTRA FUNCAO!!!!!!!!!!!!
-		element->state = WALK_LEFT;
+	else if (element->acumulation % WALK_LEFT == 0 && aux->state != GET_DOWN){
+		element->state = WALK_LEFT;	//Nao reseta clock do movimento, pois pode ser enterrompido
 		return 0;
 	}
 	else if (element->acumulation % WALK_RIGHT == 0 && aux->state != GET_DOWN){	//So move se nao estiver agachado
@@ -90,11 +91,10 @@ int choose_move_x (joystick *element, joystick *aux, float stamina, int stun, in
 		return 0;
 	}
 	else{
-		element->state = 0;	//SE NAO FIZER NADA, ESTADO 0!!!!!!!!
+		element->state = 0;	//Se nao fizer nada, estado 0!
 		return 0;
 	}
 
-	*hitted = false;
 	element->timer = 0;
 
 	return 0;

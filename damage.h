@@ -7,14 +7,14 @@
 
 #include "joystick.h"
 
-#define PUNCH_DAMAGE 5
-#define KICK_DAMAGE 700
+#define PUNCH_DAMAGE 2
+#define KICK_DAMAGE 4
 
 #define LEO_SPECIAL 30
 #define RAFA_SPECIAL 0.4
 #define DONA_SPECIAL 0.6
 
-#define STUN_TIME 5
+#define STUN_TIME 10
 
 #define SPECIAL_STAMINA 50
 #define KICK_STAMINA 7

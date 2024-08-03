@@ -1,7 +1,7 @@
 #include <stdlib.h>
-#include "begin.h"
+#include "hero.h"
 
-hero* hero_create(){
+hero* hero_create(){	//inicializacao do heroi
 	hero *new_hero = (hero*) malloc (sizeof(hero));		
 	if (!new_hero){
 		printf ("Erro durante a alocação de um novo herói!\n");
@@ -29,7 +29,7 @@ hero* hero_create(){
 	return new_hero;
 }
 
-void reset_hero (hero *p){
+void reset_hero (hero *p){	//reseta para novo round
 	p->stun = 0;
 	p->hp = 100;
 	p->stamina = 100;
@@ -51,7 +51,7 @@ void reset_hero (hero *p){
 	return;
 }
 
-hero* choose_hero (hero* element, int type, int x, int max_x, int max_y, int ground){
+hero* choose_hero (hero* element, int type, int x, int max_x, int max_y, int ground){	//define os aspectos e bitmaps
 
 	reset_hero (element);
 
@@ -91,7 +91,7 @@ int aleat (){
 	return (rand() % 100) + 1;
 }
 
-void robot (hero *element, hero *target){
+void robot (hero *element, hero *target){	//funcao do bot
 	int value = aleat();
 	element->control_x->acumulation = 1;
 
@@ -107,8 +107,6 @@ void robot (hero *element, hero *target){
 			return;
 		}
 	}
-	
-	printf ("O VALOR E : %d\n", value);
 
 	if (value < 11)
 		joystick_activate (element->control_x, 10, SPECIAL);
@@ -120,10 +118,9 @@ void robot (hero *element, hero *target){
 	return;
 }
 	
-void hero_move(hero *element, char steps, unsigned char trajectory, unsigned short max_x, unsigned short max_y, unsigned short ground){							//Implementação da função "square_move" (-1)
-
-	if (!trajectory){ if ((element->x - steps*STREET_STEP) - element->width/2 >= 0) element->x = element->x - steps*STREET_STEP;} 				//Verifica se a movimentação para a esquerda é desejada e possível; se sim, efetiva a mesma
-	else if (trajectory == 1){ if ((element->x + steps*STREET_STEP) + element->width/2 <= max_x) element->x = element->x + steps*STREET_STEP;}	//Verifica se a movimentação para a direita é desejada e possível; se sim, efetiva a mesma
+void hero_move(hero *element, char steps, unsigned char trajectory, unsigned short max_x, unsigned short max_y, unsigned short ground){
+	if (!trajectory){ if ((element->x - steps*STREET_STEP) - element->width/2 >= 0) element->x = element->x - steps*STREET_STEP;} 	
+	else if (trajectory == 1){ if ((element->x + steps*STREET_STEP) + element->width/2 <= max_x) element->x = element->x + steps*STREET_STEP;}
 	else if (trajectory == 2){	//Lógica do personagem no ar. Steps positivo = subindo, negativo = descendo
 		if (steps < 0){
 	       		if ((element->y - steps) + element->length/2 >= ground)		//Se descer pra baixo do chao, spawna no chao. Se nao, so desce normal		
@@ -165,8 +162,6 @@ unsigned char collision (hero *element_first, hero *element_second){
 	else
 		d = 0;
 
-	printf ("%d %d %d %d\n", a,b,c,d);
-
 	if ((a || b) && (c || d))
 		return 1;
 	else
@@ -174,25 +169,23 @@ unsigned char collision (hero *element_first, hero *element_second){
 }
 
 void hero_movement (hero *p1, hero *p2, char steps, unsigned char trajectory, unsigned short max_x, unsigned short max_y, unsigned short ground){
-	hero_move (p1, steps, trajectory, max_x, max_y, ground);
+	hero_move (p1, steps, trajectory, max_x, max_y, ground);	//movimenta e analisa a colisao
 	if (collision (p1, p2)){
 		hero_move (p1, -steps, trajectory, max_x, max_y, ground);
-		if (p1->air && trajectory == 2)
+		if (p1->air && trajectory == 2)		//so inverte pulo se for chamado da movimentacao vertical!
 			p1->jump = -p1->jump;
 	}
-	
-	printf ("%d\n", p1->jump);
 	return;
 }
 
 void update_position (hero *p1, hero *p2, int max_x, int max_y, int ground, int gravity){
-	if (!p1->control_y->state && p1->control_y->change)	//NA FUNCAO JUMP, SE O CLOCK FOR 0 CHAMAR HERO_JUMP!!!!!!!!!!
-		choose_move_y (p1->control_y, p1->control_x, p1->stun);	//NOS ESTADOS Y, SE ESTIVER GOLPEANDO, NAO TERMINAR A FUNCAO ENQUANTO (PELO MENOS) O GOLPE NAO FOR CONCLUIDO!!!!
-					//PENSAR NO QUE FAZER QUANDO ESTIVER GOLPEANDO E CAIR NO CHAO!!!(TESTAR SE CHEGAR NO CHAO EM Y) E ESTIVER GOLPEANDO CANCELA????
-	if (verify_action (p1->control_x->state) && p1->control_x->change)	//coloco pra chamar caso so esteja andando?
+	if (!p1->control_y->state && p1->control_y->change)	//Se estiver livre em y e puder chamar, escolhe algo em y
+		choose_move_y (p1->control_y, p1->control_x, p1->stun);	
+
+	if (verify_action (p1->control_x->state) && p1->control_x->change)	//Se nao estiver realizando movimento especial e puder chamar, escolhe em x
 		choose_move_x (p1->control_x, p1->control_y, p1->stamina, p1->stun, p1->x, p2->x, &p1->trajectory, &p1->hitted);
 
-	if (!p1->hp){
+	if (!p1->hp){	//Se estiver morto, conta um clock e atualiza em y (caso morra no ar ou agachado)
 		p1->control_y->acumulation = 1;
 		if (p1->control_x->timer < 10)
 			p1->control_x->timer++;
@@ -200,12 +193,12 @@ void update_position (hero *p1, hero *p2, int max_x, int max_y, int ground, int 
 		return;
 	}
 
-	position_x (p1, p2, max_x, max_y, ground, gravity);
+	position_x (p1, p2, max_x, max_y, ground, gravity);	//Atualiza a situacao nos eixos
 	position_y (p1, p2, max_x, max_y, ground, gravity);
 
-	stamina_update (p1->control_x->state, false, &p1->stamina, false);     //VER A LOGICA DISSO DEPOIS!
+	stamina_update (p1->control_x->state, false, &p1->stamina, false);	//Recupera stamina se for possivel
 
-        if (p1->stun > 0)
+        if (p1->stun > 0)	//Atualiza o stun
                 p1->stun--;
 	else if (p1->stun < 0)
 		p1->stun = 0;
@@ -223,23 +216,23 @@ void position_x (hero *p1, hero *p2, int max_x, int max_y, int ground, int gravi
 			p1->control_y->change = false;
 			switch (p1->id){
 				case 1:
-					p1->hitted = false;
-					if (!p1->trajectory)
+					p1->hitted = false;	//Pode acertar multiplas vezes
+					if (!p1->trajectory)	//Rafaelo e obrigado a se movimentar no sentido inicial do oponente
 						hero_movement (p1, p2, 2, 1, max_x, max_y, ground);
 					else
 						hero_movement (p1, p2, 2, 0, max_x, max_y, ground);
 					damage = RAFA_SPECIAL;
 					break;
 				case 2:
-					p1->hitted = false;
-					if (p1->control_x->acumulation % WALK_RIGHT == 0)
+					p1->hitted = false;	
+					if (p1->control_x->acumulation % WALK_RIGHT == 0)	//Donatello pode se movimentar durante special
 						hero_movement (p1, p2, 1, 1, max_x, max_y, ground);
 					else if (p1->control_x->acumulation % WALK_LEFT == 0)
 						hero_movement (p1, p2, 1, 0, max_x, max_y, ground);
 					damage = DONA_SPECIAL;
 					break;
 				case 3:
-					if (!p1->trajectory)
+					if (!p1->trajectory)	//Michelangelo move no sentido contrario do oponente
                                                 hero_movement (p1, p2, 2, 0, max_x, max_y, ground);
                                         else
                                                 hero_movement (p1, p2, 2, 1, max_x, max_y, ground);
@@ -247,6 +240,7 @@ void position_x (hero *p1, hero *p2, int max_x, int max_y, int ground, int gravi
 						p1->control_x->state = 0;
 						p1->control_x->timer = 0;
 						p1->control_y->change = true;
+						stamina_update (p1->control_x->state, true, &p1->stamina, false);
 					}
                                         break;
 				case 4:
@@ -254,37 +248,36 @@ void position_x (hero *p1, hero *p2, int max_x, int max_y, int ground, int gravi
                					p1->control_x->state = 0;
                                                 p1->control_x->timer = 0;
                                                 p1->control_y->change = true;
+						stamina_update (p1->control_x->state, true, &p1->stamina, false);
                                         }
 					damage = LEO_SPECIAL;
 					break;
 			}
-			printf ("O DANO E: %f\n", damage);
 			store = check_hit_box (&minimo_x, &maximo_x, &minimo_y, &maximo_y, SPECIAL, p1->id, p1->x, p1->y, p1->length, p1->width, p1->control_y->state, p1->trajectory, p1->control_x->timer, p1->control_x->state, &p1->stamina);
 			update_damage(damage, &p2->hp, &p2->stun, !(p2->control_x->state - DEFENSE_UP), !(p2->control_x->state - DEFENSE_DOWN), minimo_x, maximo_x, minimo_y, maximo_y, p2->x, p2->y, p2->length, p2->width, store, &p1->hitted, &p2->control_x->timer);
-			if (p1->control_x->timer > 60){
+			if (p1->control_x->timer > 60){	//Dura ate 60 ciclos
 				stamina_update (p1->control_x->state, true, &p1->stamina, false);          
 				p1->control_x->state = 0;
 				p1->control_x->timer = 0;
 				p1->control_y->change = true;
 			}
 			break;
-		case KICK:		//NAO MUDO O ESTADO DO Y??????????
+		case KICK:
 			p1->control_y->change = false;
                         p1->control_x->timer++;
 			store = check_hit_box (&minimo_x, &maximo_x, &minimo_y, &maximo_y, KICK, p1->id, p1->x, p1->y, p1->length, p1->width, p1->control_y->state, p1->trajectory, p1->control_x->timer, p1->control_x->state, &p1->stamina);
-                     	update_damage (KICK_DAMAGE, &p2->hp, &p2->stun, !(p2->control_x->state - DEFENSE_UP), !(p2->control_x->state - DEFENSE_DOWN), minimo_x, maximo_x, minimo_y, maximo_y, p2->x, p2->y, p2->length, p2->width, store, &p1->hitted, &p2->control_x->timer);	//ATUALIZAR AS HITBOXES AQUI TAMBEM!
-			if (p1->control_x->timer > 20 && !p1->air){
+                     	update_damage (KICK_DAMAGE, &p2->hp, &p2->stun, !(p2->control_x->state - DEFENSE_UP), !(p2->control_x->state - DEFENSE_DOWN), minimo_x, maximo_x, minimo_y, maximo_y, p2->x, p2->y, p2->length, p2->width, store, &p1->hitted, &p2->control_x->timer);
+			if (p1->control_x->timer > 20 && !p1->air){	//So termina o golpe se nao estiver no ar! Se estiver no ar, funcao jump termina
 				p1->control_x->state = 0;
                                 p1->control_x->timer = 0;
 				p1->control_y->change = true;
                         }
 
 			break;
-		case PUNCH:	//SE ESTIVER NO CHAO MAS JUMP ESTIVER ATIVO, NAO FAZ NADA! NO FIM DA FUNCAO EM Y DESATIVA O GOLPE!!!
+		case PUNCH:
 			p1->control_y->change = false;
 			p1->control_x->timer++;
 			store = check_hit_box (&minimo_x, &maximo_x, &minimo_y, &maximo_y, PUNCH, p1->id, p1->x, p1->y, p1->length, p1->width, p1->control_y->state, p1->trajectory, p1->control_x->timer, p1->control_x->state, &p1->stamina);
-			//printf ("O VALOR DE STORE E: %d\n");
 			update_damage (PUNCH_DAMAGE, &p2->hp, &p2->stun, !(p2->control_x->state - DEFENSE_UP), !(p2->control_x->state - DEFENSE_DOWN), minimo_x, maximo_x, minimo_y, maximo_y, p2->x, p2->y, p2->length, p2->width, store, &p1->hitted, &p2->control_x->timer);
 
 			if (p1->control_x->timer > 20 && !p1->air){
@@ -293,13 +286,13 @@ void position_x (hero *p1, hero *p2, int max_x, int max_y, int ground, int gravi
 				p1->control_y->change = true;
 			}
 			break;
-		case DEFENSE_UP:	//NAO DA PRA COMBINAR OS DOIS DEFENSES JUNTOS AQUI???
+		case DEFENSE_UP:
 			p1->control_y->change = false;
 			p1->control_x->timer++;
 			if (p1->control_x->timer > 30)
 				p1->control_x->timer = 0;
 			stamina_update (p1->control_x->state, true, &p1->stamina, false);
-			if ((p1->control_x->acumulation % DEFENSE_UP != 0) || (p1->stamina < DEFENSE_STAMINA)){
+			if ((p1->control_x->acumulation % DEFENSE_UP != 0) || (p1->stamina < DEFENSE_STAMINA)){	//Se largar o botao de defesa ou acabar a stamina necessaria
 				p1->control_x->state = 0;
 				p1->control_x->timer = 0;
 				p1->control_y->change = true;
@@ -311,7 +304,7 @@ void position_x (hero *p1, hero *p2, int max_x, int max_y, int ground, int gravi
 			if (p1->control_x->timer > 30)
 				p1->control_x->timer = 0;
 			stamina_update (p1->control_x->state, true, &p1->stamina, false);
-			if ((p1->control_x->acumulation % DEFENSE_DOWN != 0) || (p1->stamina < DEFENSE_STAMINA)){	//encerra o estado se soltar o botao ou acabar a stamina
+			if ((p1->control_x->acumulation % DEFENSE_DOWN != 0) || (p1->stamina < DEFENSE_STAMINA)){
 				p1->control_x->state = 0;
 				p1->control_x->timer = 0;
 				p1->control_y->change = true;
@@ -324,29 +317,28 @@ void position_x (hero *p1, hero *p2, int max_x, int max_y, int ground, int gravi
 			}
 			if (p1->control_x->timer > 30)
 				p1->control_x->timer = 0;
-			if (p1->control_x->acumulation % WALK_LEFT != 0){ 	//SE LARGAR O BOTAO DE EVENTO CONTINUO, CORRIGI AQUI O STATE
+			if (p1->control_x->acumulation % WALK_LEFT != 0 || p1->stun > 0){ 	//Se largar o botao de evento continuo, corrigi aqui o state
 				p1->control_x->state = 0;
 				p1->control_x->timer = 0;
 			}
 			break;
-		case WALK_RIGHT:	//LEMBRAR DE MUDAR MOVIMENTO PRA INCLUIR COLISAO!!!
+		case WALK_RIGHT:
 			if (p1->control_y->state != GET_DOWN){		//Se nao estiver agachado, move pra direita e acrescenta no timer
 				hero_movement(p1, p2, 1, 1, max_x, max_y, ground);
 				p1->control_x->timer++;
 			}
 			if (p1->control_x->timer > 30)		//se o timer estourou do limite de sprints, reseta
 				p1->control_x->timer = 0;
-			if (p1->control_x->acumulation % WALK_RIGHT != 0){	//Se largou o botão, nao anda mais
+			if (p1->control_x->acumulation % WALK_RIGHT != 0 || p1->stun > 0){	//Se largou o botão, nao anda mais
 				p1->control_x->state = 0;
 				p1->control_x->timer = 0;
 			}
 			break;
 		case 0:
-			p1->control_x->timer = 23;
-			/*p1->control_x->timer++;
+			p1->control_x->timer++;
 			if (p1->control_x->timer > 30){
 				p1->control_x->timer = 0;
-			}*/
+			}
 			break;
 	}
 }
@@ -361,10 +353,10 @@ void position_y (hero *p1, hero *p2, int max_x, int max_y, int ground, int gravi
 			if (p1->control_y->timer < 30)
 				p1->control_y->timer++;
 
-			if (p1->control_y->acumulation % GET_DOWN != 0 && verify_action (p1->control_x->state)){	//condicao pra sair do estado agachado
-				p1->control_y->timer++;		//FACO UM ESTADO PRA NAO APERTAR ENQUANTO LEVANTANDO???
+			if ((p1->control_y->acumulation % GET_DOWN != 0 && verify_action (p1->control_x->state)) || p1->stun > 0){	//condicao pra sair do estado agachado
+				p1->control_y->timer++;		
 				p1->control_x->change = false;	
-				if (p1->control_y->timer >= 30){
+				if (p1->control_y->timer >= 0){
 					p1->control_y->timer = 0;
 					p1->control_y->state = 0;
 					p1->control_x->change = true;
@@ -375,7 +367,7 @@ void position_y (hero *p1, hero *p2, int max_x, int max_y, int ground, int gravi
 			break;
 		case JUMP:
 			if (p1->air){
-				if (p1->y+p1->length/2 >= ground){	//LEMBRAR DE SETAR HERO_MOVE PRA SEMPRE ACABAR EXATAMENTE NO CHAO!!!
+				if (p1->y+p1->length/2 >= ground){	//Logica de aterrisagem
 					p1->control_x->state = 0;
 					p1->control_x->change = false;
 					p1->control_y->timer++;
@@ -389,7 +381,7 @@ void position_y (hero *p1, hero *p2, int max_x, int max_y, int ground, int gravi
 					}
 					return;
 				}
-				if (!(p1->control_x->acumulation % WALK_RIGHT) && (p1->control_x->state != WALK_RIGHT))
+				if (!(p1->control_x->acumulation % WALK_RIGHT) && (p1->control_x->state != WALK_RIGHT))	//Possibilidade de se movimentar no ar no eixo x, mesmo durante um golpe
 					hero_movement (p1, p2, 1, 1, max_x, max_y, ground);
                                 else if (!(p1->control_x->acumulation % WALK_LEFT) && (p1->control_x->state != WALK_LEFT))
                                         hero_movement (p1, p2, 1, 0, max_x, max_y, ground);
@@ -399,10 +391,10 @@ void position_y (hero *p1, hero *p2, int max_x, int max_y, int ground, int gravi
 				if (p1->control_y->timer < 15)
 					p1->control_y->timer++;
 			}
-			else{
-				p1->control_x->change = false;
+			else{	//Logica de decolagem
+				p1->control_x->change = false;	
 				p1->control_x->state = 0;
-				p1->control_y->timer++;	//ZERO O EIXO X DURANTE O PULO????
+				p1->control_y->timer++;
 				if (p1->control_y->timer > 10){		//So taca o personagem no ar depois da animacao de pulo
 					hero_jump (p1, p2, max_x, max_y, ground);
 					p1->control_x->change = true;
@@ -419,7 +411,7 @@ void position_y (hero *p1, hero *p2, int max_x, int max_y, int ground, int gravi
 	return;
 }
 
-void hero_jump (hero *element, hero *aux, int max_x, int max_y, int ground){    //ARRUMAR URGENTE!
+void hero_jump (hero *element, hero *aux, int max_x, int max_y, int ground){  
         if (!element)
                 return;
 

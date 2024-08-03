@@ -1,5 +1,5 @@
-#ifndef __BEGIN__ 												
-#define __BEGIN__																									
+#ifndef __HERO__ 												
+#define __HERO__																									
 #include <stdbool.h>
 #include <stdio.h>
 
@@ -32,7 +32,8 @@ typedef struct {
 	joystick *control_x;
 	joystick *control_y;
 	ALLEGRO_BITMAP *image;
-} hero;																									
+} hero;
+
 hero* hero_create();
 
 void reset_hero (hero *p);
@@ -56,7 +57,5 @@ void position_y (hero *p1, hero *p2, int max_x, int max_y, int ground, int gravi
 void hero_destroy(hero *element);										
 
 void hero_jump (hero *element, hero *aux, int max_x, int max_y, int ground);
-
-//void verify (bool test, const char *local);
 
 #endif

@@ -1,5 +1,3 @@
-//Compilação: gcc AggressiveSquares.c Square.c -o AS $(pkg-config allegro-5 allegro_main-5 allegro_font-5 allegro_primitives-5 --libs --cflags) (!)
-
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_primitives.h>
 #include <allegro5/allegro_image.h>
@@ -10,7 +8,7 @@
 #include <stdio.h>
 #include <time.h>
 
-#include "begin.h"
+#include "hero.h"
 #include "picture.h"
 
 #define X_SCREEN 1280
@@ -53,13 +51,20 @@ int main(){
 		
 	ALLEGRO_EVENT event;
 
-	ALLEGRO_BITMAP* bits[4];
+	ALLEGRO_BITMAP* bits[4];	//bitmap dos personagens
 	bits[0] = al_load_bitmap ("rafaelo.png");
 	bits[1] = al_load_bitmap ("donatello_2.png");
 	bits[2] = al_load_bitmap ("Michelangelo.png");
 	bits[3] = al_load_bitmap ("sodaleonard.png");
 
-	ALLEGRO_BITMAP* maps = al_load_bitmap ("mapa.png");
+	for (int i = 0; i < 4; i++){
+		if (!bits[i]){
+			printf ("Erro no load dos herois!\n");
+			return -1;
+		}
+	}
+
+	ALLEGRO_BITMAP* maps = al_load_bitmap ("mapa.png");	//bitmap do mapa
 	if (!maps)
 		return -1;
 
@@ -71,14 +76,14 @@ int main(){
 
 	al_start_timer(timer);	
 
-	int where_to_go = 1;
+	int where_to_go = 1;	//controla a tela escolhida
 	bool hero_chosen = false;
-	int option_chosen = 0, p1_chosen = 0, p2_chosen = 0, map_chosen = 0, paused = 0, score_1 = 0, score_2 = 0, ended = 0, bot = 0;
+	int option_chosen = 0, p1_chosen = 0, p2_chosen = 0, map_chosen = 0, paused = 0, score_1 = 0, score_2 = 0, ended = 0, bot = 0;	//variaveis para todos os lacos
 
 	while(1){
-		if (where_to_go == 1){
-			bot = 0;
-			option_chosen = 0;
+		if (where_to_go == 1){	//Menu principal
+			bot = 0;	//Aponta se vai ter bot ou nao
+			option_chosen = 0;	//Opcao do menu principal
 			while (1){
 				al_wait_for_event (queue, &event);
 				if (event.type == ALLEGRO_EVENT_TIMER){
@@ -86,7 +91,7 @@ int main(){
 					menu (intro, option_chosen, X_SCREEN, Y_SCREEN);
 					al_flip_display();
 				}
-				else if (event.type == 10){
+				else if (event.type == 10){	//Controle da setinha
 					if (event.keyboard.keycode == 84)
 						option_chosen = (2 + option_chosen) % 3;
 					else if (event.keyboard.keycode == 85)
@@ -108,7 +113,7 @@ int main(){
 				}
 			}
 		}
-		if (where_to_go == 2){
+		if (where_to_go == 2){	//Selecao de personagem
 			hero_chosen = false;
 			choose_hero (player_1, p1_chosen, X_SCREEN/3, X_SCREEN, Y_SCREEN, GROUND);
                   	choose_hero (player_2, p2_chosen, X_SCREEN/3, X_SCREEN, Y_SCREEN, GROUND);
@@ -116,12 +121,10 @@ int main(){
 				al_wait_for_event(queue, &event);
 				if (event.type == ALLEGRO_EVENT_TIMER){
 					al_clear_to_color (al_map_rgb (0,0,0));
-
 					character_menu (disp, maps, bits, p1_chosen, p2_chosen, map_chosen, hero_chosen, X_SCREEN, Y_SCREEN);
-
 					al_flip_display();
 				}
-				else if (event.type == 10){
+				else if (event.type == 10){	//Controle das setinhas
 					if (event.keyboard.keycode == 83 && !hero_chosen)
 						p2_chosen = (p2_chosen + 1) % 4;
 					else if (event.keyboard.keycode == 82 && !hero_chosen)
@@ -138,7 +141,7 @@ int main(){
 						else
 							map_chosen = (1 + map_chosen) % 2;
 					}
-					else if (event.keyboard.keycode == 67){
+					else if (event.keyboard.keycode == 67){	//Se ja escolheu o heroi e deu enter de novo, finaliza as escolhas e procede
 						if (!hero_chosen)
 							hero_chosen = true;
 						else{
@@ -167,8 +170,8 @@ int main(){
 				}
 			}	
 		}
-		if (where_to_go == 3){
-			paused = 0;
+		if (where_to_go == 3){	//Luta
+			paused = 0;	//Reseta os aspectos da luta
 			ended = 0;
 			score_1 = 0;
 			score_2 = 0;
@@ -176,17 +179,14 @@ int main(){
 				al_wait_for_event(queue, &event);	
 				if (event.type == ALLEGRO_EVENT_TIMER){
 					al_clear_to_color (al_map_rgb(0, 0, 0));
-					al_draw_scaled_bitmap (maps, dimension[0], dimension[1], dimension[2], dimension[3], 0, 0, X_SCREEN, Y_SCREEN, 0);
+					al_draw_scaled_bitmap (maps, dimension[0], dimension[1], dimension[2], dimension[3], 0, 0, X_SCREEN, Y_SCREEN, 0);	//printa o mapa
 
-					bars (disp, X_SCREEN, Y_SCREEN, score_1, score_2, player_1, player_2);
+					bars (disp, X_SCREEN, Y_SCREEN, score_1, score_2, player_1, player_2);	//Printa as barras de hp e stam, alem da pontuacao de rounds
 
 					if (bot)
 						robot (player_2, player_1);
 
-					al_draw_filled_rectangle (player_1->x-player_1->width/2, player_1->y-player_1->length/2, player_1->x+player_1->width/2,player_1->y+player_1->length/2, al_map_rgb(255,0,0));
-					al_draw_filled_rectangle (player_2->x-player_2->width/2, player_2->y-player_2->length/2, player_2->x+player_2->width/2,player_2->y+player_2->length/2, al_map_rgb(0,0,255));
-
-					update_position (player_1, player_2, X_SCREEN, Y_SCREEN, GROUND, GRAVITY);
+					update_position (player_1, player_2, X_SCREEN, Y_SCREEN, GROUND, GRAVITY);	//Atualiza a mecanica do hero
                                 	update_position (player_2, player_1, X_SCREEN, Y_SCREEN, GROUND, GRAVITY);
 				
 					print_hero (player_1, player_1->trajectory, GROUND);
@@ -197,11 +197,11 @@ int main(){
 							break;
 					}
 
-					end (player_1, player_2, &score_1, &score_2, X_SCREEN, Y_SCREEN, GROUND, &ended);
+					end (player_1, player_2, &score_1, &score_2, X_SCREEN, Y_SCREEN, GROUND, &ended);	//verifica smp se alguem venceu
 
 					al_flip_display();
 				}
-				else if ((event.type == 10) || (event.type == 12)){ 
+				else if ((event.type == 10) || (event.type == 12)){	//Logica de armazenar o botao pressionado para os 2 personagens
 					if (event.keyboard.keycode == 1){
 						joystick_activate (player_1->control_x, event.type, WALK_LEFT);
 						joystick_deactivate (player_1->control_x, event.type, WALK_LEFT);
@@ -238,7 +238,7 @@ int main(){
 						joystick_activate (player_1->control_x, event.type, SPECIAL);
 						joystick_deactivate (player_1->control_x, event.type, SPECIAL);
 					}
-					else if (event.type == 10 && event.keyboard.keycode == 67){
+					else if (event.type == 10 && event.keyboard.keycode == 67){	//Se apertou Enter depois que acabou, volta pro menu
                                                 if (ended){
                                                         where_to_go = 1;
                                                         break;
@@ -246,7 +246,7 @@ int main(){
                                                 paused = 1;
                                         }
 					//PLAYER 2 DAQUI PRA BAIXO
-					if (!bot){
+					if (!bot){	//Player 2 so joga se nao tiver bot
 						if (event.keyboard.keycode == 82){
                                         		joystick_activate (player_2->control_x, event.type, WALK_LEFT);
                                         		joystick_deactivate (player_2->control_x, event.type, WALK_LEFT);
@@ -284,8 +284,6 @@ int main(){
                                         		joystick_deactivate (player_2->control_x, event.type, SPECIAL);
                                 		}
 					}
-					printf ("%d\n", event.keyboard.keycode);
-
 				}
 				else if (event.type == ALLEGRO_EVENT_DISPLAY_CLOSE){
 					where_to_go = 4;
@@ -301,10 +299,12 @@ int main(){
 	al_destroy_display(disp);
 	al_destroy_timer(timer);
 	al_destroy_event_queue(queue);
+
 	for (int i = 0; i < 4; i++)
 		al_destroy_bitmap (bits[i]);
-	printf ("Ta dando free!\n"); 
-  
+	al_destroy_bitmap (maps);
+	al_destroy_bitmap (intro);
+
 	hero_destroy (player_1);
 	hero_destroy (player_2);
 

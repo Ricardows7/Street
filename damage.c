@@ -1,6 +1,6 @@
 #include "damage.h"
 
-int check_hit (int min_x, int max_x, int min_y, int max_y, int x, int y, int length, int width){
+int check_hit (int min_x, int max_x, int min_y, int max_y, int x, int y, int length, int width){	//verifica se houve contato entre a hitbox do oponente e o golpe
 	float sq_left = x - (width/2);
 	float sq_right = x + (width/2);
 	float sq_top = y - (length/2);
@@ -8,6 +8,8 @@ int check_hit (int min_x, int max_x, int min_y, int max_y, int x, int y, int len
 
 	return !(max_x < sq_left || min_x > sq_right || max_y < sq_top || min_y > sq_bottom);
 }
+
+//Daqui pra baixo sao funcoes que regulam o tamanho da hitbox dos golpes para cada heroi!
 
 int stand_punch (int *min_x, int *max_x, int *min_y, int *max_y, int id, int clock, int state_x, float *stamina, bool right){
 	switch (id){
@@ -470,7 +472,7 @@ int special_select (int *min_x, int *max_x, int *min_y, int *max_y, int id, int 
         return 0;
 }
 
-int check_hit_box (int *min_x, int *max_x, int *min_y, int *max_y, int move, int id, int x, int y, int length, int width, int state_y, bool right, int clock, int state_x, float *stamina){
+int check_hit_box (int *min_x, int *max_x, int *min_y, int *max_y, int move, int id, int x, int y, int length, int width, int state_y, bool right, int clock, int state_x, float *stamina){	//Verifica se o golpe acertou
 	int minimo_x, maximo_x, minimo_y, maximo_y;
 	int store = 0;
 
@@ -496,9 +498,9 @@ int check_hit_box (int *min_x, int *max_x, int *min_y, int *max_y, int move, int
 			break;
 	}
 
-	if (!store)
+	if (!store)	//Se !store, significa que ainda nao esta na hora de acertar o golpe, nao verifica o dano na proxima funcao
 		return store;
-	//printf ("%d %d %d %d\n", *min_x, *max_x, *min_y, *max_y);
+
 	*min_y = y + minimo_y;
 	*max_y = y + maximo_y;
 
@@ -516,6 +518,7 @@ int check_hit_box (int *min_x, int *max_x, int *min_y, int *max_y, int move, int
 
 void update_damage (float dam, float *hp, int *stun, bool up, bool down, int min_x, int max_x, int min_y, int max_y, int x, int y, int length, int width, int store, bool *hitted, int *timer){
 	bool hit_up, hit_down;
+	int chest = *stun;
 
 	if (!store || *hitted)	//se nao estiver no momento de dar hit, retorna
 		return;
@@ -523,26 +526,29 @@ void update_damage (float dam, float *hp, int *stun, bool up, bool down, int min
 	if (*hp <= 0)
 		return;
 
-	hit_up = check_hit (min_x, max_x, min_y, max_y, x, y+(length/4), length/2, width);	//verifica se houve hit na porção superior e/ou inferior da box do player2
-	hit_down = check_hit (min_x, max_x, min_y, max_y, x, y-(length/4), length/2, width);
+	hit_down = check_hit (min_x, max_x, min_y, max_y, x, y+(length/4), length/2, width);	//verifica se houve hit na porção superior e/ou inferior da box do player2
+	hit_up = check_hit (min_x, max_x, min_y, max_y, x, y-(length/4), length/2, width);
 
 	if (hit_up || hit_down){	//Se houve hit, stunna e tira vida
 		*stun = STUN_TIME;
 		*hp -= dam;
-		*hitted = true;
+		*hitted = true;		//Golpe trava pois ja deu o dano
 	}
 
-	if (hit_up && up)	//Se o hit pegou em alguma regiao sendo defendida, recupera a vida, dando o efeito de dano reduzido
+	if (hit_up && up){	//Se o hit pegou em alguma regiao sendo defendida, recupera a vida, dando o efeito de dano reduzido
+		*stun = chest;
 		*hp += dam * 0.8;
-	else if (hit_down && down)
+	}
+	else if (hit_down && down){
+		*stun = chest;
 		*hp += dam *0.8;
 	
-	if (*hp < 0){
+	}
+	
+	if (*hp < 0){	//Evita que a vida fique negativa, inicia o clock do morto
 		*hp = 0;
 		*timer = 0;
 	}
-
-	//al_draw_filled_rectangle (min_x, min_y, max_x, max_y, al_map_rgba_f(0.5, 0.3, 0.0, 0.5));
 
 	return;
 }

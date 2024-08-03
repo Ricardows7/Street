@@ -4,18 +4,18 @@
 INCLUDE_PATH=/usr/include/allegro5
 LIB_PATH=/usr/lib
 FLAGS=$(shell pkg-config allegro-5 allegro_main-5 allegro_font-5 allegro_primitives-5 allegro_image-5 allegro_ttf-5 allegro_dialog-5  --libs --cflags)
-Executavel=Street
+Executavel=Turtles
 
 all: $(Executavel)
 
-$(Executavel): AggressiveSquares.o begin.o joystick.o damage.o picture.o
-	gcc AggressiveSquares.o begin.o joystick.o damage.o picture.o -g -o $(Executavel) $(FLAGS)
+$(Executavel): Turtles.o hero.o joystick.o damage.o picture.o
+	gcc Turtles.o hero.o joystick.o damage.o picture.o -g -o $(Executavel) $(FLAGS)
 
-AggressiveSquares.o: AggressiveSquares.c
-	gcc -c AggressiveSquares.c -I$(INCLUDE_PATH) $(FLAGS)
+Turtles.o: Turtles.c
+	gcc -c Turtles.c -I$(INCLUDE_PATH) $(FLAGS)
 
-begin.o: begin.c begin.h
-	gcc -c begin.c -I$(INCLUDE_PATH) $(FLAGS)
+hero.o: hero.c hero.h
+	gcc -c hero.c -I$(INCLUDE_PATH) $(FLAGS)
 
 joystick.o: joystick.c joystick.h
 	gcc -c joystick.c -I$(INCLUDE_PATH) $(FLAGS)
